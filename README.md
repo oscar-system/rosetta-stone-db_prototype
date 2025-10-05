@@ -3,7 +3,8 @@ This is a prototype of the Rosetta stone database for mathematical objects. Its
 purpose is to store mathematical objects and their descriptions in different
 mathematical software, to enable developers to deserialize such data in the
 future. Furthermore it can be used to facilitate interoperability between
-different mathematical softwares.
+different mathematical softwares. As an added benefit, this database can be
+used to showcase the serialization capabilities of mathematical software.
 
 
 ## Structure
@@ -18,11 +19,18 @@ An `example` from the folder `description` will then correspond to a folder
 - The example serialized by `PROGRAM` in `PROGRAM/example/data.*`
 - Code for verifying the example by `PROGRAM` in `PROGRAM/example/check.*`
 - A link for a MaPS runtime in `PROGRAM/example/maps` that contains the version
-  of `PROGRAM` necessary to read the data or run the scripts.
+  of `PROGRAM` necessary to read the data or run the scripts. At the same time
+  this script showcases how to read the data using `PROGRAM`.
 
 Note that not all files will be available for all examples. Not all software
 provides (de-)serialization. Proprietary software is not available in MaPS
-runtimes.
+runtimes. And not all data makes sense for all software, for example, almost
+all mathematical software will have matrices implemented, but not every
+mathematical software will have groups or number fields.
+
+In case this structure is chosen differently for any reason, the corresponding
+folder will come with a `README.md` file containing a detailed explanation.
+
 
 ## Guidelines for suitable entries
 ### Choose unique data entries
