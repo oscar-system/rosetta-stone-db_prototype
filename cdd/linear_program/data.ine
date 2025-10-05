@@ -1,0 +1,9 @@
+H-representation
+begin
+3 4 rational
+12 31 24 78
+51 63 17 35
+23 99 19 34
+end
+minimize
+0 64449 26552 73367
