@@ -1,1 +1,161 @@
-{"_ns":{"Oscar":["https://github.com/oscar-system/Oscar.jl","1.6.0-DEV-5a8aafeb259de17629a7cf69d1e264ab505ba0cb"]},"_type":{"name":"LinearProgram","params":{"_type":"QQField"}},"data":{"feasible_region":{"LINEALITY_SPACE":[{"cols":4}],"INEQUALITIES":[["12","31","24","78"],["51","63","17","35"],["23","99","19","34"],["1","0","0","0"]],"_vertex_indices":[4],"FEASIBLE":true,"_attrs":{"_vertex_indices":{"_type":"Vector<Int>","attachment":true}},"N_VERTICES":4,"AFFINE_HULL":[{"cols":4}],"LINEALITY_DIM":0,"VERTICES":[["0","1","-3829/486","985/486"],["0","-1","3334/333","-1787/666"],["0","1","-441/29","162/29"],["1","7248/2951","-236125/8853","62650/8853"]],"_type":"polytope::Polytope<Rational>","_info":{"credits":{"ppl":"  The Parma Polyhedra Library ([[wiki:external_software#PPL]]): A C++ library for convex polyhedra\n  and other numerical abstractions.\n  http://www.cs.unipr.it/ppl/\n","cdd":"\nCopyright by Komei Fukuda.\nhttps://people.inf.ethz.ch/fukudak/cdd_home/\n"}},"LP":[{"MINIMAL_VERTEX":["1","7248/2951","-236125/8853","62650/8853"],"MINIMAL_VALUE":"-30698","convention":"min","LINEAR_OBJECTIVE":["0","64449","26552","73367"],"_id":"unnamed#0","_attrs":{"convention":{"attachment":true}}}],"FULL_DIM":true,"EQUATIONS":[{"cols":4}],"BOUNDED":false,"COMBINATORIAL_DIM":3,"CONE_AMBIENT_DIM":4,"_ns":{"polymake":["https://polymake.org","4.14"]},"FAR_FACE":[0,1,2],"POINTED":true,"CONE_DIM":4},"convention":"min","lpcoeffs":{"data":["0","64449","26552","73367"],"_ns":{"polymake":["https://polymake.org","4.14"]},"_type":"common::Vector<Rational>"}}}
+{
+  "_ns": {
+    "Oscar": [
+      "https://github.com/oscar-system/Oscar.jl",
+      "1.6.0-DEV-5a8aafeb259de17629a7cf69d1e264ab505ba0cb"
+    ]
+  },
+  "_type": {
+    "name": "LinearProgram",
+    "params": {
+      "_type": "QQField"
+    }
+  },
+  "data": {
+    "feasible_region": {
+      "LINEALITY_SPACE": [
+        {
+          "cols": 4
+        }
+      ],
+      "INEQUALITIES": [
+        [
+          "12",
+          "31",
+          "24",
+          "78"
+        ],
+        [
+          "51",
+          "63",
+          "17",
+          "35"
+        ],
+        [
+          "23",
+          "99",
+          "19",
+          "34"
+        ],
+        [
+          "1",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "_vertex_indices": [
+        4
+      ],
+      "FEASIBLE": true,
+      "_attrs": {
+        "_vertex_indices": {
+          "_type": "Vector<Int>",
+          "attachment": true
+        }
+      },
+      "N_VERTICES": 4,
+      "AFFINE_HULL": [
+        {
+          "cols": 4
+        }
+      ],
+      "LINEALITY_DIM": 0,
+      "VERTICES": [
+        [
+          "0",
+          "1",
+          "-3829/486",
+          "985/486"
+        ],
+        [
+          "0",
+          "-1",
+          "3334/333",
+          "-1787/666"
+        ],
+        [
+          "0",
+          "1",
+          "-441/29",
+          "162/29"
+        ],
+        [
+          "1",
+          "7248/2951",
+          "-236125/8853",
+          "62650/8853"
+        ]
+      ],
+      "_type": "polytope::Polytope<Rational>",
+      "_info": {
+        "credits": {
+          "ppl": "  The Parma Polyhedra Library ([[wiki:external_software#PPL]]): A C++ library for convex polyhedra\n  and other numerical abstractions.\n  http://www.cs.unipr.it/ppl/\n",
+          "cdd": "\nCopyright by Komei Fukuda.\nhttps://people.inf.ethz.ch/fukudak/cdd_home/\n"
+        }
+      },
+      "LP": [
+        {
+          "MINIMAL_VERTEX": [
+            "1",
+            "7248/2951",
+            "-236125/8853",
+            "62650/8853"
+          ],
+          "MINIMAL_VALUE": "-30698",
+          "convention": "min",
+          "LINEAR_OBJECTIVE": [
+            "0",
+            "64449",
+            "26552",
+            "73367"
+          ],
+          "_id": "unnamed#0",
+          "_attrs": {
+            "convention": {
+              "attachment": true
+            }
+          }
+        }
+      ],
+      "FULL_DIM": true,
+      "EQUATIONS": [
+        {
+          "cols": 4
+        }
+      ],
+      "BOUNDED": false,
+      "COMBINATORIAL_DIM": 3,
+      "CONE_AMBIENT_DIM": 4,
+      "_ns": {
+        "polymake": [
+          "https://polymake.org",
+          "4.14"
+        ]
+      },
+      "FAR_FACE": [
+        0,
+        1,
+        2
+      ],
+      "POINTED": true,
+      "CONE_DIM": 4
+    },
+    "convention": "min",
+    "lpcoeffs": {
+      "data": [
+        "0",
+        "64449",
+        "26552",
+        "73367"
+      ],
+      "_ns": {
+        "polymake": [
+          "https://polymake.org",
+          "4.14"
+        ]
+      },
+      "_type": "common::Vector<Rational>"
+    }
+  }
+}
