@@ -83,6 +83,7 @@ HTML_TEMPLATE = """<!doctype html>
       padding: 1rem;
       border-radius: 6px;
       position: relative;
+      background: #f3f4f6;
     }}
     .copy-code-btn {{
       position: absolute;
