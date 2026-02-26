@@ -1,6 +1,6 @@
 ---
-title: Bool
+title: Boolean
 category: basics
 ---
 
-This example stores a Boolean value.
+This example stores the boolean value `true`.
