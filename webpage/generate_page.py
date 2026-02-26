@@ -190,6 +190,8 @@ def build_example_markdown(example, systems):
     lines = [
         f"# {example['title']}",
         "",
+        "[Back to index](./index.md)",
+        "",
         body,
         "",
         "## Systems",
