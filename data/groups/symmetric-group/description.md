@@ -2,6 +2,7 @@
 title: Symmetric group
 category: groups
 subcategory: permutation
+order: 1
 ---
 
 # Symmetric group

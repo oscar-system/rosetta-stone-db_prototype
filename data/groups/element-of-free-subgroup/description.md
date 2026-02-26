@@ -2,6 +2,7 @@
 title: Element of free subgroup
 category: groups
 subcategory: free
+order: 4
 ---
 
 # Element of free subgroup

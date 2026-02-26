@@ -2,6 +2,7 @@
 title: Element of Sylow subgroup
 category: groups
 subcategory: permutation
+order: 4
 ---
 
 # Element of Sylow subgroup

@@ -2,6 +2,7 @@
 title: Free group element
 category: groups
 subcategory: free
+order: 2
 ---
 
 # Free group element

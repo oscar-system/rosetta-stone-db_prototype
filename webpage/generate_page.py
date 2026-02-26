@@ -174,6 +174,14 @@ def discover_examples():
                         "generate_file": generate_file,
                     }
 
+            raw_order = metadata.get("order")
+            parsed_order = None
+            if raw_order is not None:
+                try:
+                    parsed_order = int(raw_order)
+                except ValueError:
+                    parsed_order = None
+
             examples[example_id] = {
                 "id": example_id,
                 "slug": example_slug,
@@ -182,6 +190,7 @@ def discover_examples():
                 "title": metadata.get("title", example_slug),
                 "category": metadata.get("category", metadata.get("group", group_id)),
                 "subcategory": metadata.get("subcategory"),
+                "order": parsed_order,
                 "body": body,
                 "systems": systems,
             }
@@ -378,7 +387,10 @@ def build_index_markdown(examples, systems):
 
             sub_examples = sorted(
                 subgrouped[sub],
-                key=lambda exid: examples[exid]["title"].lower(),
+                key=lambda exid: (
+                    examples[exid]["order"] if examples[exid]["order"] is not None else 10_000,
+                    examples[exid]["title"].lower(),
+                ),
             )
             for example_id in sub_examples:
                 example = examples[example_id]

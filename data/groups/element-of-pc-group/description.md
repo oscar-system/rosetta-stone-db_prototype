@@ -2,6 +2,7 @@
 title: Element of pc group
 category: groups
 subcategory: pc
+order: 2
 ---
 
 # Element of pc group

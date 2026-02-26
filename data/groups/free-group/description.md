@@ -2,6 +2,7 @@
 title: Free group
 category: groups
 subcategory: free
+order: 1
 ---
 
 # Free group

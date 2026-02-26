@@ -2,6 +2,7 @@
 title: Subgroup of free group
 category: groups
 subcategory: free
+order: 3
 ---
 
 # Subgroup of free group

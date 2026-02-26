@@ -2,6 +2,7 @@
 title: Sylow subgroup of pc group
 category: groups
 subcategory: pc
+order: 3
 ---
 
 # Sylow subgroup of pc group

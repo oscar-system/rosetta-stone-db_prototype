@@ -2,6 +2,7 @@
 title: Free abelian group
 category: groups
 subcategory: abelian
+order: 1
 ---
 
 # Free abelian group

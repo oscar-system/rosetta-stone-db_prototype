@@ -2,6 +2,7 @@
 title: Symmetric group element
 category: groups
 subcategory: permutation
+order: 2
 ---
 
 # Symmetric group element

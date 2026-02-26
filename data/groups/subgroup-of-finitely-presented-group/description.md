@@ -2,6 +2,7 @@
 title: Subgroup of finitely presented group
 category: groups
 subcategory: fp
+order: 3
 ---
 
 # Subgroup of finitely presented group
