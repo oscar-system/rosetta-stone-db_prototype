@@ -226,7 +226,8 @@ def build_index_markdown(examples, systems):
     group_order = {
         "Rings": 0,
         "Linear Algebra": 1,
-        "Polyhedral Geometry": 2,
+        "Groups": 2,
+        "Polyhedral Geometry": 3,
     }
     lines = [
         "# Rosetta Stone Overview",
