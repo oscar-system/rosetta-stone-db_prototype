@@ -1,6 +1,6 @@
 ---
 title: Tuple of free-group elements
-group: Groups
+group: groups
 ---
 
 # Tuple of free-group elements

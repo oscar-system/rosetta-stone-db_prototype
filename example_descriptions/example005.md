@@ -1,6 +1,6 @@
 ---
 title: Fano matroid
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Fano matroid

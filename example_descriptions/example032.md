@@ -1,6 +1,6 @@
 ---
 title: Free group
-group: Groups
+group: groups
 ---
 
 # Free group

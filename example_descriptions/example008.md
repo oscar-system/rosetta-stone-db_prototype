@@ -1,6 +1,6 @@
 ---
 title: Number-field cone
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Number-field cone

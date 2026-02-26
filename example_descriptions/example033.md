@@ -1,6 +1,6 @@
 ---
 title: Subgroup of free group
-group: Groups
+group: groups
 ---
 
 # Subgroup of free group

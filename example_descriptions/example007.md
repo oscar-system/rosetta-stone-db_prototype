@@ -1,6 +1,6 @@
 ---
 title: Positive hull cone
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Positive hull cone

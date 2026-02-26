@@ -1,6 +1,6 @@
 ---
 title: Linear program
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Linear program

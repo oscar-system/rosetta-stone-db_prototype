@@ -1,6 +1,6 @@
 ---
 title: Free abelian group
-group: Groups
+group: groups
 ---
 
 # Free abelian group

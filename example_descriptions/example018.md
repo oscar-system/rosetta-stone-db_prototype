@@ -1,6 +1,6 @@
 ---
 title: Mixed-integer linear program
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Mixed-integer linear program

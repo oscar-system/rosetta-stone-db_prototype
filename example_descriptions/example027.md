@@ -1,6 +1,6 @@
 ---
 title: Sylow subgroup of symmetric group
-group: Groups
+group: groups
 ---
 
 # Sylow subgroup of symmetric group

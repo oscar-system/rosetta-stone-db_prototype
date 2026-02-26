@@ -1,6 +1,6 @@
 ---
 title: Number-field polyhedral complex
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Number-field polyhedral complex

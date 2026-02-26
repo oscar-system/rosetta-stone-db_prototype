@@ -6,7 +6,7 @@ const DESC_DIR = joinpath(ROOT, "example_descriptions")
 const OSCAR_DIR = joinpath(ROOT, "systems", "Oscar.jl")
 
 function description_md(title::String, body::String)
-    return "---\ntitle: $(title)\n---\n\n# $(title)\n\n$(body)\n"
+    return "---\ntitle: $(title)\ngroup: polyhedral\n---\n\n# $(title)\n\n$(body)\n"
 end
 
 struct ExampleSpec

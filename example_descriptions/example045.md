@@ -1,6 +1,6 @@
 ---
 title: Element of pc group
-group: Groups
+group: groups
 ---
 
 # Element of pc group

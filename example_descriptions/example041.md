@@ -1,6 +1,6 @@
 ---
 title: Subgroup of finitely presented group
-group: Groups
+group: groups
 ---
 
 # Subgroup of finitely presented group

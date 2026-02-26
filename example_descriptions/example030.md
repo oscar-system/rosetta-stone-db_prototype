@@ -1,6 +1,6 @@
 ---
 title: Tuple of permutation elements
-group: Groups
+group: groups
 ---
 
 # Tuple of permutation elements

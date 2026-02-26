@@ -223,11 +223,17 @@ def slugify(value):
 
 def build_index_markdown(examples, systems):
     system_names = sorted(systems.keys())
+    group_titles = {
+        "rings": "Rings",
+        "linear-algebra": "Linear Algebra",
+        "groups": "Groups",
+        "polyhedral": "Polyhedral Geometry",
+    }
     group_order = {
-        "Rings": 0,
-        "Linear Algebra": 1,
-        "Groups": 2,
-        "Polyhedral Geometry": 3,
+        "rings": 0,
+        "linear-algebra": 1,
+        "groups": 2,
+        "polyhedral": 3,
     }
     lines = [
         "# Rosetta Stone Overview",
@@ -243,13 +249,14 @@ def build_index_markdown(examples, systems):
         key=lambda name: (group_order.get(name, 999), name.lower()),
     )
 
-    for group_name in sorted_groups:
-        lines.append(f"## {group_name}")
+    for group_id in sorted_groups:
+        display_name = group_titles.get(group_id, group_id.replace("-", " ").title())
+        lines.append(f"## {display_name}")
         lines.append("")
         lines.append("| Example | " + " | ".join(system_names) + " |")
         lines.append("| --- | " + " | ".join("---" for _ in system_names) + " |")
 
-        for example_id in sorted(grouped_examples[group_name]):
+        for example_id in sorted(grouped_examples[group_id]):
             title = examples[example_id]["title"]
             row = [f"[{title}](./{example_id}.md)"]
             for system_name in system_names:

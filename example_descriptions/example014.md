@@ -1,6 +1,6 @@
 ---
 title: Normal fan of square
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Normal fan of square

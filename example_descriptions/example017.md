@@ -1,6 +1,6 @@
 ---
 title: Pair of linear programs
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Pair of linear programs

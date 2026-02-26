@@ -1,6 +1,6 @@
 ---
 title: Integer
-group: Rings
+group: rings
 ---
 
 # An integer

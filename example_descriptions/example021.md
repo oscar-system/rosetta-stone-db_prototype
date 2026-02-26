@@ -1,6 +1,6 @@
 ---
 title: Number-field subdivision
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Number-field subdivision

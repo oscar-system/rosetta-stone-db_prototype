@@ -1,6 +1,6 @@
 ---
 title: Rational matrix
-group: Linear Algebra
+group: linear-algebra
 ---
 
 # A matrix with rational entries

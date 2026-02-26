@@ -1,6 +1,6 @@
 ---
 title: Tuple with finitely presented groups
-group: Groups
+group: groups
 ---
 
 # Tuple with finitely presented groups

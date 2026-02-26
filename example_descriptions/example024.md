@@ -1,6 +1,6 @@
 ---
 title: Phylogenetic tree (QQ)
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Phylogenetic tree (QQ)

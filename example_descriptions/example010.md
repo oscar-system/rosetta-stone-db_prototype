@@ -1,6 +1,6 @@
 ---
 title: Algebraic cube
-group: Polyhedral Geometry
+group: polyhedral
 ---
 
 # Algebraic cube

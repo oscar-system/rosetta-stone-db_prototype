@@ -1,6 +1,6 @@
 ---
 title: Finitely presented group
-group: Groups
+group: groups
 ---
 
 # Finitely presented group
