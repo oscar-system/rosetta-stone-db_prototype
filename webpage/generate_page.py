@@ -318,6 +318,7 @@ def build_index_markdown(examples, systems):
         "rings": "Rings",
         "linear-algebra": "Linear Algebra",
         "groups": "Groups",
+        "lie-theory": "Lie Theory",
         "polyhedral": "Polyhedral Geometry",
     }
     subcategory_titles = {
@@ -339,6 +340,12 @@ def build_index_markdown(examples, systems):
             "complexes-subdivisions": "Complexes and Subdivisions",
             "phylogenetic": "Phylogenetic",
             "combinatorics": "Combinatorics",
+            "__other__": "Other",
+        },
+        "lie-theory": {
+            "root-data": "Root Data",
+            "weight-lattice": "Weight Lattice",
+            "weyl-group": "Weyl Group",
             "__other__": "Other",
         },
     }
