@@ -1,6 +1,6 @@
 ---
 title: Integer
-category: rings
+category: basics
 ---
 
 # An integer

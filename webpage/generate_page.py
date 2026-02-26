@@ -277,13 +277,13 @@ def slugify(value):
 def build_index_markdown(examples, systems):
     system_names = sorted(systems.keys())
     group_titles = {
-        "rings": "Rings",
+        "basics": "Basics",
         "linear-algebra": "Linear Algebra",
         "groups": "Groups",
         "polyhedral": "Polyhedral Geometry",
     }
     group_order = {
-        "rings": 0,
+        "basics": 0,
         "linear-algebra": 1,
         "groups": 2,
         "polyhedral": 3,
