@@ -5,7 +5,7 @@ const ROOT = normpath(joinpath(@__DIR__, ".."))
 const BASE = joinpath(ROOT, "data", "basics")
 
 items = [
-  ("int", ZZ(42)),
+  ("int", 42),
   ("bool", true),
   ("string", "string"),
   ("vector-int", Int[1, 2, 3, 4]),

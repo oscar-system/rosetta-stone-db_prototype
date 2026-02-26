@@ -5,4 +5,4 @@ category: basics
 
 # An integer
 
-This is just the number 42.
+This is just the Julia integer `42` (`Int`).

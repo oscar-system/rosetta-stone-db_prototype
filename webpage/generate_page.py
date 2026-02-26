@@ -278,15 +278,17 @@ def build_index_markdown(examples, systems):
     system_names = sorted(systems.keys())
     group_titles = {
         "basics": "Basics",
+        "rings": "Rings",
         "linear-algebra": "Linear Algebra",
         "groups": "Groups",
         "polyhedral": "Polyhedral Geometry",
     }
     group_order = {
         "basics": 0,
-        "linear-algebra": 1,
-        "groups": 2,
-        "polyhedral": 3,
+        "rings": 1,
+        "linear-algebra": 2,
+        "groups": 3,
+        "polyhedral": 4,
     }
     subgroup_titles = {
         "abelian": "Abelian Groups",

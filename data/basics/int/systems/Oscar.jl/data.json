@@ -1,1 +1,1 @@
-{"_ns":{"Oscar":["https://github.com/oscar-system/Oscar.jl","1.8.0-DEV-527f4874a699b99647059063806cf565e0d93298"]},"_type":{"name":"ZZRingElem","params":{"_type":"ZZRing"}},"data":"42"}
+{"_ns":{"Oscar":["https://github.com/oscar-system/Oscar.jl","1.8.0-DEV-527f4874a699b99647059063806cf565e0d93298"]},"_type":"Base.Int","data":"42"}
