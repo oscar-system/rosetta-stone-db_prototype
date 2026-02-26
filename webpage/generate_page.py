@@ -298,6 +298,7 @@ def build_index_markdown(examples, systems):
         "groups": {
             "abelian": "Abelian Groups",
             "permutation": "Permutation Groups",
+            "matrix": "Matrix Groups",
             "free": "Free Groups",
             "fp": "Finitely Presented Groups",
             "pc": "Pc Groups",

@@ -1,7 +1,8 @@
 ---
 title: Matrix-group elements
 category: groups
-order: 1
+subcategory: matrix
+order: 2
 ---
 
 # Matrix-group elements

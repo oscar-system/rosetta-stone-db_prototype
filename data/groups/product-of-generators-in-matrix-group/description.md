@@ -1,7 +1,8 @@
 ---
 title: Product of generators in matrix group
 category: groups
-order: 2
+subcategory: matrix
+order: 3
 ---
 
 # Product of generators in matrix group
