@@ -1,5 +1,6 @@
 ---
 title: Algebraic cube
+group: Polyhedral Geometry
 ---
 
 # Algebraic cube

@@ -1,5 +1,6 @@
 ---
 title: Subdivision of points
+group: Polyhedral Geometry
 ---
 
 # Subdivision of points

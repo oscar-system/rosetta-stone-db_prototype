@@ -120,6 +120,7 @@ def discover_examples():
             "id": path.stem,
             "path": path,
             "title": metadata.get("title", path.stem),
+            "group": metadata.get("group", "Ungrouped"),
             "body": body,
         }
     return examples
@@ -222,23 +223,42 @@ def slugify(value):
 
 def build_index_markdown(examples, systems):
     system_names = sorted(systems.keys())
+    group_order = {
+        "Rings": 0,
+        "Linear Algebra": 1,
+        "Polyhedral Geometry": 2,
+    }
     lines = [
         "# Rosetta Stone Overview",
         "",
-        "| Example | " + " | ".join(system_names) + " |",
-        "| --- | " + " | ".join("---" for _ in system_names) + " |",
     ]
 
-    for example_id in sorted(examples.keys()):
-        title = examples[example_id]["title"]
-        row = [f"[{title}](./{example_id}.md)"]
-        for system_name in system_names:
-            if example_id in systems[system_name]:
-                anchor = slugify(system_name)
-                row.append(f"[X](./{example_id}.md#{anchor})")
-            else:
-                row.append("")
-        lines.append("| " + " | ".join(row) + " |")
+    grouped_examples = {}
+    for example_id, example in examples.items():
+        grouped_examples.setdefault(example["group"], []).append(example_id)
+
+    sorted_groups = sorted(
+        grouped_examples.keys(),
+        key=lambda name: (group_order.get(name, 999), name.lower()),
+    )
+
+    for group_name in sorted_groups:
+        lines.append(f"## {group_name}")
+        lines.append("")
+        lines.append("| Example | " + " | ".join(system_names) + " |")
+        lines.append("| --- | " + " | ".join("---" for _ in system_names) + " |")
+
+        for example_id in sorted(grouped_examples[group_name]):
+            title = examples[example_id]["title"]
+            row = [f"[{title}](./{example_id}.md)"]
+            for system_name in system_names:
+                if example_id in systems[system_name]:
+                    anchor = slugify(system_name)
+                    row.append(f"[X](./{example_id}.md#{anchor})")
+                else:
+                    row.append("")
+            lines.append("| " + " | ".join(row) + " |")
+        lines.append("")
 
     lines.append("")
     return "\n".join(lines)

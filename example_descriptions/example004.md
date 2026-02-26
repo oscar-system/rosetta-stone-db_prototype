@@ -1,5 +1,6 @@
 ---
 title: Complete graph
+group: Polyhedral Geometry
 ---
 
 # Complete graph

@@ -1,5 +1,6 @@
 ---
 title: Square polyhedron
+group: Polyhedral Geometry
 ---
 
 # Square polyhedron

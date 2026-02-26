@@ -1,5 +1,6 @@
 ---
 title: Dodecahedron dictionary
+group: Polyhedral Geometry
 ---
 
 # Dodecahedron dictionary

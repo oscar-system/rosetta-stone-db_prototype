@@ -1,5 +1,6 @@
 ---
 title: Pair of linear programs
+group: Polyhedral Geometry
 ---
 
 # Pair of linear programs

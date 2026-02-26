@@ -1,5 +1,6 @@
 ---
 title: Uniform matroid
+group: Polyhedral Geometry
 ---
 
 # Uniform matroid
