@@ -139,6 +139,7 @@ def discover_examples():
             examples[example_id] = {
                 "id": example_id,
                 "slug": example_slug,
+                "output_relpath_md": f"{group_id}/{example_slug}.md",
                 "path": description_path,
                 "title": metadata.get("title", example_slug),
                 "group": group_id,
@@ -276,12 +277,14 @@ def build_index_markdown(examples, systems):
             key=lambda exid: examples[exid]["title"].lower(),
         )
         for example_id in group_examples:
-            title = examples[example_id]["title"]
-            row = [f"[{title}](./{example_id}.md)"]
+            example = examples[example_id]
+            title = example["title"]
+            relpath = example["output_relpath_md"]
+            row = [f"[{title}](./{relpath})"]
             for system_name in system_names:
                 if example_id in systems[system_name]:
                     anchor = slugify(system_name)
-                    row.append(f"[X](./{example_id}.md#{anchor})")
+                    row.append(f"[X](./{relpath}#{anchor})")
                 else:
                     row.append("")
             lines.append("| " + " | ".join(row) + " |")
@@ -301,7 +304,7 @@ def build_example_markdown(example, systems):
     lines = [
         f"# {example['title']}",
         "",
-        "[Back to index](./index.md)",
+        "[Back to index](../index.md)",
         "",
         body,
         "",
@@ -346,7 +349,7 @@ def build_example_markdown(example, systems):
 
 
 def rewrite_markdown_links(md_text):
-    pattern = re.compile(r"(\[[^\]]+\]\()(\./[^)\s]+)\)")
+    pattern = re.compile(r"(\[[^\]]+\]\()((?:\./|\.\./)[^)\s]+)\)")
 
     def replace_link(match):
         prefix = match.group(1)
@@ -493,21 +496,22 @@ def main():
     systems = build_system_index(examples)
 
     SITE_DIR.mkdir(parents=True, exist_ok=True)
-    for old_file in SITE_DIR.glob("*"):
+    for old_file in SITE_DIR.rglob("*"):
         if old_file.is_file() and old_file.suffix in {".md", ".html"}:
             old_file.unlink()
 
     INDEX_MD.write_text(build_index_markdown(examples, systems), encoding="utf-8")
 
     for example_id in sorted(examples.keys()):
-        example_page_path = SITE_DIR / f"{example_id}.md"
+        example_page_path = SITE_DIR / examples[example_id]["output_relpath_md"]
+        example_page_path.parent.mkdir(parents=True, exist_ok=True)
         page_content = build_example_markdown(examples[example_id], systems)
         example_page_path.write_text(page_content, encoding="utf-8")
         print(f"Wrote {example_page_path}")
 
     print(f"Wrote {INDEX_MD}")
 
-    for md_path in sorted(SITE_DIR.glob("*.md")):
+    for md_path in sorted(SITE_DIR.rglob("*.md")):
         render_html_page(md_path)
 
 
