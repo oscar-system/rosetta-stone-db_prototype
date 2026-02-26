@@ -35,6 +35,7 @@ HTML_TEMPLATE = """<!doctype html>
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" />
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/julia.min.js"></script>
   <script>
     window.addEventListener("DOMContentLoaded", function () {{
       document.querySelectorAll("pre > code").forEach(function (codeBlock) {{
