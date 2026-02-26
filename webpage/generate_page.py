@@ -278,21 +278,21 @@ def slugify(value):
 
 def build_index_markdown(examples, systems):
     system_names = sorted(systems.keys())
-    group_titles = {
+    category_titles = {
         "basics": "Basics",
         "rings": "Rings",
         "linear-algebra": "Linear Algebra",
         "groups": "Groups",
         "polyhedral": "Polyhedral Geometry",
     }
-    group_order = {
+    category_order = {
         "basics": 0,
         "rings": 1,
         "linear-algebra": 2,
         "groups": 3,
         "polyhedral": 4,
     }
-    subgroup_titles = {
+    subcategory_titles = {
         "abelian": "Abelian Groups",
         "permutation": "Permutation Groups",
         "free": "Free Groups",
@@ -308,7 +308,7 @@ def build_index_markdown(examples, systems):
         "combinatorics": "Combinatorics",
         "__other__": "Other",
     }
-    subgroup_order = {
+    subcategory_order = {
         "groups": {
             "abelian": 0,
             "permutation": 1,
@@ -335,7 +335,7 @@ def build_index_markdown(examples, systems):
 
     sorted_groups = sorted(
         grouped_examples.keys(),
-        key=lambda name: (group_order.get(name, 999), name.lower()),
+        key=lambda name: (category_order.get(name, 999), name.lower()),
     )
 
     lines = [
@@ -345,12 +345,12 @@ def build_index_markdown(examples, systems):
         "",
     ]
     for group_id in sorted_groups:
-        display_name = group_titles.get(group_id, group_id.replace("-", " ").title())
+        display_name = category_titles.get(group_id, group_id.replace("-", " ").title())
         lines.append(f"- [{display_name}](#{slugify(display_name)})")
     lines.append("")
 
     for group_id in sorted_groups:
-        display_name = group_titles.get(group_id, group_id.replace("-", " ").title())
+        display_name = category_titles.get(group_id, group_id.replace("-", " ").title())
         lines.append(f'<a id="{slugify(display_name)}"></a>')
         lines.append("")
         lines.append(f"## {display_name}")
@@ -365,12 +365,12 @@ def build_index_markdown(examples, systems):
 
         ordered_subgroups = sorted(
             subgrouped.keys(),
-            key=lambda sub: (subgroup_order.get(group_id, {}).get(sub, 999), sub.lower()),
+            key=lambda sub: (subcategory_order.get(group_id, {}).get(sub, 999), sub.lower()),
         )
 
         for sub in ordered_subgroups:
             if len(ordered_subgroups) > 1:
-                lines.append(f"### {subgroup_titles.get(sub, sub.replace('-', ' ').title())}")
+                lines.append(f"### {subcategory_titles.get(sub, sub.replace('-', ' ').title())}")
                 lines.append("")
 
             lines.append("| Example | " + " | ".join(system_names) + " |")
