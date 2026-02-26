@@ -37,6 +37,24 @@ HTML_TEMPLATE = """<!doctype html>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script>
     window.addEventListener("DOMContentLoaded", function () {{
+      document.querySelectorAll("pre > code").forEach(function (codeBlock) {{
+        var pre = codeBlock.parentElement;
+        if (!pre || pre.querySelector(".copy-code-btn")) {{
+          return;
+        }}
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "copy-code-btn";
+        button.textContent = "Copy";
+        button.addEventListener("click", function () {{
+          navigator.clipboard.writeText(codeBlock.textContent || "").then(function () {{
+            button.textContent = "Copied";
+            setTimeout(function () {{ button.textContent = "Copy"; }}, 1200);
+          }});
+        }});
+        pre.appendChild(button);
+      }});
+
       if (window.hljs) {{
         window.hljs.highlightAll();
       }}
@@ -64,6 +82,22 @@ HTML_TEMPLATE = """<!doctype html>
       overflow-x: auto;
       padding: 1rem;
       border-radius: 6px;
+      position: relative;
+    }}
+    .copy-code-btn {{
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      border: 1px solid #c9c9c9;
+      background: #fff;
+      color: #222;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      cursor: pointer;
+    }}
+    .copy-code-btn:hover {{
+      background: #f2f2f2;
     }}
     code {{
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
