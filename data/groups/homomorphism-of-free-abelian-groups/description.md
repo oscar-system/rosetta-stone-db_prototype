@@ -2,7 +2,7 @@
 title: Homomorphism of free abelian groups
 category: groups
 subcategory: abelian
-order: 2
+order: 3
 ---
 
 # Homomorphism of free abelian groups

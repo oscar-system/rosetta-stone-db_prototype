@@ -1,10 +1,10 @@
 ---
-title: Element of free subgroup
+title: Element of subgroup of free group
 category: groups
 subcategory: free
 order: 4
 ---
 
-# Element of free subgroup
+# Element of subgroup of free group
 
 A generator of a subgroup of a free group.

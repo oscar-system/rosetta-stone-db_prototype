@@ -1,10 +1,10 @@
 ---
-title: Matrix-group elements
+title: Element of matrix group
 category: groups
 subcategory: matrix
 order: 2
 ---
 
-# Matrix-group elements
+# Element of matrix group
 
-Two elements of `GL(3, 5)` obtained from explicit matrices.
+This example stores a generator element of `GL(3, 5)`.
