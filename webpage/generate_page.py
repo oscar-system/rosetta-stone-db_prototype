@@ -398,11 +398,7 @@ def build_index_markdown(examples, systems):
 
 
 def build_example_markdown(example, systems):
-    body_lines = example["body"].splitlines()
-    if body_lines and body_lines[0].startswith("# "):
-        body = "\n".join(body_lines[1:]).lstrip()
-    else:
-        body = example["body"].rstrip()
+    body = example["body"].rstrip()
 
     available_systems = [
         system_name
