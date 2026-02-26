@@ -4,8 +4,6 @@ category: polyhedral
 subcategory: optimization
 ---
 
-# A linear program
-
 We take the matrix
 
 $$

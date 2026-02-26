@@ -5,6 +5,4 @@ subcategory: matrix
 order: 2
 ---
 
-# Element of matrix group
-
 This example stores a generator element of `GL(3, 5)`.

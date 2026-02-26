@@ -4,6 +4,4 @@ category: polyhedral
 subcategory: fans
 ---
 
-# Normal fan of square
-
 Construct the normal fan of a square.

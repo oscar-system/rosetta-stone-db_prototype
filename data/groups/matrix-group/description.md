@@ -5,6 +5,4 @@ subcategory: matrix
 order: 1
 ---
 
-# Matrix group
-
 The group `general_linear_group(3, 5)`.

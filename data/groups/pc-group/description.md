@@ -5,6 +5,4 @@ subcategory: pc
 order: 1
 ---
 
-# Pc group
-
 The small group identified by `(24, 12)`.

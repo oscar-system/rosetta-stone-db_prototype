@@ -5,6 +5,4 @@ subcategory: pc
 order: 4
 ---
 
-# Element of subgroup of pc group
-
 A generator of a Sylow-2 subgroup in a pc group.

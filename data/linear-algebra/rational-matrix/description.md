@@ -3,8 +3,6 @@ title: Rational matrix
 category: linear-algebra
 ---
 
-# A matrix with rational entries
-
 The matrix is given as
 
 $$
