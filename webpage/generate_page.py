@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import re
+import html
 
 ROOT = Path(__file__).parent.parent
 DESCRIPTIONS_DIR = ROOT / "example_descriptions"
@@ -17,6 +18,70 @@ LANGUAGE_BY_SUFFIX = {
     ".ine": "text",
     ".md": "markdown",
 }
+
+HTML_TEMPLATE = """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <script>
+    MathJax = {{
+      tex: {{
+        inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
+        displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']]
+      }}
+    }};
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body {{
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #fafaf9;
+      color: #1a1a1a;
+      line-height: 1.5;
+    }}
+    main {{
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+    }}
+    pre {{
+      overflow-x: auto;
+      padding: 1rem;
+      background: #f5f5f5;
+      border-radius: 6px;
+    }}
+    code {{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }}
+    table {{
+      border-collapse: collapse;
+      width: 100%;
+    }}
+    th, td {{
+      border: 1px solid #ddd;
+      padding: 0.4rem 0.6rem;
+      text-align: left;
+      vertical-align: top;
+    }}
+    a {{
+      color: #0b57d0;
+    }}
+  </style>
+</head>
+<body>
+  <main>
+{content}
+  </main>
+</body>
+</html>
+"""
 
 
 def parse_description(path):
@@ -97,8 +162,7 @@ def build_index_markdown(examples, systems):
         row = [f"[{title}](./{example_id}.md)"]
         for system_name in system_names:
             if example_id in systems[system_name]:
-                anchor = slugify(system_name)
-                row.append(f"[X](./{example_id}.md#{anchor})")
+                row.append(f"[X](./{example_id}.md)")
             else:
                 row.append("")
         lines.append("| " + " | ".join(row) + " |")
@@ -157,6 +221,144 @@ def build_example_markdown(example, systems):
     return "\n".join(lines).rstrip() + "\n"
 
 
+def rewrite_markdown_links(md_text):
+    pattern = re.compile(r"(\[[^\]]+\]\()(\./[^)\s]+)\)")
+
+    def replace_link(match):
+        prefix = match.group(1)
+        target = match.group(2)
+        if ".md" in target:
+            target = re.sub(r"\.md(?=(#|$))", ".html", target)
+        return f"{prefix}{target})"
+
+    return pattern.sub(replace_link, md_text)
+
+
+def escape_inline(text):
+    escaped = html.escape(text, quote=False)
+    escaped = re.sub(r"`([^`]+)`", r"<code>\1</code>", escaped)
+    escaped = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', escaped)
+    return escaped
+
+
+def render_table(table_lines):
+    rows = []
+    for line in table_lines:
+        stripped = line.strip()
+        if not stripped.startswith("|"):
+            continue
+        parts = [cell.strip() for cell in stripped.strip("|").split("|")]
+        rows.append(parts)
+
+    if len(rows) < 2:
+        return "\n".join(f"<p>{escape_inline(line)}</p>" for line in table_lines)
+
+    headers = rows[0]
+    body_rows = rows[2:] if len(rows) > 2 else []
+    header_html = "".join(f"<th>{escape_inline(cell)}</th>" for cell in headers)
+    body_html = []
+    for row in body_rows:
+        body_cells = "".join(f"<td>{escape_inline(cell)}</td>" for cell in row)
+        body_html.append(f"<tr>{body_cells}</tr>")
+
+    return (
+        "<table>\n"
+        f"<thead><tr>{header_html}</tr></thead>\n"
+        f"<tbody>{''.join(body_html)}</tbody>\n"
+        "</table>"
+    )
+
+
+def markdown_to_html(md_text):
+    text = rewrite_markdown_links(md_text)
+    lines = text.splitlines()
+    out = []
+    paragraph = []
+    in_code = False
+    code_lang = ""
+    code_lines = []
+    table_lines = []
+
+    def flush_paragraph():
+        nonlocal paragraph
+        if paragraph:
+            joined = " ".join(part.strip() for part in paragraph if part.strip())
+            if joined:
+                out.append(f"<p>{escape_inline(joined)}</p>")
+            paragraph = []
+
+    def flush_table():
+        nonlocal table_lines
+        if table_lines:
+            out.append(render_table(table_lines))
+            table_lines = []
+
+    for line in lines:
+        stripped = line.strip()
+
+        if in_code:
+            if stripped.startswith("```"):
+                code = html.escape("\n".join(code_lines), quote=False)
+                klass = f' class="language-{code_lang}"' if code_lang else ""
+                out.append(f"<pre><code{klass}>{code}</code></pre>")
+                in_code = False
+                code_lang = ""
+                code_lines = []
+            else:
+                code_lines.append(line)
+            continue
+
+        if stripped.startswith("```"):
+            flush_paragraph()
+            flush_table()
+            in_code = True
+            code_lang = stripped[3:].strip()
+            code_lines = []
+            continue
+
+        if stripped.startswith("|"):
+            flush_paragraph()
+            table_lines.append(line)
+            continue
+        else:
+            flush_table()
+
+        if not stripped:
+            flush_paragraph()
+            continue
+
+        heading_match = re.match(r"^(#{1,6})\s+(.*)$", stripped)
+        if heading_match:
+            flush_paragraph()
+            level = len(heading_match.group(1))
+            content = escape_inline(heading_match.group(2).strip())
+            out.append(f"<h{level}>{content}</h{level}>")
+            continue
+
+        paragraph.append(line)
+
+    flush_paragraph()
+    flush_table()
+    return "\n".join(out)
+
+
+def extract_title(md_text, fallback):
+    for line in md_text.splitlines():
+        if line.startswith("# "):
+            return line[2:].strip()
+    return fallback
+
+
+def render_html_page(md_path):
+    md_text = md_path.read_text(encoding="utf-8")
+    content_html = markdown_to_html(md_text)
+    title = extract_title(md_text, md_path.stem)
+    full_html = HTML_TEMPLATE.format(title=title, content=content_html)
+    html_path = md_path.with_suffix(".html")
+    html_path.write_text(full_html, encoding="utf-8")
+    print(f"Wrote {html_path}")
+
+
 def main():
     examples = discover_examples()
     systems = discover_system_examples()
@@ -171,6 +373,9 @@ def main():
         print(f"Wrote {example_page_path}")
 
     print(f"Wrote {INDEX_MD}")
+
+    for md_path in sorted(SITE_DIR.glob("*.md")):
+        render_html_page(md_path)
 
 
 if __name__ == "__main__":
