@@ -1,7 +1,7 @@
 ---
 title: Element of finitely presented group
 category: groups
-subcategory: free-fp
+subcategory: fp
 ---
 
 # Element of finitely presented group

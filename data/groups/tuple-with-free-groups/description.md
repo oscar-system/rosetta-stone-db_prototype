@@ -1,7 +1,7 @@
 ---
 title: Tuple with free groups
 category: groups
-subcategory: free-fp
+subcategory: free
 ---
 
 # Tuple with free groups

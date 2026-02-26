@@ -291,7 +291,8 @@ def build_index_markdown(examples, systems):
     subgroup_titles = {
         "abelian": "Abelian Groups",
         "permutation": "Permutation Groups",
-        "free-fp": "Free and Finitely Presented Groups",
+        "free": "Free Groups",
+        "fp": "Finitely Presented Groups",
         "pc": "Pc Groups",
         "__other__": "Other",
     }
@@ -299,8 +300,9 @@ def build_index_markdown(examples, systems):
         "groups": {
             "abelian": 0,
             "permutation": 1,
-            "free-fp": 2,
-            "pc": 3,
+            "free": 2,
+            "fp": 3,
+            "pc": 4,
             "__other__": 99,
         }
     }

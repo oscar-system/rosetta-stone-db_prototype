@@ -1,7 +1,7 @@
 ---
 title: Tuple of free-group elements
 category: groups
-subcategory: free-fp
+subcategory: free
 ---
 
 # Tuple of free-group elements
