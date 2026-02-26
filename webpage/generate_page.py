@@ -337,6 +337,12 @@ def build_example_markdown(example, systems):
     else:
         body = example["body"].rstrip()
 
+    available_systems = [
+        system_name
+        for system_name in sorted(systems.keys())
+        if example["id"] in systems[system_name]
+    ]
+
     lines = [
         f"# {example['title']}",
         "",
@@ -348,18 +354,13 @@ def build_example_markdown(example, systems):
         "",
     ]
 
-    for system_name in sorted(systems.keys()):
+    for system_name in available_systems:
         lines.append(f'<a id="{slugify(system_name)}"></a>')
         lines.append("")
         lines.append(f"### {system_name}")
         lines.append("")
 
         system_example = systems[system_name].get(example["id"])
-        if system_example is None:
-            lines.append("Example not available for this system")
-            lines.append("")
-            continue
-
         generate_file = system_example["generate_file"]
         data_file = system_example["data_file"]
 
