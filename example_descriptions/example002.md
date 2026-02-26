@@ -1,3 +1,7 @@
+---
+title: Rational matrix
+---
+
 # A matrix with rational entries
 
 The matrix is given as

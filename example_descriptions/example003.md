@@ -1,3 +1,7 @@
+---
+title: Linear program
+---
+
 # A linear program
 
 We take the matrix
