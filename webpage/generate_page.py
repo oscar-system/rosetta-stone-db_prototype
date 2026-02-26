@@ -157,11 +157,56 @@ def render_data_for_markdown(path):
     if path.suffix == ".json":
         try:
             parsed = json.loads(raw)
-            # Keep JSON readable while avoiding excessive vertical expansion.
-            return json.dumps(parsed, indent=2, ensure_ascii=False)
+            return format_json_compact(parsed, indent_size=2, max_width=100)
         except json.JSONDecodeError:
             return raw
     return raw
+
+
+def format_json_compact(value, indent_size=2, max_width=100):
+    def inline_repr(obj):
+        return json.dumps(obj, ensure_ascii=False, separators=(", ", ": "))
+
+    def format_node(obj, level):
+        current_indent = " " * (indent_size * level)
+        next_indent = " " * (indent_size * (level + 1))
+
+        if not isinstance(obj, (list, dict)):
+            return json.dumps(obj, ensure_ascii=False)
+
+        inline = inline_repr(obj)
+        if len(current_indent) + len(inline) <= max_width:
+            return inline
+
+        if isinstance(obj, list):
+            if not obj:
+                return "[]"
+            entries = []
+            for item in obj:
+                item_repr = format_node(item, level + 1)
+                item_lines = item_repr.splitlines()
+                entry = [next_indent + item_lines[0]]
+                entry.extend(next_indent + line for line in item_lines[1:])
+                entries.append("\n".join(entry))
+            return "[\n" + ",\n".join(entries) + "\n" + current_indent + "]"
+
+        if not obj:
+            return "{}"
+
+        entries = []
+        for key, item in obj.items():
+            item_repr = format_node(item, level + 1)
+            item_lines = item_repr.splitlines()
+            key_prefix = next_indent + json.dumps(key, ensure_ascii=False) + ": "
+            if len(item_lines) == 1:
+                entries.append(key_prefix + item_lines[0])
+                continue
+            entry_lines = [key_prefix + item_lines[0]]
+            entry_lines.extend(next_indent + line for line in item_lines[1:])
+            entries.append("\n".join(entry_lines))
+        return "{\n" + ",\n".join(entries) + "\n" + current_indent + "}"
+
+    return format_node(value, 0)
 
 
 def slugify(value):
