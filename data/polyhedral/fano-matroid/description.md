@@ -1,6 +1,6 @@
 ---
 title: Fano matroid
-group: polyhedral
+category: polyhedral
 ---
 
 # Fano matroid

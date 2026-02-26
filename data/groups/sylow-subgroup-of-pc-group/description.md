@@ -1,6 +1,6 @@
 ---
 title: Sylow subgroup of pc group
-group: groups
+category: groups
 ---
 
 # Sylow subgroup of pc group

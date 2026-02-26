@@ -1,6 +1,6 @@
 ---
 title: Pair of mixed-integer linear programs
-group: polyhedral
+category: polyhedral
 ---
 
 # Pair of mixed-integer linear programs

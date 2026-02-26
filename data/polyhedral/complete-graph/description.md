@@ -1,6 +1,6 @@
 ---
 title: Complete graph
-group: polyhedral
+category: polyhedral
 ---
 
 # Complete graph

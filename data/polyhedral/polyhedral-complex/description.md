@@ -1,6 +1,6 @@
 ---
 title: Polyhedral complex
-group: polyhedral
+category: polyhedral
 ---
 
 # Polyhedral complex

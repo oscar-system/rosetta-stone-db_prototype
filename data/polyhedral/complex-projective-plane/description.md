@@ -1,6 +1,6 @@
 ---
 title: Complex projective plane
-group: polyhedral
+category: polyhedral
 ---
 
 # Complex projective plane

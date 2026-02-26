@@ -1,6 +1,6 @@
 ---
 title: Homomorphism of free abelian groups
-group: groups
+category: groups
 ---
 
 # Homomorphism of free abelian groups

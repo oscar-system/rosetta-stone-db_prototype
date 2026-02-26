@@ -1,6 +1,6 @@
 ---
 title: Linear program
-group: polyhedral
+category: polyhedral
 ---
 
 # Linear program

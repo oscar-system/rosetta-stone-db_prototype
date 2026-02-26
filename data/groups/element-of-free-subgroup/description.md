@@ -1,6 +1,6 @@
 ---
 title: Element of free subgroup
-group: groups
+category: groups
 ---
 
 # Element of free subgroup

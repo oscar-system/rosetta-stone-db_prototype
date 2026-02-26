@@ -1,6 +1,6 @@
 ---
 title: Tuple of finitely presented group elements
-group: groups
+category: groups
 ---
 
 # Tuple of finitely presented group elements

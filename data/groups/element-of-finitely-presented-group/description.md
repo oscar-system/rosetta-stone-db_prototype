@@ -1,6 +1,6 @@
 ---
 title: Element of finitely presented group
-group: groups
+category: groups
 ---
 
 # Element of finitely presented group

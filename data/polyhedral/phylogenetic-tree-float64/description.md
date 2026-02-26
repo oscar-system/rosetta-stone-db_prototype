@@ -1,6 +1,6 @@
 ---
 title: Phylogenetic tree (Float64)
-group: polyhedral
+category: polyhedral
 ---
 
 # Phylogenetic tree (Float64)

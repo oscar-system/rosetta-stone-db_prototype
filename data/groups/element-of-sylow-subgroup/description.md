@@ -1,6 +1,6 @@
 ---
 title: Element of Sylow subgroup
-group: groups
+category: groups
 ---
 
 # Element of Sylow subgroup

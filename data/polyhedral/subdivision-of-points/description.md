@@ -1,6 +1,6 @@
 ---
 title: Subdivision of points
-group: polyhedral
+category: polyhedral
 ---
 
 # Subdivision of points

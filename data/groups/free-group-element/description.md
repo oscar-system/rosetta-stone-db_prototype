@@ -1,6 +1,6 @@
 ---
 title: Free group element
-group: groups
+category: groups
 ---
 
 # Free group element

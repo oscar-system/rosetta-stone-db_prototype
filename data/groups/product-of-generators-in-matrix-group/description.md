@@ -1,6 +1,6 @@
 ---
 title: Product of generators in matrix group
-group: groups
+category: groups
 ---
 
 # Product of generators in matrix group

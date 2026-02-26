@@ -1,6 +1,6 @@
 ---
 title: Tuple of pc-group elements
-group: groups
+category: groups
 ---
 
 # Tuple of pc-group elements

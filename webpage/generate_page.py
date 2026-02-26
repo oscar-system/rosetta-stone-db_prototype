@@ -178,7 +178,7 @@ def discover_examples():
                 "output_relpath_md": f"{group_id}/{example_slug}.md",
                 "path": description_path,
                 "title": metadata.get("title", example_slug),
-                "group": group_id,
+                "category": metadata.get("category", metadata.get("group", group_id)),
                 "body": body,
                 "systems": systems,
             }
@@ -294,7 +294,7 @@ def build_index_markdown(examples, systems):
 
     grouped_examples = {}
     for example_id, example in examples.items():
-        grouped_examples.setdefault(example["group"], []).append(example_id)
+        grouped_examples.setdefault(example["category"], []).append(example_id)
 
     sorted_groups = sorted(
         grouped_examples.keys(),

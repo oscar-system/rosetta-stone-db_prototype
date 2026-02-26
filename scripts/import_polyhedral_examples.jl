@@ -6,7 +6,7 @@ const DATA_DIR = joinpath(ROOT, "data")
 const GROUP_ID = "polyhedral"
 
 function description_md(title::String, body::String)
-    return "---\ntitle: $(title)\ngroup: polyhedral\n---\n\n# $(title)\n\n$(body)\n"
+    return "---\ntitle: $(title)\ncategory: polyhedral\n---\n\n# $(title)\n\n$(body)\n"
 end
 
 struct ExampleSpec

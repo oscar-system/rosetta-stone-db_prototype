@@ -1,6 +1,6 @@
 ---
 title: Tuple with pc groups
-group: groups
+category: groups
 ---
 
 # Tuple with pc groups

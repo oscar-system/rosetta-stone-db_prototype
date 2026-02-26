@@ -1,6 +1,6 @@
 ---
 title: Symmetric group element
-group: groups
+category: groups
 ---
 
 # Symmetric group element

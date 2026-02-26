@@ -1,6 +1,6 @@
 ---
 title: Tuple with permutation groups
-group: groups
+category: groups
 ---
 
 # Tuple with permutation groups

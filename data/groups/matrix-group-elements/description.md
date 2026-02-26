@@ -1,6 +1,6 @@
 ---
 title: Matrix-group elements
-group: groups
+category: groups
 ---
 
 # Matrix-group elements

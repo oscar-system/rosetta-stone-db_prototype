@@ -1,6 +1,6 @@
 ---
 title: Normal fan of dodecahedron
-group: polyhedral
+category: polyhedral
 ---
 
 # Normal fan of dodecahedron

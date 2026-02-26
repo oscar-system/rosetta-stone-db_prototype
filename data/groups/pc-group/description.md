@@ -1,6 +1,6 @@
 ---
 title: Pc group
-group: groups
+category: groups
 ---
 
 # Pc group

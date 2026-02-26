@@ -1,6 +1,6 @@
 ---
 title: Number-field cone
-group: polyhedral
+category: polyhedral
 ---
 
 # Number-field cone
