@@ -1,10 +1,8 @@
-\documentclass{scrartcl}
-\usepackage{amsmath, amssymb}
+# A matrix with rational entries
 
-\begin{document}
-\section*{A matrix with rational entries}
 The matrix is given as
-\[
+
+$$
 \left(
 \begin{array}{cccc}
 12 & 31 & 24 & 78\\
@@ -12,6 +10,6 @@ The matrix is given as
 23 & 99 & 19 & 34
 \end{array}
 \right)
-\]
+$$
+
 with entries in the rational numbers $\mathbb{Q}$.
-\end{document}
