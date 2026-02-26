@@ -176,7 +176,7 @@ obj = map(m -> G(m), matelms)
 ]
 
 function slugify(s::String)
-    return replace(lowercase(s), r"[^a-z0-9]+" => "-") |> x -> strip(x, '-')
+    return String(strip(replace(lowercase(s), r"[^a-z0-9]+" => "-"), '-'))
 end
 
 

@@ -120,7 +120,7 @@ obj = phylogenetic_tree(QQFieldElem, "((H:3,(C:1,B:1):2):1,G:4);")
 ]
 
 function slugify(s::String)
-    return replace(lowercase(s), r"[^a-z0-9]+" => "-") |> x -> strip(x, '-')
+    return String(strip(replace(lowercase(s), r"[^a-z0-9]+" => "-"), '-'))
 end
 
 
