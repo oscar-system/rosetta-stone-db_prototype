@@ -186,7 +186,10 @@ def format_json_compact(value, indent_size=2, max_width=100):
                 item_repr = format_node(item, level + 1)
                 item_lines = item_repr.splitlines()
                 entry = [next_indent + item_lines[0]]
-                entry.extend(next_indent + line for line in item_lines[1:])
+                for line in item_lines[1:]:
+                    if line.startswith(next_indent):
+                        line = line[len(next_indent):]
+                    entry.append(next_indent + line)
                 entries.append("\n".join(entry))
             return "[\n" + ",\n".join(entries) + "\n" + current_indent + "]"
 
@@ -202,7 +205,10 @@ def format_json_compact(value, indent_size=2, max_width=100):
                 entries.append(key_prefix + item_lines[0])
                 continue
             entry_lines = [key_prefix + item_lines[0]]
-            entry_lines.extend(next_indent + line for line in item_lines[1:])
+            for line in item_lines[1:]:
+                if line.startswith(next_indent):
+                    line = line[len(next_indent):]
+                entry_lines.append(next_indent + line)
             entries.append("\n".join(entry_lines))
         return "{\n" + ",\n".join(entries) + "\n" + current_indent + "}"
 
