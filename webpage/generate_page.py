@@ -4,12 +4,43 @@ import re
 import json
 
 import marko
+from marko.html_renderer import HTMLRenderer
 
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
 SITE_DIR = ROOT / "_site"
 INDEX_MD = SITE_DIR / "index.md"
-MARKDOWN_RENDERER = marko.Markdown(extensions=["gfm"])
+
+
+def slugify(value):
+    slug = re.sub(r"[^a-z0-9]+", "-", value.lower())
+    return slug.strip("-")
+
+
+def _heading_plain_text(node):
+    if isinstance(node, str):
+        return node
+    if isinstance(node, list):
+        return "".join(_heading_plain_text(child) for child in node)
+    children = getattr(node, "children", None)
+    if children is None:
+        return ""
+    return _heading_plain_text(children)
+
+
+class HeadingIdRenderer(HTMLRenderer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._heading_id_counts = {}
+
+    def render_heading(self, element):
+        rendered = self.render_children(element)
+        text = _heading_plain_text(getattr(element, "children", "")).strip()
+        base = slugify(text) or f"h{element.level}"
+        count = self._heading_id_counts.get(base, 0) + 1
+        self._heading_id_counts[base] = count
+        heading_id = base if count == 1 else f"{base}-{count}"
+        return f'<h{element.level} id="{heading_id}">{rendered}</h{element.level}>\n'
 
 LANGUAGE_BY_SUFFIX = {
     ".jl": "julia",
@@ -280,11 +311,6 @@ def format_json_compact(value, indent_size=2, max_width=100):
     return format_node(value, 0)
 
 
-def slugify(value):
-    slug = re.sub(r"[^a-z0-9]+", "-", value.lower())
-    return slug.strip("-")
-
-
 def build_index_markdown(examples, systems):
     system_names = sorted(systems.keys())
     category_titles = {
@@ -343,8 +369,6 @@ def build_index_markdown(examples, systems):
 
     for group_id in sorted_groups:
         display_name = category_titles.get(group_id, group_id.replace("-", " ").title())
-        lines.append(f'<a id="{slugify(display_name)}"></a>')
-        lines.append("")
         lines.append(f"## {display_name}")
         lines.append("")
         group_examples = grouped_examples[group_id]
@@ -418,8 +442,6 @@ def build_example_markdown(example, systems):
     ]
 
     for system_name in available_systems:
-        lines.append(f'<a id="{slugify(system_name)}"></a>')
-        lines.append("")
         lines.append(f"### {system_name}")
         lines.append("")
 
@@ -463,7 +485,8 @@ def rewrite_markdown_links(md_text):
 
 def markdown_to_html(md_text):
     text = rewrite_markdown_links(md_text)
-    return MARKDOWN_RENDERER.convert(text)
+    renderer = marko.Markdown(renderer=HeadingIdRenderer, extensions=["gfm"])
+    return renderer.convert(text)
 
 
 def extract_title(md_text, fallback):
