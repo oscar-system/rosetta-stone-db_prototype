@@ -1,6 +1,7 @@
 ---
 title: Dodecahedron dictionary
 category: polyhedral
+subcategory: polyhedra
 ---
 
 # Dodecahedron dictionary

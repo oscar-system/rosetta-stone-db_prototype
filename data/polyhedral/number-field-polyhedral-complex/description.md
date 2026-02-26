@@ -1,6 +1,7 @@
 ---
 title: Number-field polyhedral complex
 category: polyhedral
+subcategory: complexes-subdivisions
 ---
 
 # Number-field polyhedral complex

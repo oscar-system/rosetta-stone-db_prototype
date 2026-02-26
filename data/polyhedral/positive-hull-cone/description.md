@@ -1,6 +1,7 @@
 ---
 title: Positive hull cone
 category: polyhedral
+subcategory: cones
 ---
 
 # Positive hull cone

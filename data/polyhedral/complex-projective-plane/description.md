@@ -1,6 +1,7 @@
 ---
 title: Complex projective plane
 category: polyhedral
+subcategory: complexes-subdivisions
 ---
 
 # Complex projective plane

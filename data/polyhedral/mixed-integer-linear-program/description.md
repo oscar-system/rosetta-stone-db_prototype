@@ -1,6 +1,7 @@
 ---
 title: Mixed-integer linear program
 category: polyhedral
+subcategory: optimization
 ---
 
 # Mixed-integer linear program

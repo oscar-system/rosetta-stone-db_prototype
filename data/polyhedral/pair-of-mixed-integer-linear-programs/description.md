@@ -1,6 +1,7 @@
 ---
 title: Pair of mixed-integer linear programs
 category: polyhedral
+subcategory: optimization
 ---
 
 # Pair of mixed-integer linear programs

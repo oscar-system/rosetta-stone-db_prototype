@@ -1,6 +1,7 @@
 ---
 title: Pair of linear programs
 category: polyhedral
+subcategory: optimization
 ---
 
 # Pair of linear programs

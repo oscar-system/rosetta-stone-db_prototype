@@ -296,6 +296,14 @@ def build_index_markdown(examples, systems):
         "free": "Free Groups",
         "fp": "Finitely Presented Groups",
         "pc": "Pc Groups",
+        "polyhedra": "Polyhedra",
+        "fans": "Fans",
+        "cones": "Cones",
+        "matroids": "Matroids",
+        "optimization": "Optimization",
+        "complexes-subdivisions": "Complexes and Subdivisions",
+        "phylogenetic": "Phylogenetic",
+        "combinatorics": "Combinatorics",
         "__other__": "Other",
     }
     subgroup_order = {
@@ -306,7 +314,18 @@ def build_index_markdown(examples, systems):
             "fp": 3,
             "pc": 4,
             "__other__": 99,
-        }
+        },
+        "polyhedral": {
+            "polyhedra": 0,
+            "fans": 1,
+            "cones": 2,
+            "matroids": 3,
+            "optimization": 4,
+            "complexes-subdivisions": 5,
+            "phylogenetic": 6,
+            "combinatorics": 7,
+            "__other__": 99,
+        },
     }
     lines = [
         "# Rosetta Stone Overview",

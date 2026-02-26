@@ -1,6 +1,7 @@
 ---
 title: Uniform matroid
 category: polyhedral
+subcategory: matroids
 ---
 
 # Uniform matroid

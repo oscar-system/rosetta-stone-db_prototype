@@ -1,6 +1,7 @@
 ---
 title: Square polyhedron
 category: polyhedral
+subcategory: polyhedra
 ---
 
 # Square polyhedron

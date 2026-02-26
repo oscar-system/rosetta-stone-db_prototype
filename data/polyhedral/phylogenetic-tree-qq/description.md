@@ -1,6 +1,7 @@
 ---
 title: Phylogenetic tree (QQ)
 category: polyhedral
+subcategory: phylogenetic
 ---
 
 # Phylogenetic tree (QQ)

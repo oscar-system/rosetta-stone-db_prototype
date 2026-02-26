@@ -1,6 +1,7 @@
 ---
 title: Polyhedral complex
 category: polyhedral
+subcategory: complexes-subdivisions
 ---
 
 # Polyhedral complex

@@ -1,6 +1,7 @@
 ---
 title: Subdivision of points
 category: polyhedral
+subcategory: complexes-subdivisions
 ---
 
 # Subdivision of points

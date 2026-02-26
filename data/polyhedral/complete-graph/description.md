@@ -1,6 +1,7 @@
 ---
 title: Complete graph
 category: polyhedral
+subcategory: combinatorics
 ---
 
 # Complete graph

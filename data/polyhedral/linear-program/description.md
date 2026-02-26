@@ -1,6 +1,7 @@
 ---
 title: Linear program
 category: polyhedral
+subcategory: optimization
 ---
 
 # A linear program
