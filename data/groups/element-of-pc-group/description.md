@@ -1,6 +1,7 @@
 ---
 title: Element of pc group
 category: groups
+subcategory: pc
 ---
 
 # Element of pc group

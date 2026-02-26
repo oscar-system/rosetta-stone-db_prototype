@@ -1,6 +1,7 @@
 ---
 title: Tuple with free groups
 category: groups
+subcategory: free-fp
 ---
 
 # Tuple with free groups

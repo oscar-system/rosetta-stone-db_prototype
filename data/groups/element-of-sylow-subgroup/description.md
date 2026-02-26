@@ -1,6 +1,7 @@
 ---
 title: Element of Sylow subgroup
 category: groups
+subcategory: permutation
 ---
 
 # Element of Sylow subgroup

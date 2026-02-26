@@ -1,6 +1,7 @@
 ---
 title: Element of finitely presented group
 category: groups
+subcategory: free-fp
 ---
 
 # Element of finitely presented group

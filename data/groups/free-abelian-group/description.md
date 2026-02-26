@@ -1,6 +1,7 @@
 ---
 title: Free abelian group
 category: groups
+subcategory: abelian
 ---
 
 # Free abelian group

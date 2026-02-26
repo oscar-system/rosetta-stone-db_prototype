@@ -1,6 +1,7 @@
 ---
 title: Pc group
 category: groups
+subcategory: pc
 ---
 
 # Pc group

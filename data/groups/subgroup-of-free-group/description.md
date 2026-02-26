@@ -1,6 +1,7 @@
 ---
 title: Subgroup of free group
 category: groups
+subcategory: free-fp
 ---
 
 # Subgroup of free group

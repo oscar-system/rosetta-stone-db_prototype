@@ -1,6 +1,7 @@
 ---
 title: Free group
 category: groups
+subcategory: free-fp
 ---
 
 # Free group

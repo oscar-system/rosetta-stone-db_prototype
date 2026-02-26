@@ -1,6 +1,7 @@
 ---
 title: Tuple of finitely presented group elements
 category: groups
+subcategory: free-fp
 ---
 
 # Tuple of finitely presented group elements

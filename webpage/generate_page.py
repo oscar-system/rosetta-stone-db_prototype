@@ -179,6 +179,7 @@ def discover_examples():
                 "path": description_path,
                 "title": metadata.get("title", example_slug),
                 "category": metadata.get("category", metadata.get("group", group_id)),
+                "subcategory": metadata.get("subcategory"),
                 "body": body,
                 "systems": systems,
             }
@@ -287,6 +288,22 @@ def build_index_markdown(examples, systems):
         "groups": 2,
         "polyhedral": 3,
     }
+    subgroup_titles = {
+        "abelian": "Abelian Groups",
+        "permutation": "Permutation Groups",
+        "free-fp": "Free and Finitely Presented Groups",
+        "pc": "Pc Groups",
+        "__other__": "Other",
+    }
+    subgroup_order = {
+        "groups": {
+            "abelian": 0,
+            "permutation": 1,
+            "free-fp": 2,
+            "pc": 3,
+            "__other__": 99,
+        }
+    }
     lines = [
         "# Rosetta Stone Overview",
         "",
@@ -305,26 +322,44 @@ def build_index_markdown(examples, systems):
         display_name = group_titles.get(group_id, group_id.replace("-", " ").title())
         lines.append(f"## {display_name}")
         lines.append("")
-        lines.append("| Example | " + " | ".join(system_names) + " |")
-        lines.append("| --- | " + " | ".join("---" for _ in system_names) + " |")
+        group_examples = grouped_examples[group_id]
 
-        group_examples = sorted(
-            grouped_examples[group_id],
-            key=lambda exid: examples[exid]["title"].lower(),
-        )
+        # Optional subgrouping within a category (currently used for Groups).
+        subgrouped = {}
         for example_id in group_examples:
-            example = examples[example_id]
-            title = example["title"]
-            relpath = example["output_relpath_md"]
-            row = [f"[{title}](./{relpath})"]
-            for system_name in system_names:
-                if example_id in systems[system_name]:
-                    anchor = slugify(system_name)
-                    row.append(f"[X](./{relpath}#{anchor})")
-                else:
-                    row.append("")
-            lines.append("| " + " | ".join(row) + " |")
-        lines.append("")
+            sub = examples[example_id].get("subcategory") or "__other__"
+            subgrouped.setdefault(sub, []).append(example_id)
+
+        ordered_subgroups = sorted(
+            subgrouped.keys(),
+            key=lambda sub: (subgroup_order.get(group_id, {}).get(sub, 999), sub.lower()),
+        )
+
+        for sub in ordered_subgroups:
+            if len(ordered_subgroups) > 1:
+                lines.append(f"### {subgroup_titles.get(sub, sub.replace('-', ' ').title())}")
+                lines.append("")
+
+            lines.append("| Example | " + " | ".join(system_names) + " |")
+            lines.append("| --- | " + " | ".join("---" for _ in system_names) + " |")
+
+            sub_examples = sorted(
+                subgrouped[sub],
+                key=lambda exid: examples[exid]["title"].lower(),
+            )
+            for example_id in sub_examples:
+                example = examples[example_id]
+                title = example["title"]
+                relpath = example["output_relpath_md"]
+                row = [f"[{title}](./{relpath})"]
+                for system_name in system_names:
+                    if example_id in systems[system_name]:
+                        anchor = slugify(system_name)
+                        row.append(f"[X](./{relpath}#{anchor})")
+                    else:
+                        row.append("")
+                lines.append("| " + " | ".join(row) + " |")
+            lines.append("")
 
     lines.append("")
     return "\n".join(lines)

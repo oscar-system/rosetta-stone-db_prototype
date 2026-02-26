@@ -1,6 +1,7 @@
 ---
 title: Element of free subgroup
 category: groups
+subcategory: free-fp
 ---
 
 # Element of free subgroup

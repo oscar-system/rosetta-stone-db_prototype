@@ -1,6 +1,7 @@
 ---
 title: Element of Sylow subgroup of pc group
 category: groups
+subcategory: pc
 ---
 
 # Element of Sylow subgroup of pc group

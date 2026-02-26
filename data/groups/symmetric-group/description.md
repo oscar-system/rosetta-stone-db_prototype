@@ -1,6 +1,7 @@
 ---
 title: Symmetric group
 category: groups
+subcategory: permutation
 ---
 
 # Symmetric group

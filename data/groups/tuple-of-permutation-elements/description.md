@@ -1,6 +1,7 @@
 ---
 title: Tuple of permutation elements
 category: groups
+subcategory: permutation
 ---
 
 # Tuple of permutation elements
