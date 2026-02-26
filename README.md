@@ -41,5 +41,5 @@ times, even in the metadata.
 
 ### Break symmetries
 Take for example matrices. The worst example would be a quadratic zero matrix,
-sinc ein the data one would be unable to tell rows from columns and the entries
+since in the data one would be unable to tell rows from columns and the entries
 from each other. Instead choose a non-zero non-quadratic matrix.
