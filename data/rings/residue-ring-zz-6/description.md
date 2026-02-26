@@ -4,4 +4,4 @@ category: rings
 order: 7
 ---
 
-An element in `residue_ring(ZZ, 6)[1]`.
+The residue class of $1$ in the quotient ring $\mathbb{Z}/6\mathbb{Z}$.

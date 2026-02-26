@@ -4,4 +4,4 @@ category: containers
 order: 5
 ---
 
-A dictionary mapping `"x"` to the polynomial variable `x`.
+A dictionary with one entry mapping the key $\texttt{"x"}$ to the polynomial indeterminate $x \in \mathbb{Q}[x]$.

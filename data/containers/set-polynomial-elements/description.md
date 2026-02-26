@@ -4,4 +4,7 @@ category: containers
 order: 7
 ---
 
-A set containing `x` and `x^2` in `QQ[x]`.
+A finite subset of the univariate polynomial ring $\mathbb{Q}[x]$, namely
+$$
+\{x, x^2\}.
+$$

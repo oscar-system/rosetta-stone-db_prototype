@@ -4,4 +4,4 @@ category: rings
 order: 1
 ---
 
-This example stores the integer `42` as an element of `ZZ`.
+The integer $42$ viewed as an element of the ring of integers $\mathbb{Z}$.

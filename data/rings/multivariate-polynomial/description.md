@@ -4,4 +4,8 @@ category: rings
 order: 5
 ---
 
-This example stores `3*x^2*y - 5*y^5*z` in `QQ[x,y,z]`.
+The polynomial
+$$
+3x^2y - 5y^5z
+$$
+in the multivariate polynomial ring $\mathbb{Q}[x,y,z]$.

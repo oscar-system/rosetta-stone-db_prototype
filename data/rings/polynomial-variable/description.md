@@ -1,7 +1,11 @@
 ---
-title: Polynomial variable
+title: Univariate polynomial
 category: rings
 order: 8
 ---
 
-The variable `x` in `Qx, x = QQ[:x]`.
+The univariate polynomial
+$$
+7x^2 - x + 10
+$$
+in $\mathbb{Q}[x]$.

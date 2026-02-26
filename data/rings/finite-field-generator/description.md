@@ -4,4 +4,4 @@ category: rings
 order: 4
 ---
 
-This example stores `gen(GF(5, 2))`.
+A distinguished generator of the finite field extension $\mathbf{F}_{5^2}$.

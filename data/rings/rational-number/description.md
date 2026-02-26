@@ -4,4 +4,4 @@ category: rings
 order: 2
 ---
 
-This example stores `QQ(42, 23)`.
+The rational number $\tfrac{42}{23}$ as an element of $\mathbb{Q}$.

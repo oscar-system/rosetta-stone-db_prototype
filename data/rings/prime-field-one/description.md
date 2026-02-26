@@ -4,4 +4,4 @@ category: rings
 order: 3
 ---
 
-This example stores `one(GF(5))`.
+The multiplicative unit in the finite field $\mathbf{F}_5$.
