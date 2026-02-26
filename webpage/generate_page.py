@@ -294,49 +294,31 @@ def build_index_markdown(examples, systems):
         "groups": "Groups",
         "polyhedral": "Polyhedral Geometry",
     }
-    category_order = {
-        "basics": 0,
-        "rings": 1,
-        "linear-algebra": 2,
-        "groups": 3,
-        "polyhedral": 4,
-    }
     subcategory_titles = {
-        "abelian": "Abelian Groups",
-        "permutation": "Permutation Groups",
-        "free": "Free Groups",
-        "fp": "Finitely Presented Groups",
-        "pc": "Pc Groups",
-        "polyhedra": "Polyhedra",
-        "fans": "Fans",
-        "cones": "Cones",
-        "matroids": "Matroids",
-        "optimization": "Optimization",
-        "complexes-subdivisions": "Complexes and Subdivisions",
-        "phylogenetic": "Phylogenetic",
-        "combinatorics": "Combinatorics",
-        "__other__": "Other",
-    }
-    subcategory_order = {
         "groups": {
-            "abelian": 0,
-            "permutation": 1,
-            "free": 2,
-            "fp": 3,
-            "pc": 4,
-            "__other__": 99,
+            "abelian": "Abelian Groups",
+            "permutation": "Permutation Groups",
+            "free": "Free Groups",
+            "fp": "Finitely Presented Groups",
+            "pc": "Pc Groups",
+            "__other__": "Other",
         },
         "polyhedral": {
-            "polyhedra": 0,
-            "fans": 1,
-            "cones": 2,
-            "matroids": 3,
-            "optimization": 4,
-            "complexes-subdivisions": 5,
-            "phylogenetic": 6,
-            "combinatorics": 7,
-            "__other__": 99,
+            "polyhedra": "Polyhedra",
+            "fans": "Fans",
+            "cones": "Cones",
+            "matroids": "Matroids",
+            "optimization": "Optimization",
+            "complexes-subdivisions": "Complexes and Subdivisions",
+            "phylogenetic": "Phylogenetic",
+            "combinatorics": "Combinatorics",
+            "__other__": "Other",
         },
+    }
+    category_rank = {name: idx for idx, name in enumerate(category_titles.keys())}
+    subcategory_rank = {
+        category: {name: idx for idx, name in enumerate(titles.keys())}
+        for category, titles in subcategory_titles.items()
     }
     grouped_examples = {}
     for example_id, example in examples.items():
@@ -344,7 +326,7 @@ def build_index_markdown(examples, systems):
 
     sorted_groups = sorted(
         grouped_examples.keys(),
-        key=lambda name: (category_order.get(name, 999), name.lower()),
+        key=lambda name: (category_rank.get(name, 999), name.lower()),
     )
 
     lines = [
@@ -374,12 +356,16 @@ def build_index_markdown(examples, systems):
 
         ordered_subgroups = sorted(
             subgrouped.keys(),
-            key=lambda sub: (subcategory_order.get(group_id, {}).get(sub, 999), sub.lower()),
+            key=lambda sub: (subcategory_rank.get(group_id, {}).get(sub, 999), sub.lower()),
         )
 
         for sub in ordered_subgroups:
             if len(ordered_subgroups) > 1:
-                lines.append(f"### {subcategory_titles.get(sub, sub.replace('-', ' ').title())}")
+                display_sub = (
+                    subcategory_titles.get(group_id, {}).get(sub)
+                    or sub.replace("-", " ").title()
+                )
+                lines.append(f"### {display_sub}")
                 lines.append("")
 
             lines.append("| Example | " + " | ".join(system_names) + " |")
