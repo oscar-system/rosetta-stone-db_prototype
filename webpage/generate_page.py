@@ -327,11 +327,6 @@ def build_index_markdown(examples, systems):
             "__other__": 99,
         },
     }
-    lines = [
-        "# Rosetta Stone Overview",
-        "",
-    ]
-
     grouped_examples = {}
     for example_id, example in examples.items():
         grouped_examples.setdefault(example["category"], []).append(example_id)
@@ -341,8 +336,21 @@ def build_index_markdown(examples, systems):
         key=lambda name: (group_order.get(name, 999), name.lower()),
     )
 
+    lines = [
+        "# Rosetta Stone Overview",
+        "",
+        "## Table of Contents",
+        "",
+    ]
     for group_id in sorted_groups:
         display_name = group_titles.get(group_id, group_id.replace("-", " ").title())
+        lines.append(f"- [{display_name}](#{slugify(display_name)})")
+    lines.append("")
+
+    for group_id in sorted_groups:
+        display_name = group_titles.get(group_id, group_id.replace("-", " ").title())
+        lines.append(f'<a id="{slugify(display_name)}"></a>')
+        lines.append("")
         lines.append(f"## {display_name}")
         lines.append("")
         group_examples = grouped_examples[group_id]
