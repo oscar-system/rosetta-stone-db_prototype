@@ -1,0 +1,46 @@
+{
+  "_ns": {
+    "Oscar": [
+      "https://github.com/oscar-system/Oscar.jl",
+      "1.6.0-DEV-5a8aafeb259de17629a7cf69d1e264ab505ba0cb"
+    ]
+  },
+  "_type": {
+    "name": "MatElem",
+    "params": "21190eed-8e21-402a-8fa3-2f947b17a9a2"
+  },
+  "data": [
+    [
+      "12",
+      "31",
+      "24",
+      "78"
+    ],
+    [
+      "51",
+      "63",
+      "17",
+      "35"
+    ],
+    [
+      "23",
+      "99",
+      "19",
+      "34"
+    ]
+  ],
+  "_refs": {
+    "21190eed-8e21-402a-8fa3-2f947b17a9a2": {
+      "_type": {
+        "name": "MatSpace",
+        "params": {
+          "_type": "QQField"
+        }
+      },
+      "data": {
+        "ncols": "4",
+        "nrows": "3"
+      }
+    }
+  }
+}

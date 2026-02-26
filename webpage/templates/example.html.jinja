@@ -1,0 +1,80 @@
+<div class="container">
+
+  {# ── Header ── #}
+  <div class="example-label">Example {{ '%02d' % example.num }}</div>
+  <h1>{{ example.title }}</h1>
+
+  {# ── Description ── #}
+  {% if example.description_md %}
+  <div class="description" data-md="{{ example.description_md | e }}"></div>
+  {% endif %}
+
+  {# ── Code & Data viewer ── #}
+  <div class="section-heading">Implementation</div>
+
+  {# Language toggle — only shown when there are multiple software options #}
+  {% if example.softwares | length > 1 %}
+  <div class="lang-toggle">
+    {% for sw_name in example.softwares %}
+    <button
+      class="lang-btn {% if loop.first %}active{% endif %}"
+      onclick="switchLang('{{ sw_name }}')">
+      {{ sw_name }}
+    </button>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {# Code / Data toggle #}
+  <div class="view-toggle">
+    <button class="view-btn active" id="btn-code" onclick="switchView('code')">Code</button>
+    <button class="view-btn"        id="btn-data" onclick="switchView('data')">Data</button>
+  </div>
+
+  {# One block per software #}
+  {% for sw_name, sw in example.softwares.items() %}
+  <div class="sw-block {% if not loop.first %}hidden{% endif %}" data-sw="{{ sw_name }}">
+
+    {# Code panel #}
+    <div class="view-panel code-panel" id="code-panel">
+      {% for file in sw.code_files %}
+      <pre><code class="language-{{ file.lang }}">{{ file.text | e }}</code></pre>
+      {% else %}
+      <pre><code class="plaintext">No code file found.</code></pre>
+      {% endfor %}
+    </div>
+
+    {# Data panel #}
+    <div class="view-panel data-panel hidden" id="data-panel">
+      {% for file in sw.data_files %}
+        {% if file.table %}
+        <table>
+          <thead>
+            <tr>
+              {% for header in file.table.headers %}
+              <th>{{ header | trim }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in file.table.rows %}
+            <tr>
+              {% for cell in row %}
+              <td>{{ cell | trim }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <pre><code class="plaintext">{{ file.text | e }}</code></pre>
+        {% endif %}
+      {% else %}
+      <p style="padding:24px;color:var(--muted);font-family:var(--font-ui);font-size:13px">No data file found.</p>
+      {% endfor %}
+    </div>
+
+  </div>
+  {% endfor %}
+
+</div>
