@@ -2,6 +2,7 @@
 from pathlib import Path
 import re
 import html
+import json
 
 ROOT = Path(__file__).parent.parent
 DESCRIPTIONS_DIR = ROOT / "example_descriptions"
@@ -151,6 +152,18 @@ def fenced_block(content, language):
     return f"{fence}{language}\n{content.rstrip()}\n{fence}"
 
 
+def render_data_for_markdown(path):
+    raw = path.read_text(encoding="utf-8")
+    if path.suffix == ".json":
+        try:
+            parsed = json.loads(raw)
+            # Keep JSON readable while avoiding excessive vertical expansion.
+            return json.dumps(parsed, indent=2, ensure_ascii=False)
+        except json.JSONDecodeError:
+            return raw
+    return raw
+
+
 def slugify(value):
     slug = re.sub(r"[^a-z0-9]+", "-", value.lower())
     return slug.strip("-")
@@ -223,7 +236,7 @@ def build_example_markdown(example, systems):
         if data_file is not None:
             lines.append(f"#### Data file (`{data_file.name}`)")
             lines.append("")
-            data = data_file.read_text(encoding="utf-8")
+            data = render_data_for_markdown(data_file)
             lines.append(fenced_block(data, language_for_file(data_file)))
             lines.append("")
 
