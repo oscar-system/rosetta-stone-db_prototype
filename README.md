@@ -1,45 +1,105 @@
-# Rosetta stone DB (prototype)
-This is a prototype of the Rosetta stone database for mathematical objects. Its
-purpose is to store mathematical objects and their descriptions in different
-mathematical software, to enable developers to deserialize such data in the
-future. Furthermore it can be used to facilitate interoperability between
-different mathematical softwares. As an added benefit, this database can be
-used to showcase the serialization capabilities of mathematical software.
+# Rosetta Stone DB (prototype)
 
+This repository is a prototype "Rosetta stone" for serialization of mathematical
+objects across computer algebra systems.
 
-## Structure
-At the top level there are folders
-- **description** Containing a description of the examples
-- **PROGRAM** Containing the examples for the given `PROGRAM`. Note that not
-  every example will be available in every program.
+It stores:
+- a human-readable description per example
+- code to generate the object in a given system
+- the serialized data emitted by that system
 
-An `example` from the folder `description` will then correspond to a folder
-`PROGRAM/example` where you will find
-- Code for producing this example in `PROGRAM` in `PROGRAM/example/generate.*`
-- The example serialized by `PROGRAM` in `PROGRAM/example/data.*`
-- Code for verifying the example by `PROGRAM` in `PROGRAM/example/check.*`
-- A link for a MaPS runtime in `PROGRAM/example/maps` that contains the version
-  of `PROGRAM` necessary to read the data or run the scripts. At the same time
-  this script showcases how to read the data using `PROGRAM`.
+It also generates a browsable static site with:
+- an index table grouped by category (and optional subcategory)
+- per-example pages with code and serialized data for each available system
+- Markdown and HTML output
 
-Note that not all files will be available for all examples. Not all software
-provides (de-)serialization. Proprietary software is not available in MaPS
-runtimes. And not all data makes sense for all software, for example, almost
-all mathematical software will have matrices implemented, but not every
-mathematical software will have groups or number fields.
+## Repository layout
 
-In case this structure is chosen differently for any reason, the corresponding
-folder will come with a `README.md` file containing a detailed explanation.
+### Input data
 
+All source data lives under `data/`:
 
-## Guidelines for suitable entries
-### Choose unique data entries
-To uniquely map entries to each other between different data types, the entries
-themselves should be unique and large enough, such that automated searching for
-these becomes easy. For example, one digit numbers will often appear multiple
-times, even in the metadata.
+`data/<category>/<example-slug>/description.md`  
+`data/<category>/<example-slug>/systems/<SystemName>/generate.*`  
+`data/<category>/<example-slug>/systems/<SystemName>/data.*`
 
-### Break symmetries
-Take for example matrices. The worst example would be a quadratic zero matrix,
-since in the data one would be unable to tell rows from columns and the entries
-from each other. Instead choose a non-zero non-quadratic matrix.
+Example:
+
+`data/polyhedral/complete-graph/description.md`  
+`data/polyhedral/complete-graph/systems/Oscar.jl/generate.jl`  
+`data/polyhedral/complete-graph/systems/Oscar.jl/data.json`
+
+### Site generator
+
+- Script: `webpage/generate_page.py`
+- Input: `data/`
+- Output directory: `_site/` (generated files, ignored by git)
+
+Generated output includes:
+- `_site/index.md`
+- `_site/index.html`
+- one `.md` and one `.html` page per example in category subdirectories, e.g.
+  `_site/groups/free-group.md` and `_site/groups/free-group.html`
+
+## Metadata in `description.md`
+
+Each example description starts with YAML frontmatter:
+
+```yaml
+---
+title: Complete graph
+category: polyhedral
+subcategory: combinatorics
+---
+```
+
+Required:
+- `title`
+- `category`
+
+Optional:
+- `subcategory` (used for sub-grouping and sorting in the index)
+
+`category` and `subcategory` are internal keys (slug-like). Display names and
+ordering are configured in `webpage/generate_page.py`.
+
+## Local development
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Generate the site:
+
+```bash
+python3 webpage/generate_page.py
+```
+
+Notes:
+- Markdown is converted to HTML using `marko` (with GFM extension).
+- Math rendering uses MathJax in generated HTML.
+- Code blocks use highlight.js and include a copy button.
+- JSON `data.*` is rendered with compact pretty-printing on pages.
+
+## GitHub Pages
+
+The repository contains a workflow at
+`.github/workflows/publish-pages.yml` that:
+- installs Python dependencies
+- runs `python3 webpage/generate_page.py`
+- publishes `_site/` via GitHub Pages
+
+Dependabot config for GitHub Actions updates is in:
+- `.github/dependabot.yml`
+
+## Guidelines for good examples
+
+### Prefer distinctive values
+Use values that are easy to identify in serialized output. Tiny or repetitive
+values are harder to match across systems.
+
+### Avoid overly symmetric objects
+Prefer examples that make structure visible in serialized form (for example,
+nontrivial matrices instead of highly symmetric zero matrices).
