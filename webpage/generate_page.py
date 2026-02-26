@@ -162,7 +162,8 @@ def build_index_markdown(examples, systems):
         row = [f"[{title}](./{example_id}.md)"]
         for system_name in system_names:
             if example_id in systems[system_name]:
-                row.append(f"[X](./{example_id}.md)")
+                anchor = slugify(system_name)
+                row.append(f"[X](./{example_id}.md#{anchor})")
             else:
                 row.append("")
         lines.append("| " + " | ".join(row) + " |")
@@ -188,6 +189,8 @@ def build_example_markdown(example, systems):
     ]
 
     for system_name in sorted(systems.keys()):
+        lines.append(f'<a id="{slugify(system_name)}"></a>')
+        lines.append("")
         lines.append(f"### {system_name}")
         lines.append("")
 
@@ -325,6 +328,11 @@ def markdown_to_html(md_text):
 
         if not stripped:
             flush_paragraph()
+            continue
+
+        if stripped.startswith("<") and stripped.endswith(">"):
+            flush_paragraph()
+            out.append(line)
             continue
 
         heading_match = re.match(r"^(#{1,6})\s+(.*)$", stripped)
