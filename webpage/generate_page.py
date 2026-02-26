@@ -5,8 +5,7 @@ import html
 import json
 
 ROOT = Path(__file__).parent.parent
-DESCRIPTIONS_DIR = ROOT / "example_descriptions"
-SYSTEMS_DIR = ROOT / "systems"
+DATA_DIR = ROOT / "data"
 SITE_DIR = ROOT / "_site"
 INDEX_MD = SITE_DIR / "index.md"
 
@@ -114,31 +113,47 @@ def parse_description(path):
 
 def discover_examples():
     examples = {}
-    for path in sorted(DESCRIPTIONS_DIR.glob("*.md")):
-        metadata, body = parse_description(path)
-        examples[path.stem] = {
-            "id": path.stem,
-            "path": path,
-            "title": metadata.get("title", path.stem),
-            "group": metadata.get("group", "Ungrouped"),
-            "body": body,
-        }
+    for group_dir in sorted(path for path in DATA_DIR.iterdir() if path.is_dir()):
+        group_id = group_dir.name
+        for example_dir in sorted(path for path in group_dir.iterdir() if path.is_dir()):
+            description_path = example_dir / "description.md"
+            if not description_path.exists():
+                continue
+
+            metadata, body = parse_description(description_path)
+            example_slug = example_dir.name
+            example_id = f"{group_id}-{example_slug}"
+
+            systems = {}
+            systems_root = example_dir / "systems"
+            if systems_root.exists():
+                for system_dir in sorted(path for path in systems_root.iterdir() if path.is_dir()):
+                    data_file = next((p for p in sorted(system_dir.iterdir()) if p.name.startswith("data.")), None)
+                    generate_file = next((p for p in sorted(system_dir.iterdir()) if p.name.startswith("generate.")), None)
+                    systems[system_dir.name] = {
+                        "path": system_dir,
+                        "data_file": data_file,
+                        "generate_file": generate_file,
+                    }
+
+            examples[example_id] = {
+                "id": example_id,
+                "slug": example_slug,
+                "path": description_path,
+                "title": metadata.get("title", example_slug),
+                "group": group_id,
+                "body": body,
+                "systems": systems,
+            }
     return examples
 
 
-def discover_system_examples():
+def build_system_index(examples):
     systems = {}
-    for system_dir in sorted(path for path in SYSTEMS_DIR.iterdir() if path.is_dir()):
-        examples = {}
-        for example_dir in sorted(path for path in system_dir.iterdir() if path.is_dir()):
-            data_file = next((p for p in sorted(example_dir.iterdir()) if p.name.startswith("data.")), None)
-            generate_file = next((p for p in sorted(example_dir.iterdir()) if p.name.startswith("generate.")), None)
-            examples[example_dir.name] = {
-                "path": example_dir,
-                "data_file": data_file,
-                "generate_file": generate_file,
-            }
-        systems[system_dir.name] = examples
+    for example_id, example in examples.items():
+        for system_name, files in example["systems"].items():
+            systems.setdefault(system_name, {})
+            systems[system_name][example_id] = files
     return systems
 
 
@@ -256,7 +271,11 @@ def build_index_markdown(examples, systems):
         lines.append("| Example | " + " | ".join(system_names) + " |")
         lines.append("| --- | " + " | ".join("---" for _ in system_names) + " |")
 
-        for example_id in sorted(grouped_examples[group_id]):
+        group_examples = sorted(
+            grouped_examples[group_id],
+            key=lambda exid: examples[exid]["title"].lower(),
+        )
+        for example_id in group_examples:
             title = examples[example_id]["title"]
             row = [f"[{title}](./{example_id}.md)"]
             for system_name in system_names:
@@ -471,9 +490,13 @@ def render_html_page(md_path):
 
 def main():
     examples = discover_examples()
-    systems = discover_system_examples()
+    systems = build_system_index(examples)
 
     SITE_DIR.mkdir(parents=True, exist_ok=True)
+    for old_file in SITE_DIR.glob("*"):
+        if old_file.is_file() and old_file.suffix in {".md", ".html"}:
+            old_file.unlink()
+
     INDEX_MD.write_text(build_index_markdown(examples, systems), encoding="utf-8")
 
     for example_id in sorted(examples.keys()):
