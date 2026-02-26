@@ -315,6 +315,7 @@ def build_index_markdown(examples, systems):
     system_names = sorted(systems.keys())
     category_titles = {
         "basics": "Basics",
+        "containers": "Containers",
         "rings": "Rings",
         "linear-algebra": "Linear Algebra",
         "groups": "Groups",
