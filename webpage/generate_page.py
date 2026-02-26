@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import re
-import html
 import json
+
+import marko
 
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
 SITE_DIR = ROOT / "_site"
 INDEX_MD = SITE_DIR / "index.md"
+MARKDOWN_RENDERER = marko.Markdown(extensions=["gfm"])
 
 LANGUAGE_BY_SUFFIX = {
     ".jl": "julia",
@@ -464,117 +466,9 @@ def rewrite_markdown_links(md_text):
     return pattern.sub(replace_link, md_text)
 
 
-def escape_inline(text):
-    escaped = html.escape(text, quote=False)
-    escaped = re.sub(r"`([^`]+)`", r"<code>\1</code>", escaped)
-    escaped = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', escaped)
-    return escaped
-
-
-def render_table(table_lines):
-    rows = []
-    for line in table_lines:
-        stripped = line.strip()
-        if not stripped.startswith("|"):
-            continue
-        parts = [cell.strip() for cell in stripped.strip("|").split("|")]
-        rows.append(parts)
-
-    if len(rows) < 2:
-        return "\n".join(f"<p>{escape_inline(line)}</p>" for line in table_lines)
-
-    headers = rows[0]
-    body_rows = rows[2:] if len(rows) > 2 else []
-    header_html = "".join(f"<th>{escape_inline(cell)}</th>" for cell in headers)
-    body_html = []
-    for row in body_rows:
-        body_cells = "".join(f"<td>{escape_inline(cell)}</td>" for cell in row)
-        body_html.append(f"<tr>{body_cells}</tr>")
-
-    return (
-        "<table>\n"
-        f"<thead><tr>{header_html}</tr></thead>\n"
-        f"<tbody>{''.join(body_html)}</tbody>\n"
-        "</table>"
-    )
-
-
 def markdown_to_html(md_text):
     text = rewrite_markdown_links(md_text)
-    lines = text.splitlines()
-    out = []
-    paragraph = []
-    in_code = False
-    code_lang = ""
-    code_lines = []
-    table_lines = []
-
-    def flush_paragraph():
-        nonlocal paragraph
-        if paragraph:
-            joined = " ".join(part.strip() for part in paragraph if part.strip())
-            if joined:
-                out.append(f"<p>{escape_inline(joined)}</p>")
-            paragraph = []
-
-    def flush_table():
-        nonlocal table_lines
-        if table_lines:
-            out.append(render_table(table_lines))
-            table_lines = []
-
-    for line in lines:
-        stripped = line.strip()
-
-        if in_code:
-            if stripped.startswith("```"):
-                code = html.escape("\n".join(code_lines), quote=False)
-                klass = f' class="language-{code_lang}"' if code_lang else ""
-                out.append(f"<pre><code{klass}>{code}</code></pre>")
-                in_code = False
-                code_lang = ""
-                code_lines = []
-            else:
-                code_lines.append(line)
-            continue
-
-        if stripped.startswith("```"):
-            flush_paragraph()
-            flush_table()
-            in_code = True
-            code_lang = stripped[3:].strip()
-            code_lines = []
-            continue
-
-        if stripped.startswith("|"):
-            flush_paragraph()
-            table_lines.append(line)
-            continue
-        else:
-            flush_table()
-
-        if not stripped:
-            flush_paragraph()
-            continue
-
-        if stripped.startswith("<") and stripped.endswith(">"):
-            flush_paragraph()
-            out.append(line)
-            continue
-
-        heading_match = re.match(r"^(#{1,6})\s+(.*)$", stripped)
-        if heading_match:
-            flush_paragraph()
-            level = len(heading_match.group(1))
-            content = escape_inline(heading_match.group(2).strip())
-            out.append(f"<h{level}>{content}</h{level}>")
-            continue
-
-        paragraph.append(line)
-
-    flush_paragraph()
-    flush_table()
-    return "\n".join(out)
+    return MARKDOWN_RENDERER.convert(text)
 
 
 def extract_title(md_text, fallback):
