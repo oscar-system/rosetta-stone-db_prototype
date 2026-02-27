@@ -402,9 +402,6 @@ def build_index_markdown(examples, systems):
                 lines.append(f"### {display_sub}")
                 lines.append("")
 
-            lines.append("| Example | " + " | ".join(system_names) + " |")
-            lines.append("| --- | " + " | ".join("---" for _ in system_names) + " |")
-
             sub_examples = sorted(
                 subgrouped[sub],
                 key=lambda exid: (
@@ -412,12 +409,20 @@ def build_index_markdown(examples, systems):
                     examples[exid]["title"].lower(),
                 ),
             )
+            visible_systems = [
+                system_name
+                for system_name in system_names
+                if any(example_id in systems[system_name] for example_id in sub_examples)
+            ]
+
+            lines.append("| Example | " + " | ".join(visible_systems) + " |")
+            lines.append("| --- | " + " | ".join("---" for _ in visible_systems) + " |")
             for example_id in sub_examples:
                 example = examples[example_id]
                 title = example["title"]
                 relpath = example["output_relpath_md"]
                 row = [f"[{title}](./{relpath})"]
-                for system_name in system_names:
+                for system_name in visible_systems:
                     if example_id in systems[system_name]:
                         anchor = slugify(system_name)
                         row.append(f"[X](./{relpath}#{anchor})")
