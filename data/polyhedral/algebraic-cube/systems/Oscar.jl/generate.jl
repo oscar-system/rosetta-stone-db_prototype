@@ -5,4 +5,4 @@ obj = cube(QQBarField(), 3, -1, n2)
 f_vector(obj)
 lattice_points(obj)
 
-save("data.json", obj)
+save("data.mrdi", obj)

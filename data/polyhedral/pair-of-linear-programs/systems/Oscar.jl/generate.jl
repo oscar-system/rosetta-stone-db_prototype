@@ -9,4 +9,4 @@ ov1 = optimal_value(LP1)
 ov2 = optimal_value(LP2)
 obj = [LP1, LP2]
 
-save("data.json", obj)
+save("data.mrdi", obj)

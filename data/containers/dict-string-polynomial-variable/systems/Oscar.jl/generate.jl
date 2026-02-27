@@ -1,4 +1,4 @@
 using Oscar
 
 Qx, x = QQ[:x]
-save("data.json", Dict("x" => x))
+save("data.mrdi", Dict("x" => x))

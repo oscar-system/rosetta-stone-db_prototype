@@ -6,4 +6,4 @@ println(vertices(P))
 w = [64449, 26552, 73367]
 LP = linear_program(P,w;k=0,convention = :min)
 println(optimal_value(LP))
-save("data.json", LP)
+save("data.mrdi", LP)

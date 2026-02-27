@@ -1,3 +1,3 @@
 using Oscar
 
-save("data.json", root_system(:A, 6))
+save("data.mrdi", root_system(:A, 6))

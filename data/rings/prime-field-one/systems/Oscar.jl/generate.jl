@@ -1,3 +1,3 @@
 using Oscar
 
-save("data.json", one(GF(5)))
+save("data.mrdi", one(GF(5)))

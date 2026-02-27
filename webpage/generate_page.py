@@ -50,6 +50,7 @@ LANGUAGE_BY_SUFFIX = {
     ".lp": "text",
     ".ine": "text",
     ".md": "markdown",
+    ".mrdi": "json",
 }
 
 HTML_TEMPLATE = """<!doctype html>
@@ -250,7 +251,7 @@ def fenced_block(content, language):
 
 def render_data_for_markdown(path):
     raw = path.read_text(encoding="utf-8")
-    if path.suffix == ".json":
+    if path.suffix == ".json" or path.suffix == ".mrdi":
         try:
             parsed = json.loads(raw)
             return format_json_compact(parsed, indent_size=2, max_width=100)

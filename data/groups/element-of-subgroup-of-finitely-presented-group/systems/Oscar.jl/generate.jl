@@ -7,4 +7,4 @@ G = quo(F, [x1^2, x2^2, comm(x1, x2)])[1]
 U = sub(G, [gen(G, 1)])[1]
 obj = gen(U, 1)
 
-save("data.json", obj)
+save("data.mrdi", obj)

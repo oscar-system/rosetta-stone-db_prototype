@@ -6,4 +6,4 @@ IM = incidence_matrix([[1,2,3],[1,3,4]])
 vr_F = F.([0 0; 1 0; 1 1; 0 1])
 obj = polyhedral_complex(IM, vr_F)
 
-save("data.json", obj)
+save("data.mrdi", obj)

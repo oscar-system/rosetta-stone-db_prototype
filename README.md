@@ -27,7 +27,7 @@ Example:
 
 `data/polyhedral/complete-graph/description.md`  
 `data/polyhedral/complete-graph/systems/Oscar.jl/generate.jl`  
-`data/polyhedral/complete-graph/systems/Oscar.jl/data.json`
+`data/polyhedral/complete-graph/systems/Oscar.jl/data.mrdi`
 
 ### Site generator
 

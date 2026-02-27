@@ -1,3 +1,3 @@
 using Oscar
 
-save("data.json", Int[1 2; 3 4])
+save("data.mrdi", Int[1 2; 3 4])

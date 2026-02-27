@@ -10,4 +10,4 @@ obj = Dict{String, Any}(
   "precise" => d_hedron,
 )
 
-save("data.json", obj)
+save("data.mrdi", obj)

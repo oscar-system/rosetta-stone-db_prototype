@@ -1,4 +1,4 @@
 using Oscar
 
 obj = true
-save("data.json", obj)
+save("data.mrdi", obj)

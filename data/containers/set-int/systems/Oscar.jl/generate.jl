@@ -1,3 +1,3 @@
 using Oscar
 
-save("data.json", Set{Int}([1, 2, 3]))
+save("data.mrdi", Set{Int}([1, 2, 3]))

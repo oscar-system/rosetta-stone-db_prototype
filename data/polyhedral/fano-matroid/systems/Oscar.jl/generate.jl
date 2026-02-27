@@ -2,4 +2,4 @@ using Oscar
 
 obj = fano_matroid()
 
-save("data.json", obj)
+save("data.mrdi", obj)

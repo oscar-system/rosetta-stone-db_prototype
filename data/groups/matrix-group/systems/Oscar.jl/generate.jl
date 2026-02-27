@@ -1,3 +1,3 @@
 using Oscar
 
-save("data.json", general_linear_group(3, 5))
+save("data.mrdi", general_linear_group(3, 5))
