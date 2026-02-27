@@ -140,7 +140,7 @@ HTML_TEMPLATE = """<!doctype html>
     }}
     table {{
       border-collapse: collapse;
-      width: 100%;
+      width: auto;
     }}
     th, td {{
       border: 1px solid #ddd;
