@@ -59,21 +59,21 @@ SUBCATEGORY_TITLES = {
 }
 
 TYPE_SPEC_BY_ROOT_TYPE = {
-    "Bool": "bool",
-    "Base.Int": "integers",
-    "BigInt": "integers",
-    "Int16": "integers",
-    "UInt64": "integers",
-    "ZZRingElem": "integers",
-    "String": "string",
-    "Vector": "vector",
-    "Dict": "dict",
-    "Set": "set",
-    "Tuple": "tuple",
-    "QQFieldElem": "rational-number",
-    "Matrix": "matrix",
-    "PolyRingElem": "univariate-polynomial",
-    "MPolyRingElem": "multivariate-polynomial",
+    "Bool": "basics/bool",
+    "Base.Int": "basics/integers",
+    "BigInt": "basics/integers",
+    "Int16": "basics/integers",
+    "UInt64": "basics/integers",
+    "ZZRingElem": "basics/integers",
+    "String": "basics/string",
+    "Vector": "containers/vector",
+    "Dict": "containers/dict",
+    "Set": "containers/set",
+    "Tuple": "containers/tuple",
+    "QQFieldElem": "rings/rational-number",
+    "Matrix": "linear-algebra/matrix",
+    "PolyRingElem": "rings/univariate-polynomial",
+    "MPolyRingElem": "rings/multivariate-polynomial",
 }
 
 LANGUAGE_BY_SUFFIX = {
@@ -254,7 +254,7 @@ def build_system_index(examples):
 
 def discover_spec_pages():
     spec_pages = {}
-    for spec_path in sorted(SPEC_SOURCE_DIR.glob("*.md")):
+    for spec_path in sorted(SPEC_SOURCE_DIR.rglob("*.md")):
         metadata, body = parse_description(spec_path)
         raw_order = metadata.get("order")
         parsed_order = None
@@ -264,14 +264,16 @@ def discover_spec_pages():
             except ValueError:
                 parsed_order = None
 
-        spec_id = spec_path.stem
+        relpath = spec_path.relative_to(SPEC_SOURCE_DIR)
+        spec_id = relpath.with_suffix("").as_posix()
         spec_pages[spec_id] = {
             "id": spec_id,
             "title": metadata.get("title", spec_id.replace("-", " ").title()),
             "kind": metadata.get("kind", "type"),
             "order": parsed_order,
             "body": body.rstrip(),
-            "path_md": SPEC_SITE_DIR / f"{spec_id}.md",
+            "section": metadata.get("section", relpath.parent.as_posix() if relpath.parent != Path(".") else ""),
+            "path_md": SPEC_SITE_DIR / relpath,
         }
     return spec_pages
 
@@ -293,7 +295,7 @@ def build_spec_catalog(spec_pages, examples):
 
             parsed_data = system.get("parsed_data")
             if isinstance(parsed_data, dict) and parsed_data.get("_refs"):
-                related_specs.add("references-and-parameters")
+                related_specs.add("core/references-and-parameters")
 
         example["spec_ids"] = sorted(related_specs)
         for spec_id in example["spec_ids"]:
@@ -647,6 +649,7 @@ def build_spec_index_markdown(spec_catalog):
     type_pages = sorted(
         (spec for spec in spec_catalog.values() if spec["kind"] != "core"),
         key=lambda spec: (
+            spec["section"],
             spec["order"] if spec["order"] is not None else 10_000,
             spec["title"].lower(),
         ),
@@ -679,7 +682,19 @@ def build_spec_index_markdown(spec_catalog):
         ]
     )
 
+    current_section = None
     for spec in type_pages:
+        if spec["section"] != current_section:
+            if current_section is not None:
+                lines.append("")
+            current_section = spec["section"]
+            section_title = (
+                CATEGORY_TITLES.get(current_section, current_section.replace("-", " ").title())
+                if current_section
+                else "Other"
+            )
+            lines.append(f"### {section_title}")
+            lines.append("")
         lines.append(f"- [{spec['title']}](./{spec['id']}.md)")
 
     lines.extend(
@@ -850,6 +865,7 @@ def main():
 
     for spec_id in sorted(spec_catalog.keys()):
         spec_page = spec_catalog[spec_id]
+        spec_page["path_md"].parent.mkdir(parents=True, exist_ok=True)
         spec_page["path_md"].write_text(
             build_spec_page_markdown(spec_page, examples),
             encoding="utf-8",
