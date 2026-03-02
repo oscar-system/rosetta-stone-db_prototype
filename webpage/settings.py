@@ -3,9 +3,12 @@ from __future__ import annotations
 from pathlib import Path
 import json
 
+from content import parse_description
+
 MODULE_DIR = Path(__file__).resolve().parent
 ROOT = MODULE_DIR.parent
 CONTENT_DIR = ROOT / "content"
+PROFILE_SOURCE_DIR = ROOT / "profiles"
 ROSETTA_SOURCE_DIR = ROOT / "rosetta"
 SPEC_SOURCE_DIR = ROOT / "spec"
 SITE_DIR = ROOT / "_site"
@@ -28,7 +31,23 @@ SUBCATEGORY_TITLES = _CONFIG["subcategory_titles"]
 TYPE_SPEC_BY_ROOT_TYPE = _CONFIG["type_spec_by_root_type"]
 TYPE_SPEC_BY_ROOT_TYPE_AND_PROFILE = _CONFIG.get("type_spec_by_root_type_and_profile", {})
 LANGUAGE_BY_SUFFIX = _CONFIG["language_by_suffix"]
-PROFILE_DEFINITIONS = _CONFIG["profiles"]
+def load_profile_definitions():
+    definitions = {}
+    for profile_path in sorted(PROFILE_SOURCE_DIR.glob("*.md")):
+        metadata, body = parse_description(profile_path)
+        profile_id = profile_path.stem
+        definitions[profile_id] = {
+            "title": metadata.require_str("title", profile_id),
+            "kind": metadata.require_str("kind", "application"),
+            "status": metadata.require_str("status", "draft"),
+            "based_on": metadata.str_list("based_on"),
+            "released_on": metadata.optional_str("released_on"),
+            "description": body.strip(),
+        }
+    return definitions
+
+
+PROFILE_DEFINITIONS = load_profile_definitions()
 PROFILE_ORDER = {profile_id: index for index, profile_id in enumerate(PROFILE_DEFINITIONS.keys())}
 
 GITHUB_EDIT_BASE = "https://github.com/oscar-system/rosetta-stone-db_prototype/edit/main/"
