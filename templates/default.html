@@ -24,7 +24,12 @@
           return;
         }
 
-        function activate(button) {
+        function hashTokens(button) {
+          var raw = button.getAttribute("data-tab-hashes") || "";
+          return raw.split(",").map(function (token) { return token.trim(); }).filter(Boolean);
+        }
+
+        function activate(button, updateHash) {
           var targetId = button.getAttribute("data-tab-target");
           buttons.forEach(function (candidate) {
             var selected = candidate === button;
@@ -37,15 +42,53 @@
             panel.classList.toggle("output-tab-panel-active", selected);
             panel.hidden = !selected;
           });
+
+          if (updateHash) {
+            var tokens = hashTokens(button);
+            if (tokens.length) {
+              if (window.location.hash !== "#" + tokens[0]) {
+                history.replaceState(null, "", "#" + tokens[0]);
+              }
+            }
+          }
+        }
+
+        function findButtonForHash(hashValue) {
+          var normalized = hashValue.replace(/^#/, "");
+          if (!normalized) {
+            return null;
+          }
+          for (var i = 0; i < buttons.length; i += 1) {
+            var button = buttons[i];
+            if (button.id === normalized) {
+              return button;
+            }
+            if (hashTokens(button).indexOf(normalized) !== -1) {
+              return button;
+            }
+            var target = button.getAttribute("data-tab-target");
+            if (target === normalized) {
+              return button;
+            }
+          }
+          return null;
         }
 
         buttons.forEach(function (button) {
           button.addEventListener("click", function () {
-            activate(button);
+            activate(button, true);
           });
         });
 
-        activate(buttons[0]);
+        var initialButton = findButtonForHash(window.location.hash) || buttons[0];
+        activate(initialButton, false);
+
+        window.addEventListener("hashchange", function () {
+          var matchedButton = findButtonForHash(window.location.hash);
+          if (matchedButton) {
+            activate(matchedButton, false);
+          }
+        });
       });
 
       document.querySelectorAll("pre > code").forEach(function (codeBlock) {

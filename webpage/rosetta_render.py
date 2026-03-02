@@ -323,10 +323,12 @@ def render_output_tabs(
         panel_id = f"{container_id}_panel_{group_index}"
         representative = choose_representative_output(output_group)
         button_id = f"{container_id}_tab_{tab_slug(representative.id)}"
+        tab_hashes = ",".join(output.id for output in sorted(output_group, key=output_sort_key))
         lines.append(
             f'<button type="button" class="output-tab-btn" role="tab" '
             f'id="{button_id}" aria-controls="{panel_id}" '
-            f'data-tab-target="{panel_id}">'
+            f'data-tab-target="{panel_id}" '
+            f'data-tab-hashes="{escape(tab_hashes)}">'
             f"{escape(output_group_button_label(output_group, profile_catalog))}</button>"
         )
 
