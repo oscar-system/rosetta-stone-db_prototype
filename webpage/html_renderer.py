@@ -127,6 +127,32 @@ def rewrite_html_links(html_text: str) -> str:
     return "".join(parser.parts)
 
 
+def protect_math_segments(text: str) -> tuple[str, dict[str, str]]:
+    replacements: dict[str, str] = {}
+    patterns = [
+        re.compile(r"\$\$.*?\$\$", flags=re.DOTALL),
+        re.compile(r"\\\[.*?\\\]", flags=re.DOTALL),
+        re.compile(r"\\\(.*?\\\)", flags=re.DOTALL),
+    ]
+
+    def replace(match):
+        token = f"@@MATH{len(replacements)}@@"
+        replacements[token] = escape(match.group(0), quote=False)
+        return token
+
+    protected = text
+    for pattern in patterns:
+        protected = pattern.sub(replace, protected)
+    return protected, replacements
+
+
+def restore_math_segments(text: str, replacements: dict[str, str]) -> str:
+    restored = text
+    for token, original in replacements.items():
+        restored = restored.replace(token, original)
+    return restored
+
+
 def markdown_to_html(md_text: str) -> str:
     text = md_text
     nav_html = ""
@@ -134,8 +160,10 @@ def markdown_to_html(md_text: str) -> str:
     if nav_match:
         nav_html = nav_match.group(1)
         text = text[nav_match.end():].lstrip("\n")
+    text, math_replacements = protect_math_segments(text)
     renderer = marko.Markdown(renderer=HeadingIdRenderer, extensions=["gfm"])
     html = nav_html + renderer.convert(text)
+    html = restore_math_segments(html, math_replacements)
     return rewrite_html_links(html)
 
 
