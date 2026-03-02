@@ -152,6 +152,11 @@ We should therefore aim for this model:
 This avoids duplicating the conceptual example just because one system emits
 multiple variants over time.
 
+An important consequence is that an example may need multiple outputs even when
+its top-level specification page does not split. For example, a tuple example
+may need both `basic-v1` and `basic-v2` outputs simply because one component is
+a boolean, even if the tuple format itself remains unchanged.
+
 ## Possible Future Layout for Outputs
 
 One plausible future layout is:
@@ -171,24 +176,21 @@ rosetta/basics/bool/
 
 This makes profile membership explicit at the output level.
 
-Another possibility is to organize by producer version instead:
+The current recommendation is that output directories should be named by the
+most specific relevant profile for the top-level serialized object.
 
-```text
-rosetta/basics/bool/
-  description.md
-  systems/
-    Oscar.jl/
-      generate.jl
-      outputs/
-        oscar-v1.7/
-          data.mrdi
-        oscar-v1.8/
-          data.mrdi
-```
+Examples:
 
-At the moment, the profile-based structure looks conceptually cleaner, because
-it represents the serialization contract directly. Producer-version metadata can
-still be attached to each output if desired.
+- for a top-level `bool` example, use `basic-v1` and `basic-v2`
+- for a top-level tuple example affected only through nested booleans, still use
+  `basic-v1` and `basic-v2`
+- for a top-level symmetric-group example, use `oscar-v1.7` and `oscar-v1.8`
+
+This means there is no single global naming rule beyond "outputs are tagged by
+profile id". The appropriate profile may depend on the example.
+
+Producer-version metadata can still be attached separately to each output if
+desired.
 
 ## Website Implications
 
@@ -207,6 +209,10 @@ For example, a future `bool` section might show:
 - rosetta example output for OSCAR under `basic-v2`
 
 Unchanged types would continue to have a single page listing several profiles.
+
+At the same time, example pages should still be allowed to show multiple outputs
+whose serialized files differ, even if the page's top-level specification is
+unchanged. This is necessary to make cross-profile comparison useful.
 
 ## Recommended Order of Work
 
@@ -235,8 +241,6 @@ The recommended implementation order is:
 
 - Should the website eventually expose an explicit "conceptual type" layer for
   changed types such as `bool`?
-- Should rosetta outputs be keyed primarily by serialization profile or by
-  producer version?
 - How much metadata do we want to record for producer version, for example an
   exact OSCAR release number or commit?
 - Should draft profiles be rendered differently from stable profiles on the
