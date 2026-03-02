@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+from html import escape
+from html.parser import HTMLParser
 import re
+from urllib.parse import urlsplit, urlunsplit
+
 import marko
 from marko.html_renderer import HTMLRenderer
 
@@ -34,43 +38,105 @@ class HeadingIdRenderer(HTMLRenderer):
         heading_id = base if count == 1 else f"{base}-{count}"
         return f'<h{element.level} id="{heading_id}">{rendered}</h{element.level}>\n'
 
+    def render_link(self, element):
+        template = '<a href="{}"{}>{}</a>'
+        title = f' title="{self.escape_html(element.title)}"' if element.title else ""
+        url = self.escape_url(rewrite_link_target(element.dest))
+        body = self.render_children(element)
+        return template.format(url, title, body)
 
-def rewrite_markdown_links(md_text: str) -> str:
-    pattern = re.compile(r"(\[[^\]]+\]\()([^)]+)\)")
-    href_pattern = re.compile(r'(href=")([^"\s]+)(")')
+    def render_image(self, element):
+        template = '<img src="{}" alt="{}"{} />'
+        title = f' title="{self.escape_html(element.title)}"' if element.title else ""
+        url = self.escape_url(rewrite_link_target(element.dest))
+        render_func = self.render
+        self.render = self.render_plain_text  # type: ignore
+        body = self.render_children(element)
+        self.render = render_func  # type: ignore
+        return template.format(url, body, title)
 
-    def rewrite_target(target: str) -> str:
-        if "://" in target or target.startswith(("#", "/")):
-            return target
-        if ".md" in target:
-            return re.sub(r"\.md(?=(#|$))", ".html", target)
+
+def rewrite_link_target(target: str) -> str:
+    if not target:
         return target
 
-    def replace_link(match):
-        prefix = match.group(1)
-        target = match.group(2)
-        target = rewrite_target(target)
-        return f"{prefix}{target})"
+    parts = urlsplit(target)
+    if parts.scheme or parts.netloc or target.startswith(("#", "/")):
+        return target
 
-    def replace_href(match):
-        prefix = match.group(1)
-        target = match.group(2)
-        suffix = match.group(3)
-        target = rewrite_target(target)
-        return f"{prefix}{target}{suffix}"
+    path = parts.path
+    if path.endswith(".md"):
+        path = f"{path[:-3]}.html"
 
-    return href_pattern.sub(replace_href, pattern.sub(replace_link, md_text))
+    return urlunsplit((parts.scheme, parts.netloc, path, parts.query, parts.fragment))
+
+
+class RawHtmlLinkRewriter(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=False)
+        self.parts: list[str] = []
+
+    def handle_starttag(self, tag, attrs):
+        self.parts.append(self._render_tag(tag, attrs, closing=False))
+
+    def handle_startendtag(self, tag, attrs):
+        self.parts.append(self._render_tag(tag, attrs, closing=True))
+
+    def handle_endtag(self, tag):
+        self.parts.append(f"</{tag}>")
+
+    def handle_data(self, data):
+        self.parts.append(data)
+
+    def handle_entityref(self, name):
+        self.parts.append(f"&{name};")
+
+    def handle_charref(self, name):
+        self.parts.append(f"&#{name};")
+
+    def handle_comment(self, data):
+        self.parts.append(f"<!--{data}-->")
+
+    def handle_decl(self, decl):
+        self.parts.append(f"<!{decl}>")
+
+    def handle_pi(self, data):
+        self.parts.append(f"<?{data}>")
+
+    def unknown_decl(self, data):
+        self.parts.append(f"<![{data}]>")
+
+    def _render_tag(self, tag, attrs, closing):
+        rendered_attrs = []
+        for name, value in attrs:
+            if value is None:
+                rendered_attrs.append(name)
+                continue
+            if name in {"href", "src"}:
+                value = rewrite_link_target(value)
+            rendered_attrs.append(f'{name}="{escape(value, quote=True)}"')
+        attrs_suffix = f" {' '.join(rendered_attrs)}" if rendered_attrs else ""
+        ending = " /" if closing else ""
+        return f"<{tag}{attrs_suffix}{ending}>"
+
+
+def rewrite_html_links(html_text: str) -> str:
+    parser = RawHtmlLinkRewriter()
+    parser.feed(html_text)
+    parser.close()
+    return "".join(parser.parts)
 
 
 def markdown_to_html(md_text: str) -> str:
-    text = rewrite_markdown_links(md_text)
+    text = md_text
     nav_html = ""
     nav_match = re.match(r'(<div class="page-nav">.*?</div>\n+)', text, flags=re.DOTALL)
     if nav_match:
         nav_html = nav_match.group(1)
         text = text[nav_match.end():].lstrip("\n")
     renderer = marko.Markdown(renderer=HeadingIdRenderer, extensions=["gfm"])
-    return nav_html + renderer.convert(text)
+    html = nav_html + renderer.convert(text)
+    return rewrite_html_links(html)
 
 
 def extract_title(md_text: str, fallback: str) -> str:
