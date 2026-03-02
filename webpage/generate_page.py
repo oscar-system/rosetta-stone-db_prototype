@@ -9,13 +9,14 @@ from marko.html_renderer import HTMLRenderer
 
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
+SPEC_SOURCE_DIR = ROOT / "spec"
 SITE_DIR = ROOT / "_site"
 TEMPLATE_PATH = ROOT / "templates" / "default.html"
 ROOT_INDEX_MD = SITE_DIR / "index.md"
 ROSETTA_DIR = SITE_DIR / "rosetta"
 ROSETTA_INDEX_MD = ROSETTA_DIR / "index.md"
-SPEC_DIR = SITE_DIR / "spec"
-SPEC_INDEX_MD = SPEC_DIR / "index.md"
+SPEC_SITE_DIR = SITE_DIR / "spec"
+SPEC_INDEX_MD = SPEC_SITE_DIR / "index.md"
 SCHEMA_PATH = ROOT / "paper" / "data.json"
 
 CATEGORY_TITLES = {
@@ -74,306 +75,6 @@ TYPE_SPEC_BY_ROOT_TYPE = {
     "PolyRingElem": "univariate-polynomial",
     "MPolyRingElem": "multivariate-polynomial",
 }
-
-SPEC_PAGES = [
-    {
-        "id": "data-model",
-        "title": "Overall Data Model",
-        "lede": (
-            "The MaRDI file format stores mathematical objects as annotated JSON trees. "
-            "A file combines type information, serialized data, namespaces, and optional "
-            "reference objects that provide the context required to interpret the payload."
-        ),
-        "sections": [
-            (
-                "Terminology",
-                [
-                    "A **file** is the top-level JSON object.",
-                    "A **data type** is the value of `_type`, either as a string or as an object with a `name` and optional `params`.",
-                    "A **payload** is the subtree stored under `data`.",
-                    "A **profile** is a namespace-specific encoding contract, for example the Oscar profile identified by an `Oscar` entry in `_ns`.",
-                    "A **reference object** is an entry in `_refs`, addressed by UUID and reused from types or payloads.",
-                ],
-            ),
-            (
-                "Core object members",
-                [
-                    "`_type` is required and names the data type that determines how `data` must be interpreted.",
-                    "`data` stores the serialized payload; it may be a string, array, object, or a foreign schema-defined subtree.",
-                    "`_ns` declares which namespace and software version define the semantics.",
-                    "`_refs` stores referenced objects so recursive and shared constructions can be serialized without duplication.",
-                ],
-            ),
-            (
-                "Design intent",
-                [
-                    "The format follows the paper's approach of separating syntax from semantics: JSON fixes the container syntax, while semantics are supplied by a concrete namespace and version.",
-                    "The format is intentionally extensible. New types, new namespaces, and namespace-specific payloads can be added without redesigning the whole file format.",
-                    "References are session-stable UUIDs rather than position-based indices, which makes reused mathematical context easier to track across files and workflows.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "namespaces-and-versions",
-        "title": "Namespaces, Profiles, and Versions",
-        "lede": (
-            "The format does not impose a universal mathematical semantics. Instead, each "
-            "file points to the namespace and software version that define the meaning of "
-            "its types and payloads."
-        ),
-        "sections": [
-            (
-                "Rules",
-                [
-                    "Use `_ns` to record the profile that governs the file or subtree.",
-                    "A namespace entry is typically encoded as `\"Name\": [\"URL\", \"version\"]`.",
-                    "When two systems use different meanings or different serializations, they should be treated as different profiles rather than forced into one shared meaning.",
-                    "If a profile changes its encoding, keep the old profile/version rows documented and add the new ones instead of rewriting history.",
-                ],
-            ),
-            (
-                "Practical consequence",
-                [
-                    "A type page such as Bool should document profile-specific encodings and the versions in which they appear.",
-                    "The tables on generated spec pages are built from the current rosetta-stone corpus, so they serve as an evolving compatibility log.",
-                    "This structure also leaves room for future Oscar, Magma, polymake, or other profiles once matching examples are added.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "references-and-parameters",
-        "title": "References and Parameters",
-        "lede": (
-            "Complex mathematical objects often depend on ambient rings, fields, spaces, or "
-            "other context that should be stored once and reused. The format handles this "
-            "with parametric types and UUID-addressed reference objects."
-        ),
-        "sections": [
-            (
-                "Rules",
-                [
-                    "When a type depends on contextual objects, encode that dependency in `_type.params`.",
-                    "If the parameter is itself a structured object, place it in `_refs` and refer to it by UUID.",
-                    "Use `_refs` for recursive constructions, shared ambient objects, and cases where object identity matters beyond isomorphism.",
-                    "UUID keys in `_refs` should remain stable throughout the active producing session.",
-                ],
-            ),
-            (
-                "Why this matters",
-                [
-                    "Two mathematically isomorphic objects can still play different computational roles, and the reference graph preserves that distinction.",
-                    "A later consumer can reconstruct the full serialization context instead of reverse-engineering it from the payload alone.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "bool",
-        "title": "Bool",
-        "lede": (
-            "The Bool data type encodes logical truth values. In the current corpus, the "
-            "payload is the string `\"true\"` or `\"false\"`, interpreted according to the "
-            "active profile."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Set `_type` to `\"Bool\"`.",
-                    "Encode the payload under `data` as the lowercase string `\"true\"` or `\"false\"`.",
-                    "Treat the namespace/version table below as the profile log for this type.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "integers",
-        "title": "Integers",
-        "lede": (
-            "Integer-valued data appears in several closely related data types, including "
-            "machine integers such as `Base.Int`, arbitrary-precision integers such as "
-            "`BigInt`, and algebraic integers such as `ZZRingElem`."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Encode the value under `data` as a decimal string.",
-                    "Use `_type` to distinguish the specific integer family instead of overloading one generic integer name.",
-                    "When an integer value depends on ambient algebraic structure, use a parametric type such as `ZZRingElem` with the required context in `params` or `_refs`.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "string",
-        "title": "String",
-        "lede": (
-            "String is the basic textual data type. It is useful both on its own and as a "
-            "building block inside container types such as dictionaries and tuples."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Set `_type` to `\"String\"`.",
-                    "Store the UTF-8 string payload directly under `data`.",
-                    "When strings appear as keys or components inside other payloads, their role is determined by the surrounding type.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "vector",
-        "title": "Vector",
-        "lede": (
-            "Vectors are homogeneous ordered containers. Their element type is recorded in "
-            "`_type.params`, and the payload is an array whose entries follow that element "
-            "type's serialization rules."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Set `_type` to an object with `name: \"Vector\"`.",
-                    "Record the element type in `_type.params`.",
-                    "Store the entries in order under `data` as a JSON array.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "dict",
-        "title": "Dictionary",
-        "lede": (
-            "Dictionaries map keys to values. In the current corpus, the key and value types "
-            "are recorded explicitly inside `_type.params`."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Set `_type` to an object with `name: \"Dict\"`.",
-                    "Record key and value types under `_type.params`, for example `key_params` and `value_params`.",
-                    "Serialize the payload under `data` as a JSON object from encoded keys to encoded values.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "set",
-        "title": "Set",
-        "lede": (
-            "Sets are unordered homogeneous containers. The payload is stored as an array, "
-            "while the mathematical set semantics come from the data type rather than the "
-            "JSON container alone."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Set `_type` to an object with `name: \"Set\"`.",
-                    "Record the element type in `_type.params`.",
-                    "Store the elements under `data` as an array; consumers should apply set semantics rather than relying on JSON order.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "tuple",
-        "title": "Tuple",
-        "lede": (
-            "Tuples are ordered heterogeneous containers. The parameter list records the type "
-            "of each component in position order."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Set `_type` to an object with `name: \"Tuple\"`.",
-                    "Record the component types in `_type.params` as an ordered list.",
-                    "Store the component payloads under `data` as a JSON array of the same length.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "rational-number",
-        "title": "Rational Numbers",
-        "lede": (
-            "Rational numbers are represented as typed values whose payload is a textual "
-            "fraction such as `\"42//23\"`. The field context is part of the type."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Use a typed encoding such as `QQFieldElem` rather than a bare JSON number.",
-                    "Store the rational value under `data` using the profile's textual normal form.",
-                    "Record the ambient field in `_type.params` when required by the profile.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "matrix",
-        "title": "Matrix",
-        "lede": (
-            "Matrices are two-dimensional homogeneous containers. The current corpus records "
-            "the element type in `_type.params` and stores rows as arrays."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Set `_type` to an object with `name: \"Matrix\"`.",
-                    "Record the entry type in `_type.params`.",
-                    "Store the matrix payload under `data` as an array of rows.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "univariate-polynomial",
-        "title": "Univariate Polynomial",
-        "lede": (
-            "A univariate polynomial payload is interpreted relative to a polynomial ring "
-            "stored in `_type.params` or `_refs`. The coefficients and exponents are "
-            "encoded as structured JSON data rather than as presentation text."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Set `_type` to an object with `name: \"PolyRingElem\"`.",
-                    "Use `_type.params` to point to the ambient polynomial ring.",
-                    "Encode each term structurally under `data` so that reconstruction does not depend on parsing pretty-printed algebra.",
-                ],
-            ),
-        ],
-    },
-    {
-        "id": "multivariate-polynomial",
-        "title": "Multivariate Polynomial",
-        "lede": (
-            "Multivariate polynomials extend the same idea to several variables. The payload "
-            "is a structured list of terms, while the ambient ring and coefficient context "
-            "are carried by the type parameters and references."
-        ),
-        "sections": [
-            (
-                "Encoding rules",
-                [
-                    "Set `_type` to an object with `name: \"MPolyRingElem\"`.",
-                    "Reference the ambient multivariate polynomial ring through `_type.params`.",
-                    "Encode monomials and coefficients structurally under `data` instead of using a textual polynomial syntax.",
-                ],
-            ),
-        ],
-    },
-]
 
 LANGUAGE_BY_SUFFIX = {
     ".jl": "julia",
@@ -551,11 +252,34 @@ def build_system_index(examples):
     return systems
 
 
-def build_spec_catalog(examples):
+def discover_spec_pages():
+    spec_pages = {}
+    for spec_path in sorted(SPEC_SOURCE_DIR.glob("*.md")):
+        metadata, body = parse_description(spec_path)
+        raw_order = metadata.get("order")
+        parsed_order = None
+        if raw_order is not None:
+            try:
+                parsed_order = int(raw_order)
+            except ValueError:
+                parsed_order = None
+
+        spec_id = spec_path.stem
+        spec_pages[spec_id] = {
+            "id": spec_id,
+            "title": metadata.get("title", spec_id.replace("-", " ").title()),
+            "kind": metadata.get("kind", "type"),
+            "order": parsed_order,
+            "body": body.rstrip(),
+            "path_md": SPEC_SITE_DIR / f"{spec_id}.md",
+        }
+    return spec_pages
+
+
+def build_spec_catalog(spec_pages, examples):
     catalog = {}
-    for spec in SPEC_PAGES:
+    for spec in spec_pages.values():
         page = dict(spec)
-        page["path_md"] = SPEC_DIR / f"{spec['id']}.md"
         page["example_ids"] = []
         catalog[spec["id"]] = page
 
@@ -913,12 +637,20 @@ def sample_payload_for_spec(spec_id, example_ids, examples):
 
 
 def build_spec_index_markdown(spec_catalog):
-    type_pages = [
-        spec
-        for spec in SPEC_PAGES
-        if spec["id"]
-        not in {"data-model", "namespaces-and-versions", "references-and-parameters"}
-    ]
+    core_pages = sorted(
+        (spec for spec in spec_catalog.values() if spec["kind"] == "core"),
+        key=lambda spec: (
+            spec["order"] if spec["order"] is not None else 10_000,
+            spec["title"].lower(),
+        ),
+    )
+    type_pages = sorted(
+        (spec for spec in spec_catalog.values() if spec["kind"] != "core"),
+        key=lambda spec: (
+            spec["order"] if spec["order"] is not None else 10_000,
+            spec["title"].lower(),
+        ),
+    )
     lines = [
         render_page_nav(
             [
@@ -934,13 +666,18 @@ def build_spec_index_markdown(spec_catalog):
         "",
         "## Core pages",
         "",
-        f"- [Overall Data Model](./data-model.md)",
-        f"- [Namespaces, Profiles, and Versions](./namespaces-and-versions.md)",
-        f"- [References and Parameters](./references-and-parameters.md)",
-        "",
-        "## Data Types",
-        "",
     ]
+
+    for spec in core_pages:
+        lines.append(f"- [{spec['title']}](./{spec['id']}.md)")
+
+    lines.extend(
+        [
+            "",
+            "## Data Types",
+            "",
+        ]
+    )
 
     for spec in type_pages:
         lines.append(f"- [{spec['title']}](./{spec['id']}.md)")
@@ -960,7 +697,65 @@ def build_spec_index_markdown(spec_catalog):
     return "\n".join(lines).rstrip() + "\n"
 
 
-def build_spec_page_markdown(spec_page, spec_catalog, examples):
+def render_spec_examples(spec_page, examples, page_path):
+    if not spec_page["example_ids"]:
+        return ""
+
+    lines = [
+        "## Rosetta Stone Examples",
+        "",
+    ]
+    for example_id in spec_page["example_ids"]:
+        example = examples[example_id]
+        example_href = rel_link(page_path, SITE_DIR / example["output_relpath_md"])
+        lines.append(f"- [{example['title']}]({example_href})")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def render_spec_profiles(spec_page, examples, page_path):
+    lines = [
+        "## Documented Profiles in This Corpus",
+        "",
+        "This table records the profile/version pairs currently represented by the "
+        "rosetta-stone examples for this data type. Add new rows as new systems or "
+        "encoding revisions are documented.",
+        "",
+    ]
+    lines.extend(render_profiles_table(spec_page["example_ids"], examples, page_path))
+    return "\n".join(lines)
+
+
+def render_spec_sample(spec_page, examples):
+    sample = sample_payload_for_spec(spec_page["id"], spec_page["example_ids"], examples)
+    if sample is None:
+        return ""
+
+    lines = [
+        "## Canonical Example Payload",
+        "",
+        "The following payload is taken directly from the current rosetta-stone corpus.",
+        "",
+        fenced_block(sample, "json"),
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def render_spec_placeholders(body, spec_page, examples, page_path):
+    replacements = {
+        "CANONICAL_EXAMPLE_PAYLOAD": render_spec_sample(spec_page, examples),
+        "DOCUMENTED_PROFILES": render_spec_profiles(spec_page, examples, page_path),
+        "ROSETTA_EXAMPLES": render_spec_examples(spec_page, examples, page_path),
+    }
+
+    rendered = body
+    for key, value in replacements.items():
+        rendered = rendered.replace(f"{{{{ {key} }}}}", value)
+    return re.sub(r"\n{3,}", "\n\n", rendered).strip() + "\n"
+
+
+def build_spec_page_markdown(spec_page, examples):
     page_path = spec_page["path_md"]
     lines = [
         render_page_nav(
@@ -972,55 +767,8 @@ def build_spec_page_markdown(spec_page, spec_catalog, examples):
         ),
         f"# {spec_page['title']}",
         "",
-        spec_page["lede"],
-        "",
     ]
-
-    for heading, bullets in spec_page["sections"]:
-        lines.append(f"## {heading}")
-        lines.append("")
-        for bullet in bullets:
-            lines.append(f"- {bullet}")
-        lines.append("")
-
-    sample = sample_payload_for_spec(spec_page["id"], spec_page["example_ids"], examples)
-    if sample is not None:
-        lines.extend(
-            [
-                "## Canonical Example Payload",
-                "",
-                "The following payload is taken directly from the current rosetta-stone corpus.",
-                "",
-                fenced_block(sample, "json"),
-                "",
-            ]
-        )
-
-    lines.extend(
-        [
-            "## Documented Profiles in This Corpus",
-            "",
-            "This table records the profile/version pairs currently represented by the "
-            "rosetta-stone examples for this data type. Add new rows as new systems or "
-            "encoding revisions are documented.",
-            "",
-        ]
-    )
-    lines.extend(render_profiles_table(spec_page["example_ids"], examples, page_path))
-
-    if spec_page["example_ids"]:
-        lines.extend(
-            [
-                "## Rosetta Stone Examples",
-                "",
-            ]
-        )
-        for example_id in spec_page["example_ids"]:
-            example = examples[example_id]
-            example_href = rel_link(page_path, SITE_DIR / example["output_relpath_md"])
-            lines.append(f"- [{example['title']}]({example_href})")
-        lines.append("")
-
+    lines.append(render_spec_placeholders(spec_page["body"], spec_page, examples, page_path))
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -1086,7 +834,8 @@ def render_html_page(md_path):
 def main():
     examples = discover_examples()
     systems = build_system_index(examples)
-    spec_catalog = build_spec_catalog(examples)
+    spec_pages = discover_spec_pages()
+    spec_catalog = build_spec_catalog(spec_pages, examples)
 
     SITE_DIR.mkdir(parents=True, exist_ok=True)
     for old_file in SITE_DIR.rglob("*"):
@@ -1102,7 +851,7 @@ def main():
     for spec_id in sorted(spec_catalog.keys()):
         spec_page = spec_catalog[spec_id]
         spec_page["path_md"].write_text(
-            build_spec_page_markdown(spec_page, spec_catalog, examples),
+            build_spec_page_markdown(spec_page, examples),
             encoding="utf-8",
         )
         print(f"Wrote {spec_page['path_md']}")
