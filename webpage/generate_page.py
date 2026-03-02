@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import shutil
+
 from discovery import build_profile_catalog, build_spec_catalog, build_system_index, discover_examples, discover_spec_pages
 from html_renderer import render_html_page
 from rosetta_render import build_example_markdown, build_front_page_markdown, build_rosetta_index_markdown
@@ -7,6 +9,9 @@ from spec_render import build_spec_index_markdown, build_spec_page_markdown
 
 
 def main():
+    if SITE_DIR.exists():
+        shutil.rmtree(SITE_DIR)
+
     examples = discover_examples()
     systems = build_system_index(examples)
     spec_pages = discover_spec_pages()
@@ -14,9 +19,6 @@ def main():
     profile_catalog = build_profile_catalog(spec_pages, examples)
 
     SITE_DIR.mkdir(parents=True, exist_ok=True)
-    for old_file in SITE_DIR.rglob("*"):
-        if old_file.is_file() and old_file.suffix in {".md", ".html"}:
-            old_file.unlink()
 
     ROOT_INDEX_MD.write_text(build_front_page_markdown(), encoding="utf-8")
     ROSETTA_INDEX_MD.parent.mkdir(parents=True, exist_ok=True)
