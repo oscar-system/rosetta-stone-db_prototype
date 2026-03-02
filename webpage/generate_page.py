@@ -1245,16 +1245,30 @@ def build_spec_page_markdown(spec_page, spec_catalog, examples):
 
 
 def rewrite_markdown_links(md_text):
-    pattern = re.compile(r"(\[[^\]]+\]\()((?:\./|\.\./)[^)\s]+)\)")
+    pattern = re.compile(r"(\[[^\]]+\]\()([^)]+)\)")
+    href_pattern = re.compile(r'(href=")([^"\s]+)(")')
+
+    def rewrite_target(target):
+        if "://" in target or target.startswith(("#", "/")):
+            return target
+        if ".md" in target:
+            return re.sub(r"\.md(?=(#|$))", ".html", target)
+        return target
 
     def replace_link(match):
         prefix = match.group(1)
         target = match.group(2)
-        if ".md" in target:
-            target = re.sub(r"\.md(?=(#|$))", ".html", target)
+        target = rewrite_target(target)
         return f"{prefix}{target})"
 
-    return pattern.sub(replace_link, md_text)
+    def replace_href(match):
+        prefix = match.group(1)
+        target = match.group(2)
+        suffix = match.group(3)
+        target = rewrite_target(target)
+        return f"{prefix}{target}{suffix}"
+
+    return href_pattern.sub(replace_href, pattern.sub(replace_link, md_text))
 
 
 def markdown_to_html(md_text):
