@@ -98,12 +98,20 @@ def discover_system_outputs(system_dir: Path, example_profiles: list[str]) -> Ex
     outputs_root = system_dir / "outputs"
 
     if outputs_root.exists():
-        for output_dir in sorted(path for path in outputs_root.iterdir() if path.is_dir()):
+        output_dirs = sorted(path for path in outputs_root.iterdir() if path.is_dir())
+        for output_dir in output_dirs:
             output_generate_files = find_generate_files(output_dir) or shared_generate_files
             outputs[output_dir.name] = build_output(
                 output_dir.name,
                 output_dir,
                 output_generate_files,
+            )
+        if not output_dirs and find_data_file(system_dir) is not None:
+            legacy_output_id = infer_legacy_output_id(example_profiles)
+            outputs[legacy_output_id] = build_output(
+                legacy_output_id,
+                system_dir,
+                shared_generate_files,
             )
     else:
         legacy_output_id = infer_legacy_output_id(example_profiles)

@@ -316,6 +316,7 @@ def render_output_tabs(
     unavailable_profiles,
     unavailable_note,
 ):
+    outputs = [output for output in outputs if output.data_file is not None]
     output_groups = equivalent_output_groups(outputs)
     container_id = f"tabs_{tab_slug(example_id)}_{tab_slug(system_name)}"
     lines = [
