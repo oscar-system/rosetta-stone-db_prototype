@@ -15,6 +15,8 @@ SITE_DIR = ROOT / "_site"
 TEMPLATE_PATH = ROOT / "templates" / "default.html"
 FRONT_PAGE_SOURCE = CONTENT_DIR / "front-page.md"
 ROSETTA_INDEX_SOURCE = CONTENT_DIR / "rosetta-index.md"
+SPEC_INDEX_SOURCE = CONTENT_DIR / "spec-index.md"
+PARTIALS_DIR = CONTENT_DIR / "partials"
 ROOT_INDEX_MD = SITE_DIR / "index.md"
 ROSETTA_DIR = SITE_DIR / "rosetta"
 ROSETTA_INDEX_MD = ROSETTA_DIR / "index.md"
@@ -391,16 +393,17 @@ def spec_link_lines(page_path, spec_ids, spec_catalog):
     if not spec_ids:
         return []
 
-    lines = [
-        "## Related Specification",
-        "",
-    ]
+    lines = []
     for spec_id in spec_ids:
         spec_page = spec_catalog[spec_id]
         href = rel_link(page_path, spec_page["path_md"])
         lines.append(f"- [{spec_page['title']}]({href})")
-    lines.append("")
-    return lines
+    return render_content_template(
+        PARTIALS_DIR / "example-related-spec.md",
+        {
+            "SPEC_LINKS": "\n".join(lines),
+        },
+    ).splitlines() + [""]
 
 
 def load_markdown_source(path):
@@ -414,10 +417,13 @@ def replace_placeholders(text, replacements):
     return re.sub(r"\n{3,}", "\n\n", rendered).strip() + "\n"
 
 
+def render_content_template(path, replacements):
+    return replace_placeholders(load_markdown_source(path), replacements)
+
+
 def build_front_page_markdown():
-    source = load_markdown_source(FRONT_PAGE_SOURCE)
-    return replace_placeholders(
-        source,
+    return render_content_template(
+        FRONT_PAGE_SOURCE,
         {
             "PAGE_NAV": "",
         },
@@ -503,9 +509,8 @@ def build_rosetta_index_markdown(examples, systems):
                 lines.append("| " + " | ".join(row) + " |")
             lines.append("")
 
-    source = load_markdown_source(ROSETTA_INDEX_SOURCE)
-    return replace_placeholders(
-        source,
+    return render_content_template(
+        ROSETTA_INDEX_SOURCE,
         {
             "PAGE_NAV": render_page_nav(
                 [
@@ -545,38 +550,42 @@ def build_example_markdown(example, systems, spec_catalog):
 
     lines.extend(spec_link_lines(page_path, example.get("spec_ids", []), spec_catalog))
 
-    lines.extend(
-        [
-            "## Systems",
-            "",
-        ]
-    )
+    system_lines = []
 
     for system_name in available_systems:
-        lines.append(f"### {system_name}")
-        lines.append("")
+        system_lines.append(f"### {system_name}")
+        system_lines.append("")
 
         system_example = systems[system_name].get(example["id"])
         generate_file = system_example["generate_file"]
         data_file = system_example["data_file"]
 
         if generate_file is not None:
-            lines.append(f"#### Generate code (`{generate_file.name}`)")
-            lines.append("")
+            system_lines.append(f"#### Generate code (`{generate_file.name}`)")
+            system_lines.append("")
             code = generate_file.read_text(encoding="utf-8")
-            lines.append(fenced_block(code, language_for_file(generate_file)))
-            lines.append("")
+            system_lines.append(fenced_block(code, language_for_file(generate_file)))
+            system_lines.append("")
 
         if data_file is not None:
-            lines.append(f"#### Data file (`{data_file.name}`)")
-            lines.append("")
+            system_lines.append(f"#### Data file (`{data_file.name}`)")
+            system_lines.append("")
             data = render_data_for_markdown(data_file)
-            lines.append(fenced_block(data, language_for_file(data_file)))
-            lines.append("")
+            system_lines.append(fenced_block(data, language_for_file(data_file)))
+            system_lines.append("")
 
         if generate_file is None and data_file is None:
-            lines.append("No generator or data file available for this system.")
-            lines.append("")
+            system_lines.append(load_markdown_source(PARTIALS_DIR / "example-no-system.md").strip())
+            system_lines.append("")
+
+    lines.extend(
+        render_content_template(
+            PARTIALS_DIR / "example-systems.md",
+            {
+                "SYSTEM_SECTIONS": "\n".join(system_lines).rstrip(),
+            },
+        ).splitlines() + [""]
+    )
 
     return "\n".join(lines).rstrip() + "\n"
 
@@ -637,91 +646,67 @@ def build_spec_index_markdown(spec_catalog):
             spec["title"].lower(),
         ),
     )
-    lines = [
-        render_page_nav(
-            [
-                ("Front Page", "../index.md"),
-                ("Rosetta Stone", "../rosetta/index.md"),
-            ]
-        ),
-        "# Specification",
-        "",
-        "This section describes the MaRDI file format itself. It fixes terminology, explains "
-        "the overall JSON object model, documents namespaces and versioned profiles, and "
-        "collects type-level encoding notes linked to concrete examples in the rosetta stone.",
-        "",
-        "## Core pages",
-        "",
-    ]
+    core_lines = []
 
     for spec in core_pages:
-        lines.append(f"- [{spec['title']}](./{spec['id']}.md)")
+        core_lines.append(f"- [{spec['title']}](./{spec['id']}.md)")
 
-    lines.extend(
-        [
-            "",
-            "## Data Types",
-            "",
-        ]
-    )
-
+    type_lines = []
     current_section = None
     for spec in type_pages:
         if spec["section"] != current_section:
             if current_section is not None:
-                lines.append("")
+                type_lines.append("")
             current_section = spec["section"]
             section_title = (
                 CATEGORY_TITLES.get(current_section, current_section.replace("-", " ").title())
                 if current_section
                 else "Other"
             )
-            lines.append(f"### {section_title}")
-            lines.append("")
-        lines.append(f"- [{spec['title']}](./{spec['id']}.md)")
+            type_lines.append(f"### {section_title}")
+            type_lines.append("")
+        type_lines.append(f"- [{spec['title']}](./{spec['id']}.md)")
 
-    lines.extend(
-        [
-            "",
-            "## Schema Basis",
-            "",
-            "The current schema basis used by this prototype is reproduced below from "
-            "`paper/data.json`, which in turn reflects the JSON Schema discussion from the paper.",
-            "",
-            fenced_block(render_data_for_markdown(SCHEMA_PATH), "json"),
-            "",
-        ]
+    return render_content_template(
+        SPEC_INDEX_SOURCE,
+        {
+            "PAGE_NAV": render_page_nav(
+                [
+                    ("Front Page", "../index.md"),
+                    ("Rosetta Stone", "../rosetta/index.md"),
+                ]
+            ),
+            "CORE_PAGES": "\n".join(core_lines),
+            "TYPE_PAGES": "\n".join(type_lines),
+            "SCHEMA_BASIS": fenced_block(render_data_for_markdown(SCHEMA_PATH), "json"),
+        },
     )
-    return "\n".join(lines).rstrip() + "\n"
 
 
 def render_spec_examples(spec_page, examples, page_path):
     if not spec_page["example_ids"]:
         return ""
 
-    lines = [
-        "## Rosetta Stone Examples",
-        "",
-    ]
+    lines = []
     for example_id in spec_page["example_ids"]:
         example = examples[example_id]
         example_href = rel_link(page_path, SITE_DIR / example["output_relpath_md"])
         lines.append(f"- [{example['title']}]({example_href})")
-    lines.append("")
-    return "\n".join(lines)
+    return render_content_template(
+        PARTIALS_DIR / "spec-examples.md",
+        {
+            "EXAMPLE_LINKS": "\n".join(lines),
+        },
+    )
 
 
 def render_spec_profiles(spec_page, examples, page_path):
-    lines = [
-        "## Documented Profiles in This Corpus",
-        "",
-        "This table records the profile/version pairs currently represented by the "
-        "rosetta-stone examples for this data type. Add new rows as new systems or "
-        "encoding revisions are documented.",
-        "",
-    ]
-    lines.extend(render_profiles_table(spec_page["example_ids"], examples, page_path))
-    return "\n".join(lines)
+    return render_content_template(
+        PARTIALS_DIR / "spec-profiles.md",
+        {
+            "PROFILE_TABLE": "\n".join(render_profiles_table(spec_page["example_ids"], examples, page_path)),
+        },
+    )
 
 
 def render_spec_sample(spec_page, examples):
@@ -729,15 +714,12 @@ def render_spec_sample(spec_page, examples):
     if sample is None:
         return ""
 
-    lines = [
-        "## Canonical Example Payload",
-        "",
-        "The following payload is taken directly from the current rosetta-stone corpus.",
-        "",
-        fenced_block(sample, "json"),
-        "",
-    ]
-    return "\n".join(lines)
+    return render_content_template(
+        PARTIALS_DIR / "spec-sample.md",
+        {
+            "SAMPLE_PAYLOAD": fenced_block(sample, "json"),
+        },
+    )
 
 
 def render_spec_placeholders(body, spec_page, examples, page_path):
