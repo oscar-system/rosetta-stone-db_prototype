@@ -1,11 +1,11 @@
 ---
-title: Rational Numbers (`OSCAR v1.5`)
+title: Rational Numbers (`OSCAR v1.4-v1.5`)
 concept: rational-number
 kind: type
 order: 7
-profiles: [oscar-v1.5]
+profiles: [oscar-v1.4, oscar-v1.5]
 ---
-In OSCAR v1.5, rational numbers are encoded with the bare type name
+In OSCAR v1.4 and v1.5, rational numbers are encoded with the bare type name
 `"QQFieldElem"` and a textual fraction payload.
 
 ## Encoding rules

@@ -96,12 +96,14 @@
       "basic-v2": "basics/bool-basic-v2"
     },
     "ZZRingElem": {
+      "oscar-v1.4": "rings/zz-ring-element-oscar-v1.5",
       "oscar-v1.5": "rings/zz-ring-element-oscar-v1.5",
       "oscar-v1.6": "rings/zz-ring-element",
       "oscar-v1.7": "rings/zz-ring-element",
       "oscar-v1.8": "rings/zz-ring-element"
     },
     "QQFieldElem": {
+      "oscar-v1.4": "rings/rational-number-oscar-v1.5",
       "oscar-v1.5": "rings/rational-number-oscar-v1.5",
       "oscar-v1.6": "rings/rational-number",
       "oscar-v1.7": "rings/rational-number",
@@ -116,6 +118,7 @@
       "oscar-v1.8": "groups/matrix-group"
     },
     "PhylogeneticTree": {
+      "oscar-v1.4": "polyhedral/phylogenetic-tree-oscar-v1.5",
       "oscar-v1.5": "polyhedral/phylogenetic-tree-oscar-v1.5",
       "oscar-v1.6": "polyhedral/phylogenetic-tree",
       "oscar-v1.7": "polyhedral/phylogenetic-tree",
@@ -146,6 +149,15 @@
       "status": "draft",
       "based_on": [],
       "description": "Planned successor to `basic v1`. For now this profile is a draft placeholder for the next revision of the shared backbone, starting with the forthcoming change to boolean serialization."
+    },
+    "oscar-v1.4": {
+      "title": "OSCAR v1.4",
+      "kind": "application",
+      "status": "stable",
+      "based_on": [
+        "basic-v1"
+      ],
+      "description": "Application profile for the OSCAR 1.4 serialization format. In the current corpus most OSCAR-specific examples already work, but a few later object types were not yet supported and some encodings that became more explicit in OSCAR 1.5 and 1.6 still used older forms."
     },
     "oscar-v1.5": {
       "title": "OSCAR v1.5",

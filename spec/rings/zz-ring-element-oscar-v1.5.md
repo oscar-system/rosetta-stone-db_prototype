@@ -1,11 +1,11 @@
 ---
-title: ZZRingElem (`OSCAR v1.5`)
+title: ZZRingElem (`OSCAR v1.4-v1.5`)
 concept: zz-ring-element
 kind: type
 order: 5
-profiles: [oscar-v1.5]
+profiles: [oscar-v1.4, oscar-v1.5]
 ---
-In OSCAR v1.5, elements of `ZZ` are encoded with the bare type name
+In OSCAR v1.4 and v1.5, elements of `ZZ` are encoded with the bare type name
 `"ZZRingElem"` and a decimal string payload.
 
 ## Encoding rules

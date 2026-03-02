@@ -1,12 +1,12 @@
 ---
-title: Phylogenetic Trees (`OSCAR v1.5`)
+title: Phylogenetic Trees (`OSCAR v1.4-v1.5`)
 concept: phylogenetic-tree
 kind: type
 order: 10
-profiles: [oscar-v1.5]
+profiles: [oscar-v1.4, oscar-v1.5]
 ---
-In OSCAR v1.5, phylogenetic trees are serialized with a bare root type name and
-the underlying polymake object directly as the `data` payload.
+In OSCAR v1.4 and v1.5, phylogenetic trees are serialized with a bare root type
+name and the underlying polymake object directly as the `data` payload.
 
 ## Encoding Notes
 

@@ -2,7 +2,7 @@
 title: Permutation Groups
 kind: type
 order: 10
-profiles: [oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
+profiles: [oscar-v1.4, oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
 ---
 `PermGroup` is unchanged across the OSCAR versions currently represented in the
 corpus, so one specification page covers OSCAR v1.5 through v1.8.
