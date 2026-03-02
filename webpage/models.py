@@ -36,6 +36,8 @@ class ExamplePage:
     profiles: list[str]
     body: str
     systems: dict[str, ExampleSystem]
+    unavailable_profiles: list[str] = field(default_factory=list)
+    unavailable_note: str | None = None
     spec_ids: list[str] = field(default_factory=list)
 
 

@@ -210,6 +210,10 @@ def build_example_markdown(example, systems, spec_catalog, profile_catalog):
             )
             system_lines.append("")
 
+        unavailable_lines = render_unavailable_outputs(page_path, example, profile_catalog)
+        if unavailable_lines:
+            system_lines.extend(unavailable_lines)
+
         if not shared_generate_files and not any(output.data_file is not None for output in outputs):
             system_lines.append(load_markdown_source(PARTIALS_DIR / "example-no-system.md").strip())
             system_lines.append("")
@@ -449,4 +453,29 @@ def render_generate_sections_html(generate_files: list[Path]) -> list[str]:
             f'<pre><code class="language-{escape(language)}">{escape(code)}</code></pre>'
             "</div>"
         )
+    return lines
+
+
+def render_unavailable_outputs(page_path, example, profile_catalog):
+    if not example.unavailable_profiles:
+        return []
+
+    labels = []
+    for profile_id in example.unavailable_profiles:
+        if profile_id in profile_catalog:
+            profile = profile_catalog[profile_id]
+            href = profile_href(page_path)
+            labels.append(f"[{profile.title}]({href}#{profile_id})")
+        else:
+            labels.append(f"`{profile_id}`")
+
+    lines = [
+        "#### Unavailable outputs",
+        "",
+        f"Not available for {', '.join(labels)}.",
+    ]
+    if example.unavailable_note:
+        lines.append("")
+        lines.append(example.unavailable_note)
+    lines.append("")
     return lines

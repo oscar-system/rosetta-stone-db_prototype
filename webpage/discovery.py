@@ -157,6 +157,8 @@ def discover_examples() -> dict[str, ExamplePage]:
                 profiles=example_profiles,
                 body=body,
                 systems=systems,
+                unavailable_profiles=metadata.str_list("unavailable_profiles"),
+                unavailable_note=metadata.optional_str("unavailable_note"),
             )
     return examples
 
