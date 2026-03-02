@@ -1,16 +1,19 @@
 ---
-title: Phylogenetic Trees
+title: Phylogenetic Trees (`OSCAR v1.6-v1.8`)
+concept: phylogenetic-tree
 kind: type
 order: 11
-profiles: [oscar-v1.7, oscar-v1.8]
+profiles: [oscar-v1.6, oscar-v1.7, oscar-v1.8]
 ---
-`PhylogeneticTree` is currently documented in the OSCAR v1.7 profile through the rosetta-stone corpus. This page records the present encoding shape and should be read as a profile-specific type description.
+From OSCAR v1.6 onward, `PhylogeneticTree` uses a parametric root type and a
+structured payload that separates the polymake tree from additional OSCAR-level
+data such as vertex permutations.
 
 ## Encoding Notes
 
-- Set `_type` to `"PhylogeneticTree"` when this type appears at the root of a serialized object.
-- Interpret the payload under `data` according to the active namespace and profile version.
-- Follow the linked examples for the currently documented payload shape and referenced ambient objects.
+- Use a typed `_type` object whose `name` is `"PhylogeneticTree"`.
+- Record the coefficient field in `_type.params`.
+- Store the tree data under `data`, with at least `pm_tree` and any additional OSCAR-specific fields required by the profile.
 
 {{ CANONICAL_EXAMPLE_PAYLOAD }}
 

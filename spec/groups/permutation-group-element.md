@@ -2,9 +2,10 @@
 title: Permutation Group Elements
 kind: type
 order: 11
-profiles: [oscar-v1.7, oscar-v1.8]
+profiles: [oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
 ---
-`PermGroupElem` is currently documented in the OSCAR v1.7 profile through the rosetta-stone corpus. This page records the present encoding shape and should be read as a profile-specific type description.
+`PermGroupElem` is unchanged across the OSCAR versions currently represented in
+the corpus, so one specification page covers OSCAR v1.5 through v1.8.
 
 ## Encoding Notes
 

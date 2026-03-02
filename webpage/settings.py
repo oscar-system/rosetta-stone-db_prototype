@@ -29,6 +29,7 @@ TYPE_SPEC_BY_ROOT_TYPE = _CONFIG["type_spec_by_root_type"]
 TYPE_SPEC_BY_ROOT_TYPE_AND_PROFILE = _CONFIG.get("type_spec_by_root_type_and_profile", {})
 LANGUAGE_BY_SUFFIX = _CONFIG["language_by_suffix"]
 PROFILE_DEFINITIONS = _CONFIG["profiles"]
+PROFILE_ORDER = {profile_id: index for index, profile_id in enumerate(PROFILE_DEFINITIONS.keys())}
 
 GITHUB_EDIT_BASE = "https://github.com/oscar-system/rosetta-stone-db_prototype/edit/main/"
 

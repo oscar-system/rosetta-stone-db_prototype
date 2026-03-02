@@ -1,16 +1,18 @@
 ---
-title: Matrix Groups
+title: Matrix Groups (`OSCAR v1.7-v1.8`)
+concept: matrix-group
 kind: type
 order: 6
 profiles: [oscar-v1.7, oscar-v1.8]
 ---
-`MatGroup` is currently documented in the OSCAR v1.7 profile through the rosetta-stone corpus. This page records the present encoding shape and should be read as a profile-specific type description.
+`MatGroup` is the current OSCAR encoding for matrix groups. In the present
+corpus this form appears in OSCAR v1.7 and the draft OSCAR v1.8 profile.
 
 ## Encoding Notes
 
-- Set `_type` to `"MatGroup"` when this type appears at the root of a serialized object.
-- Interpret the payload under `data` according to the active namespace and profile version.
-- Follow the linked examples for the currently documented payload shape and referenced ambient objects.
+- Use a typed `_type` object whose `name` is `"MatGroup"`.
+- Record the ambient base ring and degree in `_type.params`.
+- Store generators and descriptive metadata under `data`.
 
 {{ CANONICAL_EXAMPLE_PAYLOAD }}
 

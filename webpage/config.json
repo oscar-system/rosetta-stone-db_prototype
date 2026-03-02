@@ -41,13 +41,11 @@
     "BigInt": "basics/integers",
     "Int16": "basics/integers",
     "UInt64": "basics/integers",
-    "ZZRingElem": "basics/integers",
     "String": "basics/string",
     "Vector": "containers/vector",
     "Dict": "containers/dict",
     "Set": "containers/set",
     "Tuple": "containers/tuple",
-    "QQFieldElem": "rings/rational-number",
     "Matrix": "linear-algebra/matrix",
     "PolyRingElem": "rings/univariate-polynomial",
     "MPolyRingElem": "rings/multivariate-polynomial",
@@ -96,6 +94,32 @@
     "Bool": {
       "basic-v1": "basics/bool-basic-v1",
       "basic-v2": "basics/bool-basic-v2"
+    },
+    "ZZRingElem": {
+      "oscar-v1.5": "rings/zz-ring-element-oscar-v1.5",
+      "oscar-v1.6": "rings/zz-ring-element",
+      "oscar-v1.7": "rings/zz-ring-element",
+      "oscar-v1.8": "rings/zz-ring-element"
+    },
+    "QQFieldElem": {
+      "oscar-v1.5": "rings/rational-number-oscar-v1.5",
+      "oscar-v1.6": "rings/rational-number",
+      "oscar-v1.7": "rings/rational-number",
+      "oscar-v1.8": "rings/rational-number"
+    },
+    "MatrixGroup": {
+      "oscar-v1.5": "groups/matrix-group-oscar-v1.5-v1.6",
+      "oscar-v1.6": "groups/matrix-group-oscar-v1.5-v1.6"
+    },
+    "MatGroup": {
+      "oscar-v1.7": "groups/matrix-group",
+      "oscar-v1.8": "groups/matrix-group"
+    },
+    "PhylogeneticTree": {
+      "oscar-v1.5": "polyhedral/phylogenetic-tree-oscar-v1.5",
+      "oscar-v1.6": "polyhedral/phylogenetic-tree",
+      "oscar-v1.7": "polyhedral/phylogenetic-tree",
+      "oscar-v1.8": "polyhedral/phylogenetic-tree"
     }
   },
   "language_by_suffix": {
@@ -122,6 +146,24 @@
       "status": "draft",
       "based_on": [],
       "description": "Planned successor to `basic v1`. For now this profile is a draft placeholder for the next revision of the shared backbone, starting with the forthcoming change to boolean serialization."
+    },
+    "oscar-v1.5": {
+      "title": "OSCAR v1.5",
+      "kind": "application",
+      "status": "stable",
+      "based_on": [
+        "basic-v1"
+      ],
+      "description": "Application profile for the OSCAR 1.5 serialization format. The current corpus shows that many examples were already supported, but some typed encodings were still less explicit than in OSCAR 1.6 and 1.7."
+    },
+    "oscar-v1.6": {
+      "title": "OSCAR v1.6",
+      "kind": "application",
+      "status": "stable",
+      "based_on": [
+        "basic-v1"
+      ],
+      "description": "Application profile for the OSCAR 1.6 serialization format. In the current corpus this largely matches OSCAR 1.7, with the main documented differences appearing in matrix groups and a few type-level encodings that were finalized later."
     },
     "oscar-v1.7": {
       "title": "OSCAR v1.7",

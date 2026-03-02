@@ -1,12 +1,13 @@
 ---
-title: Rational Numbers
+title: Rational Numbers (`OSCAR v1.6-v1.8`)
+concept: rational-number
 kind: type
 order: 8
-profiles: [oscar-v1.7, oscar-v1.8]
+profiles: [oscar-v1.6, oscar-v1.7, oscar-v1.8]
 ---
-
-Rational numbers are represented as typed values whose payload is a textual
-fraction such as `"42//23"`. The field context is part of the type.
+From OSCAR v1.6 onward, rational numbers are represented as typed values whose
+payload is a textual fraction such as `"42//23"`. The field context is part of
+the type.
 
 ## Encoding rules
 

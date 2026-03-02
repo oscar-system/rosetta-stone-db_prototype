@@ -1,8 +1,14 @@
 from __future__ import annotations
 
 from content import render_content_template, render_page_nav, replace_placeholders
-from settings import CATEGORY_TITLES, PARTIALS_DIR, ROOT_INDEX_MD, ROSETTA_INDEX_MD, SCHEMA_PATH, SPEC_INDEX_MD, SPEC_INDEX_SOURCE, resolve_type_spec
+from settings import CATEGORY_TITLES, PARTIALS_DIR, PROFILE_ORDER, ROOT_INDEX_MD, ROSETTA_INDEX_MD, SCHEMA_PATH, SPEC_INDEX_MD, SPEC_INDEX_SOURCE, resolve_type_spec
 from utils import fenced_block, github_edit_url, profile_href, rel_link, render_data_for_markdown
+
+
+def output_profile_sort_key(output):
+    if output.profile_id is None:
+        return (10_000, "")
+    return (PROFILE_ORDER.get(output.profile_id, 10_000), output.profile_id)
 
 
 def render_profiles_table(example_ids, examples, page_path):
@@ -13,7 +19,7 @@ def render_profiles_table(example_ids, examples, page_path):
         example_path = ROOT_INDEX_MD.parent / example.output_relpath_md
         example_href = rel_link(page_path, example_path)
         for system_name, system in sorted(example.systems.items()):
-            for output in system.outputs.values():
+            for output in sorted(system.outputs.values(), key=output_profile_sort_key):
                 if resolve_type_spec(output.root_type, output.profile_id) != spec_id:
                     continue
                 namespaces = output.namespaces or [{"name": "", "url": "", "version": ""}]
@@ -31,6 +37,7 @@ def render_profiles_table(example_ids, examples, page_path):
     if not rows:
         return ["No documented profiles yet.", ""]
 
+    rows.sort()
     return [
         "| Profile | Version | Example | Root type |",
         "| --- | --- | --- | --- |",
@@ -40,6 +47,7 @@ def render_profiles_table(example_ids, examples, page_path):
 
 
 def sample_payload_for_spec(spec_id, example_ids, examples):
+    candidates = []
     for example_id in example_ids:
         example = examples[example_id]
         for system in example.systems.values():
@@ -47,8 +55,13 @@ def sample_payload_for_spec(spec_id, example_ids, examples):
                 root_type = output.root_type
                 if output.data_file is not None and examples[example_id].spec_ids and spec_id in examples[example_id].spec_ids and root_type:
                     if resolve_type_spec(root_type, output.profile_id) == spec_id:
-                        return render_data_for_markdown(output.data_file)
-    return None
+                        candidates.append(output)
+
+    if not candidates:
+        return None
+
+    best_output = max(candidates, key=output_profile_sort_key)
+    return render_data_for_markdown(best_output.data_file)
 
 
 def render_page_profiles(profile_ids, profile_catalog, page_path):
