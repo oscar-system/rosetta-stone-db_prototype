@@ -1,0 +1,107 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{polymake:2017}
+Assarf, B., Gawrilow, E., Herr, K., Joswig, M., Lorenz, B., Paffenholz, A.,
+  Rehn, T.: Computing convex hulls and counting integer points with \polymake.
+  Math. Program. Comput.  \textbf{9}(1),  1--38 (2017)
+
+\bibitem{Julia-2017}
+Bezanson, J., Edelman, A., Karpinski, S., Shah, V.B.: Julia: A fresh approach
+  to numerical computing. SIAM {R}eview  \textbf{59}(1),  65--98 (2017)
+
+\bibitem{BuchbergerLoos:1983}
+Buchberger, B., Loos, R.: Algebraic simplification. In: Computer algebra, pp.
+  11--43. Springer, Vienna (1983)
+
+\bibitem{toric+varieties}
+Cox, D.A., Little, J.B., Schenck, H.K.: Toric varieties, Graduate Studies in
+  Mathematics, vol.~124. American Mathematical Society, Providence, RI (2011)
+
+\bibitem{OSCAR-book}
+Decker, W., Eder, C., Fieker, C., Horn, M., Joswig, M. (eds.): The Computer
+  Algebra System {\OSCAR}: Algorithms and Examples. Algorithms and
+  {C}omputation in {M}athematics, Springer (2024)
+
+\bibitem{DeckerSchreyer:2000}
+Decker, W., Schreyer, F.O.: Non-general type surfaces in {${\bf P}^4$}: some
+  remarks on bounds and constructions. J. Symbolic Comput.  \textbf{29}(4-5),
+  545--582 (2000), symbolic computation in algebra, analysis, and geometry
+  (Berkeley, CA, 1998)
+
+\bibitem{DGPS}
+Decker, W., et~al.: {\sc Singular} --- {A} computer algebra system for
+  polynomial computations, version 4.3.2-p16 (2024),
+  \url{http://www.singular.uni-kl.de}
+
+\bibitem{OpenMath:2000}
+Dewar, M.: {\OpenMath}: An overview. SIGSAM Bull.  \textbf{34}(2),  2–5 (6
+  2000)
+
+\bibitem{EllingsrudPeskine:1989}
+Ellingsrud, G., Peskine, C.: Sur les surfaces lisses de {${\bf P}_4$}. Invent.
+  Math.  \textbf{95}(1),  1--11 (1989)
+
+\bibitem{Fateman:2001}
+Fateman, R.: A critique of {\OpenMath} and thoughts on encoding mathematics.
+  \url{https://people.eecs.berkeley.edu/~fateman/papers/openmathcrit.pdf} (1
+  2001)
+
+\bibitem{Fateman:MVSD}
+Fateman, R.: More versatile scientific documents.
+  \url{https://people.eecs.berkeley.edu/~fateman/MVSD.html} (2003)
+
+\bibitem{nemo}
+Fieker, C., et~al.: Nemo/{H}ecke: Computer algebra and number theory packages
+  for the {J}ulia programming language. In: Proceedings of the 2017 ACM on
+  International Symposium on Symbolic and Algebraic Computation. pp. 157--164.
+  ISSAC '17, ACM, New York, NY, USA (2017)
+
+\bibitem{vonzurGathenGerhard:1999}
+von~zur Gathen, J., Gerhard, J.: Modern computer algebra. Cambridge University
+  Press, New York (1999)
+
+\bibitem{polymake_XML:ICMS_2016}
+Gawrilow, E., Hampe, S., Joswig, M.: The {\polymake} {XML} file format. In:
+  Mathematical software -- ICMS 2016. 5th international congress, Berlin,
+  Germany, July 11--14, 2016. Proceedings, pp. 403--410. Berlin: Springer
+  (2016)
+
+\bibitem{geiselmann_2024_10729583}
+Geiselmann, Z., et~al.: Algebraically precise {J}ohnson solids (Mar 2024).
+  \doi{10.5281/zenodo.10729583}
+
+\bibitem{MIPLIB}
+Gleixner, A., et~al.: {\MIPLIB 2017: Data-Driven Compilation of the 6th
+  Mixed-Integer Programming Library}. Mathematical Programming Computation
+  (2021)
+
+\bibitem{polydb}
+Paffenholz, A.: {\polyDB}: a database for polytopes and related objects. In:
+  Algorithmic and experimental methods in algebra, geometry, and number theory,
+  pp. 533--547. Springer, Cham (2017)
+
+\bibitem{GAP4}
+{The GAP~Group}: {GAP -- Groups, Algorithms, and Programming, Version 4.12.2}
+  (2022), \url{https://www.gap-system.org}
+
+\bibitem{the_mardi_consortium_2022_6552436}
+{The MaRDI consortium}: {MaRDI: Mathematical Research Data Initiative Proposal}
+  (May 2022). \doi{10.5281/zenodo.6552436}
+
+\bibitem{OSCAR}
+{The \OSCAR Team}: {{\OSCAR} -- Open Source Computer Algebra Research system,
+  Version 1.0.0} (2024), \url{https://www.oscar-system.org}
+
+\bibitem{william_stein_2020_4066866}
+{The {\SageMath} Developers}: {\SageMath}, version 10.2 (Dec 2023).
+  \doi{10.5281/zenodo.10252400}
+
+\bibitem{json-schema-2020-12}
+Wright, A., Andrews, H., Hutton, B., Dennis, G.: Json schema: A media type for
+  describing json documents.
+  \url{https://json-schema.org/draft/2020-12/json-schema-core.html} (2020)
+
+\end{thebibliography}

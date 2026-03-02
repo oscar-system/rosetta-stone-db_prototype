@@ -1,0 +1,20 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}\PYGZus{}ns\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Oscar\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}https://github.com/oscar\PYGZhy{}system/Oscar.jl\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{                     }\PYG{l+s+s2}{\PYGZdq{}1.0.0\PYGZdq{}}\PYG{+w}{ }\PYG{p}{]}\PYG{+w}{ }\PYG{p}{\PYGZcb{},}
+\PYG{+w}{  }\PYG{l+s+s2}{\PYGZdq{}\PYGZus{}type\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}name\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}MPolyRingElem\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{             }\PYG{l+s+s2}{\PYGZdq{}params\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}a7029443\PYGZhy{}b1d3\PYGZhy{}4708\PYGZhy{}a66d\PYGZhy{}f68eb6616fcf\PYGZdq{}}\PYG{+w}{ }\PYG{p}{\PYGZcb{},}
+\PYG{+w}{  }\PYG{l+s+s2}{\PYGZdq{}data\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{[[[}\PYG{l+s+s2}{\PYGZdq{}3\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}4\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}0\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}2\PYGZdq{}}\PYG{p}{]]],}
+\PYG{+w}{           }\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}0\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}2\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}0\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}3\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}1\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}1\PYGZdq{}}\PYG{p}{]]],}
+\PYG{+w}{           }\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}1\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}0\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}1\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}5\PYGZdq{}}\PYG{p}{]]],}
+\PYG{+w}{           }\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}0\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}0\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}0\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}1\PYGZdq{}}\PYG{p}{]]]],}
+\PYG{+w}{  }\PYG{l+s+s2}{\PYGZdq{}\PYGZus{}refs\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{l+s+s2}{\PYGZdq{}a7029443\PYGZhy{}b1d3\PYGZhy{}4708\PYGZhy{}a66d\PYGZhy{}f68eb6616fcf\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{p}{...}\PYG{+w}{ }\PYG{p}{\PYGZcb{},}
+\PYG{+w}{    }\PYG{l+s+s2}{\PYGZdq{}f2b7cb6b\PYGZhy{}535a\PYGZhy{}4a52\PYGZhy{}a0cc\PYGZhy{}75f8e93a6719\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{p}{...}\PYG{+w}{ }\PYG{p}{\PYGZcb{},}
+\PYG{+w}{    }\PYG{l+s+s2}{\PYGZdq{}23f25330\PYGZhy{}83f7\PYGZhy{}43a0\PYGZhy{}ac74\PYGZhy{}da6f2caa7eb8\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{l+s+s2}{\PYGZdq{}\PYGZus{}type\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}FqField\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{      }\PYG{l+s+s2}{\PYGZdq{}data\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}def\PYGZus{}pol\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{l+s+s2}{\PYGZdq{}\PYGZus{}type\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}name\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}PolyRingElem\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{                   }\PYG{l+s+s2}{\PYGZdq{}params\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}f2b7cb6b\PYGZhy{}535a\PYGZhy{}4a52\PYGZhy{}a0cc\PYGZhy{}75f8e93a6719\PYGZdq{}}\PYG{+w}{ }\PYG{p}{\PYGZcb{},}
+\PYG{+w}{        }\PYG{l+s+s2}{\PYGZdq{}data\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}0\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}1\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}2\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}1\PYGZdq{}}\PYG{p}{]]}
+\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

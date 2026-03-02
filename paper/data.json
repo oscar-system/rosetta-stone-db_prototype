@@ -1,0 +1,26 @@
+{ "$id": "https://oscar-system.org/schemas/mrdi.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["_type"],
+  "properties": { "_ns": { "type": "object" },
+		  "_type": {
+		    "oneOf": [
+		      { "type": "string"},
+		      { "type": "object", "properties": {
+			"name": {"type": "string"},
+			"params": {"$ref": "#/$defs/data"}
+		      } } ] },
+    "data": {"$ref": "#/$defs/data"},
+    "_refs": {"type": "object", "patternProperties": {
+      "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$": {
+	"$ref": "#" 
+      } } } },
+  "$defs": { "data": {
+    "oneOf": [
+      { "type": "string"},
+      { "type": "array", "items": { "$ref": "#/$defs/data"} },
+      { "type": "object", "not": { "required": [ "_ns" ] },
+	"patternProperties": {
+	  "^[a-zA-Z0-9_]*": {"$ref": "#/$defs/data"} } },
+      { "$ref": "https://polymake.org/schemas/data.json"}
+    ] } } }

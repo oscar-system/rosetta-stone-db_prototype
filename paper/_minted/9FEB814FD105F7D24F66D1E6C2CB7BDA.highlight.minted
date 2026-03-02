@@ -1,0 +1,13 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{n+nd}{@testset}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}ToricDivisor\PYGZdq{}}\PYG{+w}{ }\PYG{k}{begin}
+\PYG{+w}{  }\PYG{n}{pp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{projective\PYGZus{}space}\PYG{p}{(}\PYG{n}{NormalToricVariety}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n}{td0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{toric\PYGZus{}divisor}\PYG{p}{(}\PYG{n}{pp}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n}{td1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{toric\PYGZus{}divisor}\PYG{p}{(}\PYG{n}{pp}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{3}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n}{vtd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{td0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{td1}\PYG{p}{]}
+\PYG{+w}{  }\PYG{n}{test\PYGZus{}save\PYGZus{}load\PYGZus{}roundtrip}\PYG{p}{(}\PYG{n}{path}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{vtd}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{do}\PYG{+w}{ }\PYG{n}{loaded}
+\PYG{+w}{    }\PYG{n+nd}{@test}\PYG{+w}{ }\PYG{n}{coefficients}\PYG{p}{(}\PYG{n}{td0}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{coefficients}\PYG{p}{(}\PYG{n}{loaded}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+\PYG{+w}{    }\PYG{n+nd}{@test}\PYG{+w}{ }\PYG{n}{coefficients}\PYG{p}{(}\PYG{n}{td1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{coefficients}\PYG{p}{(}\PYG{n}{loaded}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{])}
+\PYG{+w}{    }\PYG{n+nd}{@test}\PYG{+w}{ }\PYG{n}{toric\PYGZus{}variety}\PYG{p}{(}\PYG{n}{loaded}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{toric\PYGZus{}variety}\PYG{p}{(}\PYG{n}{loaded}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{])}
+\PYG{+w}{  }\PYG{k}{end}
+\PYG{k}{end}
+\end{MintedVerbatim}

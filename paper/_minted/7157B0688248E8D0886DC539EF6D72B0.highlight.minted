@@ -1,0 +1,8 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{\PYGZgt{} jq \PYGZsq{}.data.float.VERTICES | length\PYGZsq{} j3}
+\PYG{g+go}{9}
+\PYG{g+go}{\PYGZgt{} jq \PYGZsq{}.data.float.VERTICES | length\PYGZsq{} j7}
+\PYG{g+go}{7}
+\PYG{g+go}{\PYGZgt{} jq \PYGZsq{}.data.float.VERTICES | length\PYGZsq{} j11}
+\PYG{g+go}{11}
+\end{MintedVerbatim}
