@@ -17,6 +17,37 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/julia.min.js"></script>
   <script>
     window.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll("[data-tabs]").forEach(function (tabContainer) {
+        var buttons = Array.from(tabContainer.querySelectorAll("[data-tab-target]"));
+        var panels = Array.from(tabContainer.querySelectorAll(".output-tab-panel"));
+        if (!buttons.length || !panels.length) {
+          return;
+        }
+
+        function activate(button) {
+          var targetId = button.getAttribute("data-tab-target");
+          buttons.forEach(function (candidate) {
+            var selected = candidate === button;
+            candidate.classList.toggle("output-tab-btn-active", selected);
+            candidate.setAttribute("aria-selected", selected ? "true" : "false");
+            candidate.setAttribute("tabindex", selected ? "0" : "-1");
+          });
+          panels.forEach(function (panel) {
+            var selected = panel.id === targetId;
+            panel.classList.toggle("output-tab-panel-active", selected);
+            panel.hidden = !selected;
+          });
+        }
+
+        buttons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            activate(button);
+          });
+        });
+
+        activate(buttons[0]);
+      });
+
       document.querySelectorAll("pre > code").forEach(function (codeBlock) {
         var pre = codeBlock.parentElement;
         if (!pre || pre.querySelector(".copy-code-btn")) {
@@ -226,6 +257,47 @@
     }
     a {
       color: var(--accent);
+    }
+    .output-tabs {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.62);
+      overflow: hidden;
+    }
+    .output-tab-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      padding: 0.85rem 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.45);
+    }
+    .output-tab-btn {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--muted);
+      border-radius: 10px 10px 0 0;
+      padding: 0.45rem 0.8rem;
+      font: inherit;
+      cursor: pointer;
+    }
+    .output-tab-btn-active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-bottom-color: var(--accent-soft);
+      font-weight: 600;
+    }
+    .output-tab-panel {
+      padding: 1rem 1rem 0.7rem;
+    }
+    .output-tab-panel[hidden] {
+      display: none;
+    }
+    .output-tab-panel p:first-child {
+      margin-top: 0;
+    }
+    .output-tab-generate-block {
+      margin: 0.9rem 0 1rem;
     }
     @media (max-width: 700px) {
       main {

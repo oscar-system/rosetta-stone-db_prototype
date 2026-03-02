@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from html import escape
 from pathlib import Path
+import re
 
 from content import load_markdown_source, render_content_template, render_page_nav
 from mrdi_compare import equivalent_json
+from models import ExampleOutput
 from settings import (
     CATEGORY_TITLES,
     FRONT_PAGE_SOURCE,
@@ -192,43 +195,20 @@ def build_example_markdown(example, systems, spec_catalog, profile_catalog):
         if shared_generate_files:
             system_lines.extend(render_generate_sections(shared_generate_files))
 
-        for output_group in equivalent_output_groups(outputs):
-            representative = choose_representative_output(output_group)
-
-            if len(outputs) > 1:
-                if len(output_group) > 1:
-                    system_lines.append(
-                        f"#### Equivalent outputs for "
-                        f"{output_label_list(page_path, output_group, profile_catalog)}"
-                    )
-                else:
-                    system_lines.append(
-                        f"#### {output_heading(page_path, representative.id, profile_catalog)}"
-                    )
-                system_lines.append("")
-
-            if len(output_group) > 1:
-                system_lines.append(
-                    "These serialized outputs are equivalent up to UUID renaming "
-                    "and recorded namespace version strings."
+        if outputs:
+            system_lines.append("#### Data outputs")
+            system_lines.append("")
+            system_lines.extend(
+                render_output_tabs(
+                    page_path,
+                    example.id,
+                    system_name,
+                    outputs,
+                    shared_generate_files,
+                    profile_catalog,
                 )
-                system_lines.append("")
-
-            if representative.generate_files and representative.generate_files != shared_generate_files:
-                system_lines.extend(render_generate_sections(representative.generate_files))
-
-            data_file = representative.data_file
-            if data_file is not None:
-                if len(output_group) > 1:
-                    system_lines.append(
-                        f"#### Representative data file (`{data_file.name}`)"
-                    )
-                else:
-                    system_lines.append(f"#### Data file (`{data_file.name}`)")
-                system_lines.append("")
-                data = render_data_for_markdown(data_file)
-                system_lines.append(fenced_block(data, language_for_file(data_file)))
-                system_lines.append("")
+            )
+            system_lines.append("")
 
         if not shared_generate_files and not any(output.data_file is not None for output in outputs):
             system_lines.append(load_markdown_source(PARTIALS_DIR / "example-no-system.md").strip())
@@ -290,7 +270,7 @@ def outputs_are_equivalent(left, right):
 
 
 def equivalent_output_groups(outputs):
-    groups: list[list[object]] = []
+    groups: list[list[ExampleOutput]] = []
     for output in sorted(outputs, key=output_sort_key):
         matched_group = None
         for group in groups:
@@ -318,3 +298,153 @@ def output_label_list(page_path, outputs, profile_catalog):
         for output in sorted(outputs, key=output_sort_key)
     ]
     return ", ".join(labels)
+
+
+def tab_slug(value):
+    return slugify(value).replace("-", "_")
+
+
+def render_output_tabs(
+    page_path,
+    example_id,
+    system_name,
+    outputs,
+    shared_generate_files,
+    profile_catalog,
+):
+    output_groups = equivalent_output_groups(outputs)
+    container_id = f"tabs_{tab_slug(example_id)}_{tab_slug(system_name)}"
+    lines = [
+        f'<div class="output-tabs" data-tabs id="{container_id}">',
+        '<div class="output-tab-list" role="tablist" aria-label="Serialized outputs">',
+    ]
+
+    for group_index, output_group in enumerate(output_groups):
+        panel_id = f"{container_id}_panel_{group_index}"
+        representative = choose_representative_output(output_group)
+        button_id = f"{container_id}_tab_{tab_slug(representative.id)}"
+        lines.append(
+            f'<button type="button" class="output-tab-btn" role="tab" '
+            f'id="{button_id}" aria-controls="{panel_id}" '
+            f'data-tab-target="{panel_id}">'
+            f"{escape(output_group_button_label(output_group, profile_catalog))}</button>"
+        )
+
+    lines.append("</div>")
+
+    for group_index, output_group in enumerate(output_groups):
+        representative = choose_representative_output(output_group)
+        panel_id = f"{container_id}_panel_{group_index}"
+        panel_lines = [
+            f'<div class="output-tab-panel" role="tabpanel" id="{panel_id}">'
+        ]
+
+        label_list = output_label_list_html(page_path, output_group, profile_catalog)
+        panel_lines.append(
+            f"<p><strong>Profiles:</strong> {label_list}</p>"
+        )
+
+        if representative.generate_files and representative.generate_files != shared_generate_files:
+            panel_lines.extend(render_generate_sections_html(representative.generate_files))
+
+        if representative.data_file is not None:
+            language = language_for_file(representative.data_file)
+            data = render_data_for_markdown(representative.data_file)
+            panel_lines.append(
+                f"<p><strong>Data file:</strong> <code>{escape(representative.data_file.name)}</code></p>"
+            )
+            panel_lines.append(
+                f'<pre><code class="language-{escape(language)}">{escape(data)}</code></pre>'
+            )
+
+        if len(output_group) > 1:
+            panel_lines.append(
+                "<p>This serialized output is equivalent for these profiles up to "
+                "UUID renaming and recorded namespace version strings.</p>"
+            )
+
+        panel_lines.append("</div>")
+        lines.extend(panel_lines)
+
+    lines.append("</div>")
+    return lines
+
+
+def output_button_label(output_id, profile_catalog):
+    if output_id in profile_catalog:
+        return profile_catalog[output_id].title
+    return output_id
+
+
+def output_group_button_label(outputs, profile_catalog):
+    sorted_outputs = sorted(outputs, key=output_sort_key)
+    titles = []
+    for output in sorted_outputs:
+        if output.id not in profile_catalog:
+            return ", ".join(
+                output_button_label(candidate.id, profile_catalog)
+                for candidate in sorted_outputs
+            )
+        titles.append(profile_catalog[output.id].title)
+
+    if len(titles) == 1:
+        return titles[0]
+
+    range_label = merged_title_range(titles)
+    return range_label if range_label is not None else ", ".join(titles)
+
+
+def merged_title_range(titles):
+    parsed = [split_trailing_version(title) for title in titles]
+    if any(item is None for item in parsed):
+        return None
+
+    prefixes = {item[0] for item in parsed if item is not None}
+    if len(prefixes) != 1:
+        return None
+
+    first_prefix, first_version = parsed[0]
+    last_prefix, last_version = parsed[-1]
+    if first_prefix != last_prefix:
+        return None
+
+    return f"{first_prefix}{first_version}-{last_version}"
+
+
+def split_trailing_version(title):
+    match = re.match(r"^(.*?)(\d+(?:\.\d+)*)$", title)
+    if match is None:
+        return None
+    return match.group(1), match.group(2)
+
+
+def output_label_html(page_path, output_id, profile_catalog):
+    if output_id in profile_catalog:
+        profile = profile_catalog[output_id]
+        href = profile_href(page_path)
+        return f'<a href="{escape(href)}#{escape(output_id)}">{escape(profile.title)}</a>'
+    return f"<code>{escape(output_id)}</code>"
+
+
+def output_label_list_html(page_path, outputs, profile_catalog):
+    labels = [
+        output_label_html(page_path, output.id, profile_catalog)
+        for output in sorted(outputs, key=output_sort_key)
+    ]
+    return ", ".join(labels)
+
+
+def render_generate_sections_html(generate_files: list[Path]) -> list[str]:
+    lines = []
+    for generate_file in generate_files:
+        code = generate_file.read_text(encoding="utf-8")
+        language = language_for_file(generate_file)
+        edit_url = github_edit_url(generate_file)
+        lines.append(
+            "<div class=\"output-tab-generate-block\">"
+            f"<p><strong>Generate code:</strong> <code>{escape(generate_file.name)}</code> "
+            f'[ <a href="{escape(edit_url)}">edit</a> ]</p>'
+            f'<pre><code class="language-{escape(language)}">{escape(code)}</code></pre>'
+            "</div>"
+        )
+    return lines
