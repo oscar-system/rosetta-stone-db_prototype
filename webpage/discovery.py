@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from content import parse_description
-from models import ExamplePage, ExampleSystem, Profile, SpecPage
+from models import ExampleOutput, ExamplePage, ExampleSystem, Profile, SpecPage
 from settings import PROFILE_DEFINITIONS, ROSETTA_SOURCE_DIR, SPEC_SITE_DIR, SPEC_SOURCE_DIR, TYPE_SPEC_BY_ROOT_TYPE
 
 
@@ -56,6 +56,70 @@ def extract_namespaces(parsed) -> list[dict[str, str]]:
     return namespaces
 
 
+def find_generate_files(path: Path) -> list[Path]:
+    return [p for p in sorted(path.iterdir()) if p.is_file() and p.name.startswith("generate.")]
+
+
+def find_data_file(path: Path) -> Path | None:
+    return next(
+        (p for p in sorted(path.iterdir()) if p.is_file() and p.name.startswith("data.")),
+        None,
+    )
+
+
+def infer_legacy_output_id(example_profiles: list[str]) -> str:
+    if len(example_profiles) == 1:
+        return example_profiles[0]
+    return "default"
+
+
+def build_output(
+    output_id: str,
+    output_path: Path,
+    generate_files: list[Path],
+) -> ExampleOutput:
+    data_file = find_data_file(output_path)
+    parsed_data = load_serialized_payload(data_file)
+    return ExampleOutput(
+        id=output_id,
+        path=output_path,
+        data_file=data_file,
+        generate_files=list(generate_files),
+        parsed_data=parsed_data,
+        root_type=normalize_type_name(parsed_data.get("_type")) if isinstance(parsed_data, dict) else None,
+        namespaces=extract_namespaces(parsed_data),
+        profile_id=output_id if output_id != "default" else None,
+    )
+
+
+def discover_system_outputs(system_dir: Path, example_profiles: list[str]) -> ExampleSystem:
+    shared_generate_files = find_generate_files(system_dir)
+    outputs: dict[str, ExampleOutput] = {}
+    outputs_root = system_dir / "outputs"
+
+    if outputs_root.exists():
+        for output_dir in sorted(path for path in outputs_root.iterdir() if path.is_dir()):
+            output_generate_files = find_generate_files(output_dir) or shared_generate_files
+            outputs[output_dir.name] = build_output(
+                output_dir.name,
+                output_dir,
+                output_generate_files,
+            )
+    else:
+        legacy_output_id = infer_legacy_output_id(example_profiles)
+        outputs[legacy_output_id] = build_output(
+            legacy_output_id,
+            system_dir,
+            shared_generate_files,
+        )
+
+    return ExampleSystem(
+        path=system_dir,
+        shared_generate_files=shared_generate_files,
+        outputs=outputs,
+    )
+
+
 def discover_examples() -> dict[str, ExamplePage]:
     examples: dict[str, ExamplePage] = {}
     for group_dir in sorted(path for path in ROSETTA_SOURCE_DIR.iterdir() if path.is_dir()):
@@ -66,6 +130,7 @@ def discover_examples() -> dict[str, ExamplePage]:
                 continue
 
             metadata, body = parse_description(description_path)
+            example_profiles = metadata.str_list("profiles")
             example_slug = example_dir.name
             example_id = f"{group_id}-{example_slug}"
 
@@ -73,20 +138,7 @@ def discover_examples() -> dict[str, ExamplePage]:
             systems_root = example_dir / "systems"
             if systems_root.exists():
                 for system_dir in sorted(path for path in systems_root.iterdir() if path.is_dir()):
-                    data_file = next((p for p in sorted(system_dir.iterdir()) if p.name.startswith("data.")), None)
-                    generate_file = next(
-                        (p for p in sorted(system_dir.iterdir()) if p.name.startswith("generate.")),
-                        None,
-                    )
-                    parsed_data = load_serialized_payload(data_file)
-                    systems[system_dir.name] = ExampleSystem(
-                        path=system_dir,
-                        data_file=data_file,
-                        generate_file=generate_file,
-                        parsed_data=parsed_data,
-                        root_type=normalize_type_name(parsed_data.get("_type")) if isinstance(parsed_data, dict) else None,
-                        namespaces=extract_namespaces(parsed_data),
-                    )
+                    systems[system_dir.name] = discover_system_outputs(system_dir, example_profiles)
 
             parsed_order = metadata.optional_int("order")
 
@@ -102,7 +154,7 @@ def discover_examples() -> dict[str, ExamplePage]:
                 ),
                 subcategory=metadata.optional_str("subcategory"),
                 order=parsed_order,
-                profiles=metadata.str_list("profiles"),
+                profiles=example_profiles,
                 body=body,
                 systems=systems,
             )
@@ -162,14 +214,15 @@ def build_spec_catalog(spec_pages: dict[str, SpecPage], examples: dict[str, Exam
     for example_id, example in examples.items():
         related_specs: set[str] = set()
         for system in example.systems.values():
-            root_type = system.root_type
-            spec_id = TYPE_SPEC_BY_ROOT_TYPE.get(root_type)
-            if spec_id:
-                related_specs.add(spec_id)
+            for output in system.outputs.values():
+                root_type = output.root_type
+                spec_id = TYPE_SPEC_BY_ROOT_TYPE.get(root_type)
+                if spec_id:
+                    related_specs.add(spec_id)
 
-            parsed_data = system.parsed_data
-            if isinstance(parsed_data, dict) and parsed_data.get("_refs"):
-                related_specs.add("core/references-and-parameters")
+                parsed_data = output.parsed_data
+                if isinstance(parsed_data, dict) and parsed_data.get("_refs"):
+                    related_specs.add("core/references-and-parameters")
 
         example.spec_ids = sorted(related_specs)
         for spec_id in example.spec_ids:

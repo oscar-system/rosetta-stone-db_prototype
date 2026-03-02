@@ -12,17 +12,18 @@ def render_profiles_table(example_ids, examples, page_path):
         example_path = ROOT_INDEX_MD.parent / example.output_relpath_md
         example_href = rel_link(page_path, example_path)
         for system_name, system in sorted(example.systems.items()):
-            namespaces = system.namespaces or [{"name": "", "url": "", "version": ""}]
-            for namespace in namespaces:
-                namespace_name = namespace["name"] or system_name
-                version = namespace["version"] or "unspecified"
-                url = namespace["url"]
-                profile_label = namespace_name
-                if url:
-                    profile_label = f"[{namespace_name}]({url})"
-                rows.append(
-                    f"| {profile_label} | `{version}` | [{example.title}]({example_href}) | `{system.root_type or ''}` |"
-                )
+            for output in system.outputs.values():
+                namespaces = output.namespaces or [{"name": "", "url": "", "version": ""}]
+                for namespace in namespaces:
+                    namespace_name = namespace["name"] or system_name
+                    version = namespace["version"] or "unspecified"
+                    url = namespace["url"]
+                    profile_label = namespace_name
+                    if url:
+                        profile_label = f"[{namespace_name}]({url})"
+                    rows.append(
+                        f"| {profile_label} | `{version}` | [{example.title}]({example_href}) | `{output.root_type or ''}` |"
+                    )
 
     if not rows:
         return ["No documented profiles yet.", ""]
@@ -39,11 +40,12 @@ def sample_payload_for_spec(spec_id, example_ids, examples):
     for example_id in example_ids:
         example = examples[example_id]
         for system in example.systems.values():
-            root_type = system.root_type
-            if system.data_file is not None and examples[example_id].spec_ids and spec_id in examples[example_id].spec_ids and root_type:
-                from settings import TYPE_SPEC_BY_ROOT_TYPE
-                if TYPE_SPEC_BY_ROOT_TYPE.get(root_type) == spec_id:
-                    return render_data_for_markdown(system.data_file)
+            for output in system.outputs.values():
+                root_type = output.root_type
+                if output.data_file is not None and examples[example_id].spec_ids and spec_id in examples[example_id].spec_ids and root_type:
+                    from settings import TYPE_SPEC_BY_ROOT_TYPE
+                    if TYPE_SPEC_BY_ROOT_TYPE.get(root_type) == spec_id:
+                        return render_data_for_markdown(output.data_file)
     return None
 
 

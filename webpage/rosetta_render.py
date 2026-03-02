@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from content import load_markdown_source, render_content_template, render_page_nav
 from settings import (
     CATEGORY_TITLES,
@@ -180,26 +182,29 @@ def build_example_markdown(example, systems, spec_catalog, profile_catalog):
         system_lines.append("")
 
         system_example = systems[system_name].get(example.id)
-        generate_file = system_example.generate_file
-        data_file = system_example.data_file
+        outputs = sorted(system_example.outputs.values(), key=lambda output: output.id)
+        shared_generate_files = system_example.shared_generate_files
 
-        if generate_file is not None:
-            system_lines.append(
-                f"#### Generate code [ [edit]({github_edit_url(generate_file)}) ]"
-            )
-            system_lines.append("")
-            code = generate_file.read_text(encoding="utf-8")
-            system_lines.append(fenced_block(code, language_for_file(generate_file)))
-            system_lines.append("")
+        if shared_generate_files:
+            system_lines.extend(render_generate_sections(shared_generate_files))
 
-        if data_file is not None:
-            system_lines.append(f"#### Data file (`{data_file.name}`)")
-            system_lines.append("")
-            data = render_data_for_markdown(data_file)
-            system_lines.append(fenced_block(data, language_for_file(data_file)))
-            system_lines.append("")
+        for output in outputs:
+            if len(outputs) > 1:
+                system_lines.append(f"#### {output_heading(page_path, output.id, profile_catalog)}")
+                system_lines.append("")
 
-        if generate_file is None and data_file is None:
+            if output.generate_files and output.generate_files != shared_generate_files:
+                system_lines.extend(render_generate_sections(output.generate_files))
+
+            data_file = output.data_file
+            if data_file is not None:
+                system_lines.append(f"#### Data file (`{data_file.name}`)")
+                system_lines.append("")
+                data = render_data_for_markdown(data_file)
+                system_lines.append(fenced_block(data, language_for_file(data_file)))
+                system_lines.append("")
+
+        if not shared_generate_files and not any(output.data_file is not None for output in outputs):
             system_lines.append(load_markdown_source(PARTIALS_DIR / "example-no-system.md").strip())
             system_lines.append("")
 
@@ -213,3 +218,24 @@ def build_example_markdown(example, systems, spec_catalog, profile_catalog):
     )
 
     return "\n".join(lines).rstrip() + "\n"
+
+
+def render_generate_sections(generate_files: list[Path]) -> list[str]:
+    lines = []
+    for generate_file in generate_files:
+        lines.append(
+            f"#### Generate code (`{generate_file.name}`) [ [edit]({github_edit_url(generate_file)}) ]"
+        )
+        lines.append("")
+        code = generate_file.read_text(encoding="utf-8")
+        lines.append(fenced_block(code, language_for_file(generate_file)))
+        lines.append("")
+    return lines
+
+
+def output_heading(page_path, output_id, profile_catalog):
+    if output_id in profile_catalog:
+        profile = profile_catalog[output_id]
+        href = profile_href(page_path)
+        return f"Output for [{profile.title}]({href}#{output_id})"
+    return f"Output `{output_id}`"

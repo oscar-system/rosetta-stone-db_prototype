@@ -5,13 +5,22 @@ from pathlib import Path
 
 
 @dataclass
-class ExampleSystem:
+class ExampleOutput:
+    id: str
     path: Path
     data_file: Path | None
-    generate_file: Path | None
+    generate_files: list[Path]
     parsed_data: dict | list | None
     root_type: str | None
     namespaces: list[dict[str, str]]
+    profile_id: str | None
+
+
+@dataclass
+class ExampleSystem:
+    path: Path
+    shared_generate_files: list[Path]
+    outputs: dict[str, ExampleOutput]
 
 
 @dataclass
