@@ -80,7 +80,10 @@
           });
         });
 
-        var initialButton = findButtonForHash(window.location.hash) || buttons[0];
+        var defaultButton = buttons.find(function (button) {
+          return button.getAttribute("data-tab-default") === "true";
+        });
+        var initialButton = findButtonForHash(window.location.hash) || defaultButton || buttons[0];
         activate(initialButton, false);
 
         window.addEventListener("hashchange", function () {
@@ -323,6 +326,9 @@
       padding: 0.45rem 0.8rem;
       font: inherit;
       cursor: pointer;
+    }
+    .output-tab-btn-unavailable {
+      border-style: dashed;
     }
     .output-tab-btn-active {
       background: var(--accent-soft);

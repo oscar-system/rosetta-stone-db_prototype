@@ -206,13 +206,11 @@ def build_example_markdown(example, systems, spec_catalog, profile_catalog):
                     outputs,
                     shared_generate_files,
                     profile_catalog,
+                    example.unavailable_profiles,
+                    example.unavailable_note,
                 )
             )
             system_lines.append("")
-
-        unavailable_lines = render_unavailable_outputs(page_path, example, profile_catalog)
-        if unavailable_lines:
-            system_lines.extend(unavailable_lines)
 
         if not shared_generate_files and not any(output.data_file is not None for output in outputs):
             system_lines.append(load_markdown_source(PARTIALS_DIR / "example-no-system.md").strip())
@@ -315,6 +313,8 @@ def render_output_tabs(
     outputs,
     shared_generate_files,
     profile_catalog,
+    unavailable_profiles,
+    unavailable_note,
 ):
     output_groups = equivalent_output_groups(outputs)
     container_id = f"tabs_{tab_slug(example_id)}_{tab_slug(system_name)}"
@@ -323,51 +323,91 @@ def render_output_tabs(
         '<div class="output-tab-list" role="tablist" aria-label="Serialized outputs">',
     ]
 
+    tab_specs = []
     for group_index, output_group in enumerate(output_groups):
-        panel_id = f"{container_id}_panel_{group_index}"
         representative = choose_representative_output(output_group)
-        button_id = f"{container_id}_tab_{tab_slug(representative.id)}"
-        tab_hashes = ",".join(output.id for output in sorted(output_group, key=output_sort_key))
+        tab_specs.append(
+            {
+                "kind": "output",
+                "panel_id": f"{container_id}_panel_{group_index}",
+                "button_id": f"{container_id}_tab_{tab_slug(representative.id)}",
+                "hashes": [output.id for output in sorted(output_group, key=output_sort_key)],
+                "label": output_group_button_label(output_group, profile_catalog),
+                "output_group": output_group,
+            }
+        )
+
+    for profile_id in unavailable_profiles:
+        tab_specs.append(
+            {
+                "kind": "unavailable",
+                "panel_id": f"{container_id}_panel_unavailable_{tab_slug(profile_id)}",
+                "button_id": f"{container_id}_tab_{tab_slug(profile_id)}",
+                "hashes": [profile_id],
+                "label": output_button_label(profile_id, profile_catalog),
+                "profile_id": profile_id,
+            }
+        )
+
+    tab_specs.sort(key=tab_sort_key)
+    default_tab = next((tab for tab in reversed(tab_specs) if tab["kind"] == "output"), None)
+
+    for tab in tab_specs:
+        tab_hashes = ",".join(tab["hashes"])
+        button_class = "output-tab-btn"
+        if tab["kind"] == "unavailable":
+            button_class += " output-tab-btn-unavailable"
+        default_attr = ""
+        if tab is default_tab:
+            default_attr = ' data-tab-default="true"'
         lines.append(
-            f'<button type="button" class="output-tab-btn" role="tab" '
-            f'id="{button_id}" aria-controls="{panel_id}" '
-            f'data-tab-target="{panel_id}" '
-            f'data-tab-hashes="{escape(tab_hashes)}">'
-            f"{escape(output_group_button_label(output_group, profile_catalog))}</button>"
+            f'<button type="button" class="{button_class}" role="tab" '
+            f'id="{tab["button_id"]}" aria-controls="{tab["panel_id"]}" '
+            f'data-tab-target="{tab["panel_id"]}" '
+            f'data-tab-hashes="{escape(tab_hashes)}"{default_attr}>'
+            f"{escape(tab['label'])}</button>"
         )
 
     lines.append("</div>")
 
-    for group_index, output_group in enumerate(output_groups):
-        representative = choose_representative_output(output_group)
-        panel_id = f"{container_id}_panel_{group_index}"
+    for tab in tab_specs:
         panel_lines = [
-            f'<div class="output-tab-panel" role="tabpanel" id="{panel_id}">'
+            f'<div class="output-tab-panel" role="tabpanel" id="{tab["panel_id"]}">'
         ]
 
-        label_list = output_label_list_html(page_path, output_group, profile_catalog)
-        panel_lines.append(
-            f"<p><strong>Profiles:</strong> {label_list}</p>"
-        )
-
-        if representative.generate_files and representative.generate_files != shared_generate_files:
-            panel_lines.extend(render_generate_sections_html(representative.generate_files))
-
-        if representative.data_file is not None:
-            language = language_for_file(representative.data_file)
-            data = render_data_for_markdown(representative.data_file)
+        if tab["kind"] == "output":
+            output_group = tab["output_group"]
+            representative = choose_representative_output(output_group)
+            label_list = output_label_list_html(page_path, output_group, profile_catalog)
             panel_lines.append(
-                f"<p><strong>Data file:</strong> <code>{escape(representative.data_file.name)}</code></p>"
-            )
-            panel_lines.append(
-                f'<pre><code class="language-{escape(language)}">{escape(data)}</code></pre>'
+                f"<p><strong>Profiles:</strong> {label_list}</p>"
             )
 
-        if len(output_group) > 1:
-            panel_lines.append(
-                "<p>This serialized output is equivalent for these profiles up to "
-                "UUID renaming and recorded namespace version strings.</p>"
-            )
+            if representative.generate_files and representative.generate_files != shared_generate_files:
+                panel_lines.extend(render_generate_sections_html(representative.generate_files))
+
+            if representative.data_file is not None:
+                language = language_for_file(representative.data_file)
+                data = render_data_for_markdown(representative.data_file)
+                panel_lines.append(
+                    f"<p><strong>Data file:</strong> <code>{escape(representative.data_file.name)}</code></p>"
+                )
+                panel_lines.append(
+                    f'<pre><code class="language-{escape(language)}">{escape(data)}</code></pre>'
+                )
+
+            if len(output_group) > 1:
+                panel_lines.append(
+                    "<p>This serialized output is equivalent for these profiles up to "
+                    "UUID renaming and recorded namespace version strings.</p>"
+                )
+        else:
+            profile_id = tab["profile_id"]
+            label = output_label_html(page_path, profile_id, profile_catalog)
+            panel_lines.append(f"<p><strong>Profiles:</strong> {label}</p>")
+            panel_lines.append(f"<p>Not available for {label}.</p>")
+            if unavailable_note:
+                panel_lines.append(f"<p>{unavailable_note}</p>")
 
         panel_lines.append("</div>")
         lines.extend(panel_lines)
@@ -398,6 +438,16 @@ def output_group_button_label(outputs, profile_catalog):
 
     range_label = merged_title_range(titles)
     return range_label if range_label is not None else ", ".join(titles)
+
+
+def tab_sort_key(tab):
+    hashes = tab["hashes"]
+    if not hashes:
+        return (10_000, tab["label"])
+    return (
+        min(PROFILE_ORDER.get(profile_id, 10_000) for profile_id in hashes),
+        tab["label"],
+    )
 
 
 def merged_title_range(titles):
@@ -453,29 +503,4 @@ def render_generate_sections_html(generate_files: list[Path]) -> list[str]:
             f'<pre><code class="language-{escape(language)}">{escape(code)}</code></pre>'
             "</div>"
         )
-    return lines
-
-
-def render_unavailable_outputs(page_path, example, profile_catalog):
-    if not example.unavailable_profiles:
-        return []
-
-    labels = []
-    for profile_id in example.unavailable_profiles:
-        if profile_id in profile_catalog:
-            profile = profile_catalog[profile_id]
-            href = profile_href(page_path)
-            labels.append(f"[{profile.title}]({href}#{profile_id})")
-        else:
-            labels.append(f"`{profile_id}`")
-
-    lines = [
-        "#### Unavailable outputs",
-        "",
-        f"Not available for {', '.join(labels)}.",
-    ]
-    if example.unavailable_note:
-        lines.append("")
-        lines.append(example.unavailable_note)
-    lines.append("")
     return lines
