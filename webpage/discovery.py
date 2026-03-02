@@ -188,8 +188,10 @@ def build_profile_catalog(
             id=profile_id,
             title=definition["title"],
             kind=definition["kind"],
+            status=definition["status"],
             based_on=list(definition.get("based_on", [])),
             description=definition["description"],
+            released_on=definition.get("released_on"),
         )
         for profile_id, definition in PROFILE_DEFINITIONS.items()
     }

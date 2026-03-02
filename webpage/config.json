@@ -107,12 +107,21 @@
     "basic-v1": {
       "title": "basic v1",
       "kind": "shared",
+      "status": "stable",
       "based_on": [],
       "description": "Shared profile for the common serialization backbone: core format rules, primitive data types, and basic container encodings."
+    },
+    "basic-v2": {
+      "title": "basic v2",
+      "kind": "shared",
+      "status": "draft",
+      "based_on": [],
+      "description": "Planned successor to `basic v1`. For now this profile is a draft placeholder for the next revision of the shared backbone, starting with the forthcoming change to boolean serialization."
     },
     "oscar-v1.7": {
       "title": "OSCAR v1.7",
       "kind": "application",
+      "status": "stable",
       "based_on": [
         "basic-v1"
       ],
@@ -121,10 +130,11 @@
     "oscar-v1.8": {
       "title": "OSCAR v1.8",
       "kind": "application",
+      "status": "draft",
       "based_on": [
-        "basic-v1"
+        "basic-v2"
       ],
-      "description": "Application profile for the OSCAR 1.8 serialization format. In this first profile pass it intentionally mirrors the currently documented OSCAR 1.7 coverage; later revisions can let the two diverge explicitly."
+      "description": "Draft application profile for the OSCAR 1.8 serialization format. It is intended to track the next shared backbone revision via `basic v2`; later revisions can make its divergences from OSCAR 1.7 explicit."
     }
   }
 }

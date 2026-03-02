@@ -71,6 +71,9 @@ def render_profile_definitions(profile_catalog, spec_catalog, examples, page_pat
         lines.append("")
         lines.append(f"- Identifier: `{profile.id}`")
         lines.append(f"- Kind: {profile.kind}")
+        lines.append(f"- Status: {profile.status}")
+        if profile.released_on:
+            lines.append(f"- Released on: {profile.released_on}")
         if profile.based_on:
             based_on_links = []
             for base_id in profile.based_on:

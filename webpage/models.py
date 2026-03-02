@@ -49,7 +49,9 @@ class Profile:
     id: str
     title: str
     kind: str
+    status: str
     based_on: list[str]
     description: str
+    released_on: str | None = None
     spec_ids: list[str] = field(default_factory=list)
     example_ids: list[str] = field(default_factory=list)
