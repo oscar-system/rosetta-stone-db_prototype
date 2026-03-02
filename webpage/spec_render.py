@@ -132,14 +132,6 @@ def render_profile_definitions(profile_catalog, spec_catalog, examples, page_pat
                 spec_page = spec_catalog[spec_id]
                 lines.append(f"- [{spec_page.title}]({rel_link(page_path, spec_page.path_md)})")
             lines.append("")
-        if profile.example_ids:
-            lines.append("### Direct Example Pages")
-            lines.append("")
-            for example_id in profile.example_ids:
-                example = examples[example_id]
-                example_path = ROOT_INDEX_MD.parent / example.output_relpath_md
-                lines.append(f"- [{example.title}]({rel_link(page_path, example_path)})")
-            lines.append("")
     return "\n".join(lines).rstrip()
 
 
