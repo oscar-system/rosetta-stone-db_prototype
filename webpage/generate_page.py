@@ -384,7 +384,7 @@ def format_json_compact(value, indent_size=2, max_width=100):
 
 def render_page_nav(links):
     items = [f'<a href="{href}">{label}</a>' for label, href in links]
-    return '<div class="page-nav">' + "".join(items) + "</div>"
+    return '<div class="page-nav">' + "".join(items) + "</div>\n"
 
 
 def spec_link_lines(page_path, spec_ids, spec_catalog):
@@ -799,8 +799,13 @@ def rewrite_markdown_links(md_text):
 
 def markdown_to_html(md_text):
     text = rewrite_markdown_links(md_text)
+    nav_html = ""
+    nav_match = re.match(r'(<div class="page-nav">.*?</div>\n+)', text, flags=re.DOTALL)
+    if nav_match:
+        nav_html = nav_match.group(1)
+        text = text[nav_match.end():].lstrip("\n")
     renderer = marko.Markdown(renderer=HeadingIdRenderer, extensions=["gfm"])
-    return renderer.convert(text)
+    return nav_html + renderer.convert(text)
 
 
 def load_html_template():
