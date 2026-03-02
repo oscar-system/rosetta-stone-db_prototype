@@ -43,6 +43,7 @@ class ExamplePage:
 class SpecPage:
     id: str
     title: str
+    concept_id: str | None
     kind: str
     order: int | None
     profiles: list[str]

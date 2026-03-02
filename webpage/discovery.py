@@ -5,7 +5,7 @@ from pathlib import Path
 
 from content import parse_description
 from models import ExampleOutput, ExamplePage, ExampleSystem, Profile, SpecPage
-from settings import PROFILE_DEFINITIONS, ROSETTA_SOURCE_DIR, SPEC_SITE_DIR, SPEC_SOURCE_DIR, TYPE_SPEC_BY_ROOT_TYPE
+from settings import PROFILE_DEFINITIONS, ROSETTA_SOURCE_DIR, SPEC_SITE_DIR, SPEC_SOURCE_DIR, resolve_type_spec
 
 
 def load_serialized_payload(path: Path | None):
@@ -181,6 +181,7 @@ def discover_spec_pages() -> dict[str, SpecPage]:
         spec_pages[spec_id] = SpecPage(
             id=spec_id,
             title=metadata.require_str("title", spec_id.replace("-", " ").title()),
+            concept_id=metadata.optional_str("concept"),
             kind=metadata.require_str("kind", "type"),
             order=parsed_order,
             profiles=metadata.str_list("profiles"),
@@ -200,6 +201,7 @@ def build_spec_catalog(spec_pages: dict[str, SpecPage], examples: dict[str, Exam
         spec_id: SpecPage(
             id=spec.id,
             title=spec.title,
+            concept_id=spec.concept_id,
             kind=spec.kind,
             order=spec.order,
             profiles=list(spec.profiles),
@@ -215,8 +217,7 @@ def build_spec_catalog(spec_pages: dict[str, SpecPage], examples: dict[str, Exam
         related_specs: set[str] = set()
         for system in example.systems.values():
             for output in system.outputs.values():
-                root_type = output.root_type
-                spec_id = TYPE_SPEC_BY_ROOT_TYPE.get(root_type)
+                spec_id = resolve_type_spec(output.root_type, output.profile_id)
                 if spec_id:
                     related_specs.add(spec_id)
 

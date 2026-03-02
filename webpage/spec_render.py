@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 from content import render_content_template, render_page_nav, replace_placeholders
-from settings import CATEGORY_TITLES, PARTIALS_DIR, ROOT_INDEX_MD, ROSETTA_INDEX_MD, SCHEMA_PATH, SPEC_INDEX_MD, SPEC_INDEX_SOURCE
+from settings import CATEGORY_TITLES, PARTIALS_DIR, ROOT_INDEX_MD, ROSETTA_INDEX_MD, SCHEMA_PATH, SPEC_INDEX_MD, SPEC_INDEX_SOURCE, resolve_type_spec
 from utils import fenced_block, github_edit_url, profile_href, rel_link, render_data_for_markdown
 
 
 def render_profiles_table(example_ids, examples, page_path):
+    spec_id = page_path.relative_to(page_path.parents[1]).with_suffix("").as_posix()
     rows = []
     for example_id in example_ids:
         example = examples[example_id]
@@ -13,6 +14,8 @@ def render_profiles_table(example_ids, examples, page_path):
         example_href = rel_link(page_path, example_path)
         for system_name, system in sorted(example.systems.items()):
             for output in system.outputs.values():
+                if resolve_type_spec(output.root_type, output.profile_id) != spec_id:
+                    continue
                 namespaces = output.namespaces or [{"name": "", "url": "", "version": ""}]
                 for namespace in namespaces:
                     namespace_name = namespace["name"] or system_name
@@ -43,8 +46,7 @@ def sample_payload_for_spec(spec_id, example_ids, examples):
             for output in system.outputs.values():
                 root_type = output.root_type
                 if output.data_file is not None and examples[example_id].spec_ids and spec_id in examples[example_id].spec_ids and root_type:
-                    from settings import TYPE_SPEC_BY_ROOT_TYPE
-                    if TYPE_SPEC_BY_ROOT_TYPE.get(root_type) == spec_id:
+                    if resolve_type_spec(root_type, output.profile_id) == spec_id:
                         return render_data_for_markdown(output.data_file)
     return None
 
@@ -61,6 +63,31 @@ def render_page_profiles(profile_ids, profile_catalog, page_path):
         profile = profile_catalog[profile_id]
         links.append(f"[{profile.title}]({profiles_path}#{profile_id})")
     return f"**Profiles:** {', '.join(links)}"
+
+
+def render_other_versions(spec_page, spec_catalog, page_path):
+    if spec_page.concept_id is None:
+        return ""
+
+    related_pages = [
+        candidate
+        for candidate in spec_catalog.values()
+        if candidate.id != spec_page.id and candidate.concept_id == spec_page.concept_id
+    ]
+    if not related_pages:
+        return ""
+
+    related_pages.sort(
+        key=lambda candidate: (
+            candidate.order if candidate.order is not None else 10_000,
+            candidate.title.lower(),
+        )
+    )
+    links = [
+        f"[{candidate.title}]({rel_link(page_path, candidate.path_md)})"
+        for candidate in related_pages
+    ]
+    return f"**Other versions:** {', '.join(links)}"
 
 
 def render_profile_definitions(profile_catalog, spec_catalog, examples, page_path):
@@ -226,6 +253,7 @@ def build_spec_page_markdown(spec_page, examples, profile_catalog, spec_catalog)
         f"# Specification: {spec_page.title}",
         "",
         render_page_profiles(spec_page.profiles, profile_catalog, page_path),
+        render_other_versions(spec_page, spec_catalog, page_path),
         "",
         render_spec_placeholders(
             spec_page.body,

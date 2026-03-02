@@ -1,13 +1,12 @@
 ---
-title: Bool
+title: Bool (`basic v1`)
+concept: bool
 kind: type
 order: 1
 profiles: [basic-v1]
 ---
 
-The Bool data type encodes logical truth values. In the current corpus, the
-payload is the string `"true"` or `"false"`, interpreted according to the
-active profile.
+The Bool data type encodes logical truth values in the `basic v1` profile.
 
 ## Encoding rules
 

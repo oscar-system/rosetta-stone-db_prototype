@@ -26,7 +26,22 @@ _CONFIG = json.loads((MODULE_DIR / "config.json").read_text(encoding="utf-8"))
 CATEGORY_TITLES = _CONFIG["category_titles"]
 SUBCATEGORY_TITLES = _CONFIG["subcategory_titles"]
 TYPE_SPEC_BY_ROOT_TYPE = _CONFIG["type_spec_by_root_type"]
+TYPE_SPEC_BY_ROOT_TYPE_AND_PROFILE = _CONFIG.get("type_spec_by_root_type_and_profile", {})
 LANGUAGE_BY_SUFFIX = _CONFIG["language_by_suffix"]
 PROFILE_DEFINITIONS = _CONFIG["profiles"]
 
 GITHUB_EDIT_BASE = "https://github.com/oscar-system/rosetta-stone-db_prototype/edit/main/"
+
+
+def resolve_type_spec(root_type: str | None, profile_id: str | None) -> str | None:
+    if root_type is None:
+        return None
+
+    profile_map = TYPE_SPEC_BY_ROOT_TYPE_AND_PROFILE.get(root_type)
+    if isinstance(profile_map, dict) and profile_id is not None:
+        spec_id = profile_map.get(profile_id)
+        if isinstance(spec_id, str):
+            return spec_id
+
+    spec_id = TYPE_SPEC_BY_ROOT_TYPE.get(root_type)
+    return spec_id if isinstance(spec_id, str) else None

@@ -37,7 +37,6 @@
     }
   },
   "type_spec_by_root_type": {
-    "Bool": "basics/bool",
     "Base.Int": "basics/integers",
     "BigInt": "basics/integers",
     "Int16": "basics/integers",
@@ -92,6 +91,12 @@
     "polytope::Polytope<Rational>": "polyhedral/polyhedron",
     "SimplicialComplex": "polyhedral/simplicial-complex",
     "SubdivisionOfPoints": "polyhedral/subdivision-of-points"
+  },
+  "type_spec_by_root_type_and_profile": {
+    "Bool": {
+      "basic-v1": "basics/bool-basic-v1",
+      "basic-v2": "basics/bool-basic-v2"
+    }
   },
   "language_by_suffix": {
     ".jl": "julia",
