@@ -1,5 +1,6 @@
 ---
-title: Subgroups of Pc Groups
+title: Subgroups of Pc Groups (`OSCAR v1.4-v1.8`)
+concept: subgroup-of-pc-group
 kind: type
 order: 14
 profiles: [oscar-v1.4, oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]

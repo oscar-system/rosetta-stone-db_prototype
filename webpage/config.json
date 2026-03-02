@@ -95,6 +95,50 @@
       "basic-v1": "basics/bool-basic-v1",
       "basic-v2": "basics/bool-basic-v2"
     },
+    "FPGroup": {
+      "oscar-v1.0": "groups/finitely-presented-group-oscar-v1.0",
+      "oscar-v1.1": "groups/finitely-presented-group-oscar-v1.1-v1.3",
+      "oscar-v1.2": "groups/finitely-presented-group-oscar-v1.1-v1.3",
+      "oscar-v1.3": "groups/finitely-presented-group-oscar-v1.1-v1.3",
+      "oscar-v1.4": "groups/finitely-presented-group",
+      "oscar-v1.5": "groups/finitely-presented-group",
+      "oscar-v1.6": "groups/finitely-presented-group",
+      "oscar-v1.7": "groups/finitely-presented-group",
+      "oscar-v1.8": "groups/finitely-presented-group"
+    },
+    "FPGroupElem": {
+      "oscar-v1.0": "groups/finitely-presented-group-element-oscar-v1.0",
+      "oscar-v1.1": "groups/finitely-presented-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.2": "groups/finitely-presented-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.3": "groups/finitely-presented-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.4": "groups/finitely-presented-group-element",
+      "oscar-v1.5": "groups/finitely-presented-group-element",
+      "oscar-v1.6": "groups/finitely-presented-group-element",
+      "oscar-v1.7": "groups/finitely-presented-group-element",
+      "oscar-v1.8": "groups/finitely-presented-group-element"
+    },
+    "PcGroup": {
+      "oscar-v1.0": "groups/pc-group-oscar-v1.0",
+      "oscar-v1.1": "groups/pc-group-oscar-v1.1-v1.3",
+      "oscar-v1.2": "groups/pc-group-oscar-v1.1-v1.3",
+      "oscar-v1.3": "groups/pc-group-oscar-v1.1-v1.3",
+      "oscar-v1.4": "groups/pc-group",
+      "oscar-v1.5": "groups/pc-group",
+      "oscar-v1.6": "groups/pc-group",
+      "oscar-v1.7": "groups/pc-group",
+      "oscar-v1.8": "groups/pc-group"
+    },
+    "PcGroupElem": {
+      "oscar-v1.0": "groups/pc-group-element-oscar-v1.0",
+      "oscar-v1.1": "groups/pc-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.2": "groups/pc-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.3": "groups/pc-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.4": "groups/pc-group-element",
+      "oscar-v1.5": "groups/pc-group-element",
+      "oscar-v1.6": "groups/pc-group-element",
+      "oscar-v1.7": "groups/pc-group-element",
+      "oscar-v1.8": "groups/pc-group-element"
+    },
     "ZZRingElem": {
       "oscar-v1.0": "rings/zz-ring-element-oscar-v1.0-v1.5",
       "oscar-v1.1": "rings/zz-ring-element-oscar-v1.0-v1.5",
@@ -121,9 +165,75 @@
       "oscar-v1.5": "groups/matrix-group-oscar-v1.5-v1.6",
       "oscar-v1.6": "groups/matrix-group-oscar-v1.5-v1.6"
     },
+    "MatrixGroupElem": {
+      "oscar-v1.5": "groups/matrix-group-element-oscar-v1.5-v1.6",
+      "oscar-v1.6": "groups/matrix-group-element-oscar-v1.5-v1.6"
+    },
     "MatGroup": {
       "oscar-v1.7": "groups/matrix-group",
       "oscar-v1.8": "groups/matrix-group"
+    },
+    "SubFPGroup": {
+      "oscar-v1.1": "groups/subgroup-of-finitely-presented-group-oscar-v1.1-v1.3",
+      "oscar-v1.2": "groups/subgroup-of-finitely-presented-group-oscar-v1.1-v1.3",
+      "oscar-v1.3": "groups/subgroup-of-finitely-presented-group-oscar-v1.1-v1.3",
+      "oscar-v1.4": "groups/subgroup-of-finitely-presented-group",
+      "oscar-v1.5": "groups/subgroup-of-finitely-presented-group",
+      "oscar-v1.6": "groups/subgroup-of-finitely-presented-group",
+      "oscar-v1.7": "groups/subgroup-of-finitely-presented-group",
+      "oscar-v1.8": "groups/subgroup-of-finitely-presented-group"
+    },
+    "SubFPGroupElem": {
+      "oscar-v1.1": "groups/subgroup-of-finitely-presented-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.2": "groups/subgroup-of-finitely-presented-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.3": "groups/subgroup-of-finitely-presented-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.4": "groups/subgroup-of-finitely-presented-group-element",
+      "oscar-v1.5": "groups/subgroup-of-finitely-presented-group-element",
+      "oscar-v1.6": "groups/subgroup-of-finitely-presented-group-element",
+      "oscar-v1.7": "groups/subgroup-of-finitely-presented-group-element",
+      "oscar-v1.8": "groups/subgroup-of-finitely-presented-group-element"
+    },
+    "SubPcGroup": {
+      "oscar-v1.1": "groups/subgroup-of-pc-group-oscar-v1.1-v1.3",
+      "oscar-v1.2": "groups/subgroup-of-pc-group-oscar-v1.1-v1.3",
+      "oscar-v1.3": "groups/subgroup-of-pc-group-oscar-v1.1-v1.3",
+      "oscar-v1.4": "groups/subgroup-of-pc-group",
+      "oscar-v1.5": "groups/subgroup-of-pc-group",
+      "oscar-v1.6": "groups/subgroup-of-pc-group",
+      "oscar-v1.7": "groups/subgroup-of-pc-group",
+      "oscar-v1.8": "groups/subgroup-of-pc-group"
+    },
+    "SubPcGroupElem": {
+      "oscar-v1.1": "groups/subgroup-of-pc-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.2": "groups/subgroup-of-pc-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.3": "groups/subgroup-of-pc-group-element-oscar-v1.1-v1.3",
+      "oscar-v1.4": "groups/subgroup-of-pc-group-element",
+      "oscar-v1.5": "groups/subgroup-of-pc-group-element",
+      "oscar-v1.6": "groups/subgroup-of-pc-group-element",
+      "oscar-v1.7": "groups/subgroup-of-pc-group-element",
+      "oscar-v1.8": "groups/subgroup-of-pc-group-element"
+    },
+    "PermGroup": {
+      "oscar-v1.0": "groups/permutation-group-oscar-v1.0-v1.1",
+      "oscar-v1.1": "groups/permutation-group-oscar-v1.0-v1.1",
+      "oscar-v1.2": "groups/permutation-group-oscar-v1.2-v1.3",
+      "oscar-v1.3": "groups/permutation-group-oscar-v1.2-v1.3",
+      "oscar-v1.4": "groups/permutation-group-oscar-v1.4-v1.5",
+      "oscar-v1.5": "groups/permutation-group-oscar-v1.4-v1.5",
+      "oscar-v1.6": "groups/permutation-group",
+      "oscar-v1.7": "groups/permutation-group",
+      "oscar-v1.8": "groups/permutation-group"
+    },
+    "PermGroupElem": {
+      "oscar-v1.0": "groups/permutation-group-element-oscar-v1.0-v1.1",
+      "oscar-v1.1": "groups/permutation-group-element-oscar-v1.0-v1.1",
+      "oscar-v1.2": "groups/permutation-group-element-oscar-v1.2-v1.3",
+      "oscar-v1.3": "groups/permutation-group-element-oscar-v1.2-v1.3",
+      "oscar-v1.4": "groups/permutation-group-element-oscar-v1.4-v1.5",
+      "oscar-v1.5": "groups/permutation-group-element-oscar-v1.4-v1.5",
+      "oscar-v1.6": "groups/permutation-group-element",
+      "oscar-v1.7": "groups/permutation-group-element",
+      "oscar-v1.8": "groups/permutation-group-element"
     },
     "PhylogeneticTree": {
       "oscar-v1.0": "polyhedral/phylogenetic-tree-oscar-v1.0-v1.5",
@@ -135,6 +245,40 @@
       "oscar-v1.6": "polyhedral/phylogenetic-tree",
       "oscar-v1.7": "polyhedral/phylogenetic-tree",
       "oscar-v1.8": "polyhedral/phylogenetic-tree"
+    },
+    "WeightLattice": {
+      "oscar-v1.3": "lie-theory/weight-lattice-oscar-v1.3",
+      "oscar-v1.4": "lie-theory/weight-lattice",
+      "oscar-v1.5": "lie-theory/weight-lattice",
+      "oscar-v1.6": "lie-theory/weight-lattice",
+      "oscar-v1.7": "lie-theory/weight-lattice",
+      "oscar-v1.8": "lie-theory/weight-lattice"
+    },
+    "WeightLatticeElem": {
+      "oscar-v1.3": "lie-theory/weight-lattice-element-oscar-v1.3",
+      "oscar-v1.4": "lie-theory/weight-lattice-element",
+      "oscar-v1.5": "lie-theory/weight-lattice-element",
+      "oscar-v1.6": "lie-theory/weight-lattice-element",
+      "oscar-v1.7": "lie-theory/weight-lattice-element",
+      "oscar-v1.8": "lie-theory/weight-lattice-element"
+    },
+    "WeylGroup": {
+      "oscar-v1.2": "lie-theory/weyl-group-oscar-v1.2-v1.3",
+      "oscar-v1.3": "lie-theory/weyl-group-oscar-v1.2-v1.3",
+      "oscar-v1.4": "lie-theory/weyl-group",
+      "oscar-v1.5": "lie-theory/weyl-group",
+      "oscar-v1.6": "lie-theory/weyl-group",
+      "oscar-v1.7": "lie-theory/weyl-group",
+      "oscar-v1.8": "lie-theory/weyl-group"
+    },
+    "WeylGroupElem": {
+      "oscar-v1.2": "lie-theory/weyl-group-element-oscar-v1.2",
+      "oscar-v1.3": "lie-theory/weyl-group-element-oscar-v1.3",
+      "oscar-v1.4": "lie-theory/weyl-group-element",
+      "oscar-v1.5": "lie-theory/weyl-group-element",
+      "oscar-v1.6": "lie-theory/weyl-group-element",
+      "oscar-v1.7": "lie-theory/weyl-group-element",
+      "oscar-v1.8": "lie-theory/weyl-group-element"
     }
   },
   "language_by_suffix": {

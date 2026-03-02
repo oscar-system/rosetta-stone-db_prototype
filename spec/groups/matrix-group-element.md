@@ -1,17 +1,18 @@
 ---
-title: Matrix Group Elements
+title: Matrix Group Elements (`OSCAR v1.7-v1.8`)
+concept: matrix-group-element
 kind: type
 order: 7
-profiles: [oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
+profiles: [oscar-v1.7, oscar-v1.8]
 ---
-`MatGroupElem` is unchanged across the OSCAR versions currently represented in
-the corpus, so one specification page covers OSCAR v1.5 through v1.8.
+`MatGroupElem` is the current OSCAR encoding for matrix-group elements. In the
+current corpus this form appears in OSCAR v1.7 and v1.8.
 
 ## Encoding Notes
 
-- Set `_type` to `"MatGroupElem"` when this type appears at the root of a serialized object.
-- Interpret the payload under `data` according to the active namespace and profile version.
-- Follow the linked examples for the currently documented payload shape and referenced ambient objects.
+- Use a typed `_type` object whose `name` is `"MatGroupElem"`.
+- Store the matrix entries under `data`.
+- Refer to the ambient group using the matching `MatGroup` encoding.
 
 {{ CANONICAL_EXAMPLE_PAYLOAD }}
 

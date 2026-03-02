@@ -2,7 +2,7 @@
 title: Undirected Graphs
 kind: type
 order: 2
-profiles: [oscar-v1.4, oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
+profiles: [oscar-v1.0, oscar-v1.1, oscar-v1.2, oscar-v1.3, oscar-v1.4, oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
 ---
 `Graph{Undirected}` is currently documented in the OSCAR v1.7 profile through the rosetta-stone corpus. This page records the present encoding shape and should be read as a profile-specific type description.
 

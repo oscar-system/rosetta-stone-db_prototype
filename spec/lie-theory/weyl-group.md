@@ -1,5 +1,6 @@
 ---
-title: Weyl Groups
+title: Weyl Groups (`OSCAR v1.4-v1.8`)
+concept: weyl-group
 kind: type
 order: 6
 profiles: [oscar-v1.4, oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]

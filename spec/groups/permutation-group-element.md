@@ -1,17 +1,19 @@
 ---
-title: Permutation Group Elements
+title: Permutation Group Elements (`OSCAR v1.6-v1.8`)
+concept: permutation-group-element
 kind: type
 order: 11
-profiles: [oscar-v1.4, oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
+profiles: [oscar-v1.6, oscar-v1.7, oscar-v1.8]
 ---
-`PermGroupElem` is unchanged across the OSCAR versions currently represented in
-the corpus, so one specification page covers OSCAR v1.5 through v1.8.
+In OSCAR v1.6 through v1.8, `PermGroupElem` refers to a `PermGroup` whose
+attributes live in a top-level `attrs` block and use the newer nested encodings.
 
 ## Encoding Notes
 
-- Set `_type` to `"PermGroupElem"` when this type appears at the root of a serialized object.
-- Interpret the payload under `data` according to the active namespace and profile version.
-- Follow the linked examples for the currently documented payload shape and referenced ambient objects.
+- Use `_type: "PermGroupElem"`.
+- Store the permutation word under `data`.
+- Refer to the parent group according to the matching OSCAR v1.6-v1.8
+  `PermGroup` encoding.
 
 {{ CANONICAL_EXAMPLE_PAYLOAD }}
 

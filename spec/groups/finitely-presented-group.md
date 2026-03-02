@@ -1,16 +1,19 @@
 ---
-title: Finitely Presented Groups
+title: Finitely Presented Groups (`OSCAR v1.4-v1.8`)
+concept: finitely-presented-group
 kind: type
 order: 1
 profiles: [oscar-v1.4, oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
 ---
-`FPGroup` is currently documented in the OSCAR v1.7 profile through the rosetta-stone corpus. This page records the present encoding shape and should be read as a profile-specific type description.
+In OSCAR v1.4 through v1.8, `FPGroup` moves to a typed `_type` object and the
+ambient GAP data is carried through `_type.params` and `_refs`.
 
 ## Encoding Notes
 
-- Set `_type` to `"FPGroup"` when this type appears at the root of a serialized object.
-- Interpret the payload under `data` according to the active namespace and profile version.
-- Follow the linked examples for the currently documented payload shape and referenced ambient objects.
+- Use a typed `_type` object whose `name` is `"FPGroup"`.
+- Store the parent-group reference inside `_type.params`.
+- The root `data` payload is empty; the ambient GAP object is resolved through
+  `_refs`.
 
 {{ CANONICAL_EXAMPLE_PAYLOAD }}
 

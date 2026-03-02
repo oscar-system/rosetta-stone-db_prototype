@@ -2,7 +2,7 @@
 title: Homomorphisms of Finitely Generated Abelian Groups
 kind: type
 order: 5
-profiles: [oscar-v1.7, oscar-v1.8]
+profiles: [oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
 ---
 `FinGenAbGroupHom` is currently documented in the OSCAR v1.7 profile through the rosetta-stone corpus. This page records the present encoding shape and should be read as a profile-specific type description.
 

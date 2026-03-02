@@ -1,12 +1,13 @@
 ---
-title: Permutation Groups (`OSCAR v1.6-v1.8`)
+title: Permutation Groups (`OSCAR v1.4-v1.5`)
 concept: permutation-group
 kind: type
 order: 10
-profiles: [oscar-v1.6, oscar-v1.7, oscar-v1.8]
+profiles: [oscar-v1.4, oscar-v1.5]
 ---
-In OSCAR v1.6 through v1.8, `PermGroup` keeps the top-level `attrs` block, but
-the nested `ZZRingElem` and `Bool` attributes use the newer typed encodings.
+In OSCAR v1.4 and v1.5, `PermGroup` moves attributes out of `data` into a
+top-level `attrs` dictionary, while the root type is still the bare string
+`"PermGroup"`.
 
 ## Encoding Notes
 

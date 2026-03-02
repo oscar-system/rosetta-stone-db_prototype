@@ -1,5 +1,6 @@
 ---
-title: Weyl Group Elements
+title: Weyl Group Elements (`OSCAR v1.4-v1.8`)
+concept: weyl-group-element
 kind: type
 order: 7
 profiles: [oscar-v1.4, oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
