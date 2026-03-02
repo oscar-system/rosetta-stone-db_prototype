@@ -3,7 +3,7 @@ title: Weyl group
 category: lie-theory
 subcategory: weyl-group
 order: 1
-profiles: [oscar-v1.7, oscar-v1.8]
+profiles: [oscar-v1.5, oscar-v1.6, oscar-v1.7, oscar-v1.8]
 ---
 
 The Weyl group of `A2 x B4`.

@@ -1,0 +1,1 @@
+{"_ns":{"Oscar":["https://github.com/oscar-system/Oscar.jl","1.6.0"]},"_type":{"name":"FqFieldElem","params":"b17f1eb2-73a4-4e35-99ed-adf177d57b34"},"data":"1","_refs":{"b17f1eb2-73a4-4e35-99ed-adf177d57b34":{"_type":{"name":"FiniteField","_instance":"FqField"},"data":"5"}}}
