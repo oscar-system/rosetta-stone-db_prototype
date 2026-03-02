@@ -1,4 +1,4 @@
 using Oscar
 
-obj = "string"
+obj = "some text"
 save("data.mrdi", obj)
