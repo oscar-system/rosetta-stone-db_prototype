@@ -144,6 +144,7 @@ def render_profile_definitions(profile_catalog, spec_catalog, examples, page_pat
 
 
 def build_spec_index_markdown(spec_catalog):
+    category_rank = {name: idx for idx, name in enumerate(CATEGORY_TITLES.keys())}
     core_pages = sorted(
         (spec for spec in spec_catalog.values() if spec.kind == "core"),
         key=lambda spec: (
@@ -154,6 +155,7 @@ def build_spec_index_markdown(spec_catalog):
     type_pages = sorted(
         (spec for spec in spec_catalog.values() if spec.kind != "core"),
         key=lambda spec: (
+            category_rank.get(spec.section, 999),
             spec.section,
             spec.order if spec.order is not None else 10_000,
             spec.title.lower(),
