@@ -141,6 +141,7 @@ def discover_spec_pages() -> dict[str, SpecPage]:
             order=parsed_order,
             body=body.rstrip(),
             section=metadata.get("section", relpath.parent.as_posix() if relpath.parent != Path(".") else ""),
+            source_path=spec_path,
             path_md=SPEC_SITE_DIR / relpath,
         )
     return spec_pages
@@ -155,6 +156,7 @@ def build_spec_catalog(spec_pages: dict[str, SpecPage], examples: dict[str, Exam
             order=spec.order,
             body=spec.body,
             section=spec.section,
+            source_path=spec.source_path,
             path_md=spec.path_md,
         )
         for spec_id, spec in spec_pages.items()

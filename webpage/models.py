@@ -37,5 +37,6 @@ class SpecPage:
     order: int | None
     body: str
     section: str
+    source_path: Path
     path_md: Path
     example_ids: list[str] = field(default_factory=list)

@@ -11,7 +11,7 @@ from settings import (
     SPEC_INDEX_MD,
     SUBCATEGORY_TITLES,
 )
-from utils import fenced_block, language_for_file, rel_link, render_data_for_markdown, slugify
+from utils import fenced_block, github_edit_url, language_for_file, rel_link, render_data_for_markdown, slugify
 
 
 def spec_link_lines(page_path, spec_ids, spec_catalog):
@@ -35,7 +35,10 @@ def build_front_page_markdown():
     return render_content_template(
         FRONT_PAGE_SOURCE,
         {
-            "PAGE_NAV": "",
+            "PAGE_NAV": render_page_nav(
+                [],
+                edit_link=("Edit this page", github_edit_url(FRONT_PAGE_SOURCE)),
+            ),
         },
     )
 
@@ -123,7 +126,8 @@ def build_rosetta_index_markdown(examples, systems):
                 [
                     ("Front Page", "../index.md"),
                     ("Specification", "../spec/index.md"),
-                ]
+                ],
+                edit_link=("Edit this page", github_edit_url(ROSETTA_INDEX_SOURCE)),
             ),
             "TABLE_OF_CONTENTS": "\n".join(toc_lines),
             "EXAMPLE_TABLES": "\n".join(lines).rstrip(),
@@ -146,7 +150,8 @@ def build_example_markdown(example, systems, spec_catalog):
                 ("Front Page", rel_link(page_path, ROOT_INDEX_MD)),
                 ("Rosetta Stone", rel_link(page_path, ROSETTA_INDEX_MD)),
                 ("Specification", rel_link(page_path, SPEC_INDEX_MD)),
-            ]
+            ],
+            edit_link=("Edit this page", github_edit_url(example.path)),
         ),
         f"# {example.title}",
         "",
@@ -166,7 +171,9 @@ def build_example_markdown(example, systems, spec_catalog):
         data_file = system_example.data_file
 
         if generate_file is not None:
-            system_lines.append(f"#### Generate code (`{generate_file.name}`)")
+            system_lines.append(
+                f"#### Generate code [ [edit]({github_edit_url(generate_file)}) ]"
+            )
             system_lines.append("")
             code = generate_file.read_text(encoding="utf-8")
             system_lines.append(fenced_block(code, language_for_file(generate_file)))

@@ -42,6 +42,12 @@ def load_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def render_page_nav(links: list[tuple[str, str]]) -> str:
+def render_page_nav(
+    links: list[tuple[str, str]],
+    edit_link: tuple[str, str] | None = None,
+) -> str:
     items = [f'<a href="{href}">{label}</a>' for label, href in links]
+    if edit_link is not None:
+        label, href = edit_link
+        items.append(f'<a class="page-nav-edit" href="{href}">{label}</a>')
     return '<div class="page-nav">' + "".join(items) + "</div>\n"

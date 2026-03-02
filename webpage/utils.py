@@ -4,8 +4,9 @@ import json
 import os
 import re
 from pathlib import Path
+from urllib.parse import quote
 
-from settings import LANGUAGE_BY_SUFFIX
+from settings import GITHUB_EDIT_BASE, LANGUAGE_BY_SUFFIX, ROOT
 
 
 def slugify(value: str) -> str:
@@ -15,6 +16,11 @@ def slugify(value: str) -> str:
 
 def rel_link(from_path: Path, to_path: Path) -> str:
     return os.path.relpath(to_path, start=from_path.parent).replace(os.sep, "/")
+
+
+def github_edit_url(path: Path) -> str:
+    relpath = path.resolve().relative_to(ROOT).as_posix()
+    return GITHUB_EDIT_BASE + quote(relpath, safe="/")
 
 
 def language_for_file(path: Path) -> str:

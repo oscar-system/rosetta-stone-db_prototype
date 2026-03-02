@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from content import render_content_template, render_page_nav, replace_placeholders
 from settings import CATEGORY_TITLES, PARTIALS_DIR, ROOT_INDEX_MD, ROSETTA_INDEX_MD, SCHEMA_PATH, SPEC_INDEX_MD, SPEC_INDEX_SOURCE
-from utils import fenced_block, rel_link, render_data_for_markdown
+from utils import fenced_block, github_edit_url, rel_link, render_data_for_markdown
 
 
 def render_profiles_table(example_ids, examples, page_path):
@@ -88,7 +88,8 @@ def build_spec_index_markdown(spec_catalog):
                 [
                     ("Front Page", "../index.md"),
                     ("Rosetta Stone", "../rosetta/index.md"),
-                ]
+                ],
+                edit_link=("Edit this page", github_edit_url(SPEC_INDEX_SOURCE)),
             ),
             "CORE_PAGES": "\n".join(core_lines),
             "TYPE_PAGES": "\n".join(type_lines),
@@ -155,7 +156,8 @@ def build_spec_page_markdown(spec_page, examples):
                 ("Front Page", rel_link(page_path, ROOT_INDEX_MD)),
                 ("Specification Index", rel_link(page_path, SPEC_INDEX_MD)),
                 ("Rosetta Stone", rel_link(page_path, ROSETTA_INDEX_MD)),
-            ]
+            ],
+            edit_link=("Edit this page", github_edit_url(spec_page.source_path)),
         ),
         f"# {spec_page.title}",
         "",

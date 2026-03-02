@@ -27,3 +27,5 @@ CATEGORY_TITLES = _CONFIG["category_titles"]
 SUBCATEGORY_TITLES = _CONFIG["subcategory_titles"]
 TYPE_SPEC_BY_ROOT_TYPE = _CONFIG["type_spec_by_root_type"]
 LANGUAGE_BY_SUFFIX = _CONFIG["language_by_suffix"]
+
+GITHUB_EDIT_BASE = "https://github.com/oscar-system/rosetta-stone-db_prototype/edit/main/"
