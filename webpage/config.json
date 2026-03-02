@@ -157,7 +157,7 @@
       "based_on": [
         "basic-v1"
       ],
-      "description": "Application profile for the OSCAR 1.4 serialization format. In the current corpus most OSCAR-specific examples already work, but a few later object types were not yet supported and some encodings that became more explicit in OSCAR 1.5 and 1.6 still used older forms."
+      "description": "Application profile for the OSCAR 1.4 serialization format. In the current corpus this is the earliest documented OSCAR-specific profile: most examples already work, but some later object types were not yet supported and several encodings still used older root type names or less explicit type descriptions."
     },
     "oscar-v1.5": {
       "title": "OSCAR v1.5",
@@ -166,7 +166,7 @@
       "based_on": [
         "basic-v1"
       ],
-      "description": "Application profile for the OSCAR 1.5 serialization format. The current corpus shows that many examples were already supported, but some typed encodings were still less explicit than in OSCAR 1.6 and 1.7."
+      "description": "Application profile for the OSCAR 1.5 serialization format. Relative to OSCAR 1.4, the current corpus shows broader object support, but `ZZRingElem`, `QQFieldElem`, and phylogenetic trees still use the older encodings shared with OSCAR 1.4."
     },
     "oscar-v1.6": {
       "title": "OSCAR v1.6",
@@ -175,7 +175,7 @@
       "based_on": [
         "basic-v1"
       ],
-      "description": "Application profile for the OSCAR 1.6 serialization format. In the current corpus this largely matches OSCAR 1.7, with the main documented differences appearing in matrix groups and a few type-level encodings that were finalized later."
+      "description": "Application profile for the OSCAR 1.6 serialization format. Relative to OSCAR 1.5, the current corpus introduces the newer typed encodings for `ZZRingElem`, `QQFieldElem`, and phylogenetic trees, while matrix groups still use the older `MatrixGroup` root type."
     },
     "oscar-v1.7": {
       "title": "OSCAR v1.7",
@@ -184,7 +184,7 @@
       "based_on": [
         "basic-v1"
       ],
-      "description": "Application profile for the OSCAR 1.7 serialization format. At present this extends `basic v1` with the OSCAR-specific algebraic, group-theoretic, Lie-theoretic, and polyhedral encodings documented by this prototype."
+      "description": "Application profile for the OSCAR 1.7 serialization format. Relative to OSCAR 1.6, the main documented change in the current corpus is the matrix-group rename from `MatrixGroup` to `MatGroup`; otherwise this profile matches the OSCAR-specific encodings documented here."
     },
     "oscar-v1.8": {
       "title": "OSCAR v1.8",
@@ -193,7 +193,7 @@
       "based_on": [
         "basic-v2"
       ],
-      "description": "Draft application profile for the OSCAR 1.8 serialization format. It is intended to track the next shared backbone revision via `basic v2`; later revisions can make its divergences from OSCAR 1.7 explicit."
+      "description": "Draft application profile for the OSCAR 1.8 serialization format. Relative to OSCAR 1.7, it is intended to track the next shared backbone revision via `basic v2`, starting with the planned boolean change; further OSCAR-specific divergences can be recorded here as they appear."
     }
   }
 }
