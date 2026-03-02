@@ -6,7 +6,7 @@ import json
 MODULE_DIR = Path(__file__).resolve().parent
 ROOT = MODULE_DIR.parent
 CONTENT_DIR = ROOT / "content"
-DATA_DIR = ROOT / "data"
+ROSETTA_SOURCE_DIR = ROOT / "rosetta"
 SPEC_SOURCE_DIR = ROOT / "spec"
 SITE_DIR = ROOT / "_site"
 TEMPLATE_PATH = ROOT / "templates" / "default.html"

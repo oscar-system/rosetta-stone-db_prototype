@@ -19,22 +19,22 @@ It also generates a browsable static site with:
 
 ### Input data
 
-All source data lives under `data/`:
+All source example material lives under `rosetta/`:
 
-`data/<category>/<example-slug>/description.md`  
-`data/<category>/<example-slug>/systems/<SystemName>/generate.*`  
-`data/<category>/<example-slug>/systems/<SystemName>/data.*`
+`rosetta/<category>/<example-slug>/description.md`  
+`rosetta/<category>/<example-slug>/systems/<SystemName>/generate.*`  
+`rosetta/<category>/<example-slug>/systems/<SystemName>/data.*`
 
 Example:
 
-`data/polyhedral/complete-graph/description.md`  
-`data/polyhedral/complete-graph/systems/Oscar.jl/generate.jl`  
-`data/polyhedral/complete-graph/systems/Oscar.jl/data.mrdi`
+`rosetta/polyhedral/complete-graph/description.md`  
+`rosetta/polyhedral/complete-graph/systems/Oscar.jl/generate.jl`  
+`rosetta/polyhedral/complete-graph/systems/Oscar.jl/data.mrdi`
 
 ### Site generator
 
 - Script: `webpage/generate_page.py`
-- Input: `data/`
+- Input: `rosetta/`
 - Output directory: `_site/` (generated files, ignored by git)
 
 Generated output includes:

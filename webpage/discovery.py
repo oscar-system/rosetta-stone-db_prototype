@@ -5,7 +5,7 @@ from pathlib import Path
 
 from content import parse_description
 from models import ExamplePage, ExampleSystem, SpecPage
-from settings import DATA_DIR, SPEC_SITE_DIR, SPEC_SOURCE_DIR, TYPE_SPEC_BY_ROOT_TYPE
+from settings import ROSETTA_SOURCE_DIR, SPEC_SITE_DIR, SPEC_SOURCE_DIR, TYPE_SPEC_BY_ROOT_TYPE
 
 
 def load_serialized_payload(path: Path | None):
@@ -58,7 +58,7 @@ def extract_namespaces(parsed) -> list[dict[str, str]]:
 
 def discover_examples() -> dict[str, ExamplePage]:
     examples: dict[str, ExamplePage] = {}
-    for group_dir in sorted(path for path in DATA_DIR.iterdir() if path.is_dir()):
+    for group_dir in sorted(path for path in ROSETTA_SOURCE_DIR.iterdir() if path.is_dir()):
         group_id = group_dir.name
         for example_dir in sorted(path for path in group_dir.iterdir() if path.is_dir()):
             description_path = example_dir / "description.md"
