@@ -2,6 +2,7 @@
 title: Bool
 kind: type
 order: 1
+profiles: [basic-v1]
 ---
 
 The Bool data type encodes logical truth values. In the current corpus, the

@@ -2,6 +2,7 @@
 title: String
 kind: type
 order: 3
+profiles: [basic-v1]
 ---
 
 String is the basic textual data type. It is useful both on its own and as a

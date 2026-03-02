@@ -23,6 +23,10 @@ def github_edit_url(path: Path) -> str:
     return GITHUB_EDIT_BASE + quote(relpath, safe="/")
 
 
+def profile_href(from_path: Path) -> str:
+    return rel_link(from_path, ROOT / "_site" / "spec" / "core" / "profiles.md")
+
+
 def language_for_file(path: Path) -> str:
     return LANGUAGE_BY_SUFFIX.get(path.suffix, "")
 

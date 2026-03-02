@@ -1,6 +1,7 @@
 ---
 title: Pair of linear programs
 category: polyhedral
+profiles: [oscar-v1.7, oscar-v1.8]
 subcategory: optimization
 ---
 

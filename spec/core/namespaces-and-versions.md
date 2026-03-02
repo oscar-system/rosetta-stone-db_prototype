@@ -2,6 +2,7 @@
 title: Namespaces, Profiles, and Versions
 kind: core
 order: 2
+profiles: [basic-v1]
 ---
 
 The format does not impose a universal mathematical semantics. Instead, each

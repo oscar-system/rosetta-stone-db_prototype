@@ -2,6 +2,7 @@
 title: Multivariate Polynomial
 kind: type
 order: 11
+profiles: [oscar-v1.7, oscar-v1.8]
 ---
 
 Multivariate polynomials extend the same idea to several variables. The payload

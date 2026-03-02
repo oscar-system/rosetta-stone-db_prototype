@@ -2,6 +2,7 @@
 title: Rational Numbers
 kind: type
 order: 8
+profiles: [oscar-v1.7, oscar-v1.8]
 ---
 
 Rational numbers are represented as typed values whose payload is a textual

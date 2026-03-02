@@ -51,7 +51,47 @@
     "QQFieldElem": "rings/rational-number",
     "Matrix": "linear-algebra/matrix",
     "PolyRingElem": "rings/univariate-polynomial",
-    "MPolyRingElem": "rings/multivariate-polynomial"
+    "MPolyRingElem": "rings/multivariate-polynomial",
+    "Float64": "basics/floating-point",
+    "FqFieldElem": "rings/finite-field-element",
+    "ZZModRingElem": "rings/residue-ring-element",
+    "zzModRingElem": "rings/residue-ring-element",
+    "MatElem": "linear-algebra/matrix",
+    "common::Matrix<Rational, NonSymmetric>": "linear-algebra/matrix",
+    "FPGroup": "groups/finitely-presented-group",
+    "FPGroupElem": "groups/finitely-presented-group-element",
+    "FinGenAbGroup": "groups/finitely-generated-abelian-group",
+    "FinGenAbGroupElem": "groups/finitely-generated-abelian-group-element",
+    "FinGenAbGroupHom": "groups/finitely-generated-abelian-group-homomorphism",
+    "MatGroup": "groups/matrix-group",
+    "MatGroupElem": "groups/matrix-group-element",
+    "PcGroup": "groups/pc-group",
+    "PcGroupElem": "groups/pc-group-element",
+    "PermGroup": "groups/permutation-group",
+    "PermGroupElem": "groups/permutation-group-element",
+    "SubFPGroup": "groups/subgroup-of-finitely-presented-group",
+    "SubFPGroupElem": "groups/subgroup-of-finitely-presented-group-element",
+    "SubPcGroup": "groups/subgroup-of-pc-group",
+    "SubPcGroupElem": "groups/subgroup-of-pc-group-element",
+    "RootSpaceElem": "lie-theory/root-space-element",
+    "DualRootSpaceElem": "lie-theory/dual-root-space-element",
+    "RootSystem": "lie-theory/root-system",
+    "WeightLattice": "lie-theory/weight-lattice",
+    "WeightLatticeElem": "lie-theory/weight-lattice-element",
+    "WeylGroup": "lie-theory/weyl-group",
+    "WeylGroupElem": "lie-theory/weyl-group-element",
+    "Cone": "polyhedral/cone",
+    "Graph{Undirected}": "polyhedral/undirected-graph",
+    "LinearProgram": "polyhedral/linear-program",
+    "Matroid": "polyhedral/matroid",
+    "MixedIntegerLinearProgram": "polyhedral/mixed-integer-linear-program",
+    "PhylogeneticTree": "polyhedral/phylogenetic-tree",
+    "PolyhedralComplex": "polyhedral/polyhedral-complex",
+    "PolyhedralFan": "polyhedral/polyhedral-fan",
+    "Polyhedron": "polyhedral/polyhedron",
+    "polytope::Polytope<Rational>": "polyhedral/polyhedron",
+    "SimplicialComplex": "polyhedral/simplicial-complex",
+    "SubdivisionOfPoints": "polyhedral/subdivision-of-points"
   },
   "language_by_suffix": {
     ".jl": "julia",
@@ -62,5 +102,29 @@
     ".ine": "text",
     ".md": "markdown",
     ".mrdi": "json"
+  },
+  "profiles": {
+    "basic-v1": {
+      "title": "basic v1",
+      "kind": "shared",
+      "based_on": [],
+      "description": "Shared profile for the common serialization backbone: core format rules, primitive data types, and basic container encodings."
+    },
+    "oscar-v1.7": {
+      "title": "OSCAR v1.7",
+      "kind": "application",
+      "based_on": [
+        "basic-v1"
+      ],
+      "description": "Application profile for the OSCAR 1.7 serialization format. At present this extends `basic v1` with the OSCAR-specific algebraic, group-theoretic, Lie-theoretic, and polyhedral encodings documented by this prototype."
+    },
+    "oscar-v1.8": {
+      "title": "OSCAR v1.8",
+      "kind": "application",
+      "based_on": [
+        "basic-v1"
+      ],
+      "description": "Application profile for the OSCAR 1.8 serialization format. In this first profile pass it intentionally mirrors the currently documented OSCAR 1.7 coverage; later revisions can let the two diverge explicitly."
+    }
   }
 }

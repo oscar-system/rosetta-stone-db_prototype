@@ -2,6 +2,7 @@
 title: Tuple
 kind: type
 order: 7
+profiles: [basic-v1]
 ---
 
 Tuples are ordered heterogeneous containers. The parameter list records the type

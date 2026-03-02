@@ -2,6 +2,7 @@
 title: Matrix of integers
 category: containers
 order: 3
+profiles: [basic-v1]
 ---
 
 The integer matrix

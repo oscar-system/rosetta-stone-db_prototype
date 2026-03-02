@@ -4,8 +4,8 @@ import json
 from pathlib import Path
 
 from content import parse_description
-from models import ExamplePage, ExampleSystem, SpecPage
-from settings import ROSETTA_SOURCE_DIR, SPEC_SITE_DIR, SPEC_SOURCE_DIR, TYPE_SPEC_BY_ROOT_TYPE
+from models import ExamplePage, ExampleSystem, Profile, SpecPage
+from settings import PROFILE_DEFINITIONS, ROSETTA_SOURCE_DIR, SPEC_SITE_DIR, SPEC_SOURCE_DIR, TYPE_SPEC_BY_ROOT_TYPE
 
 
 def load_serialized_payload(path: Path | None):
@@ -105,6 +105,7 @@ def discover_examples() -> dict[str, ExamplePage]:
                 category=metadata.get("category", metadata.get("group", group_id)),
                 subcategory=metadata.get("subcategory"),
                 order=parsed_order,
+                profiles=list(metadata.get("profiles", [])),
                 body=body,
                 systems=systems,
             )
@@ -139,6 +140,7 @@ def discover_spec_pages() -> dict[str, SpecPage]:
             title=metadata.get("title", spec_id.replace("-", " ").title()),
             kind=metadata.get("kind", "type"),
             order=parsed_order,
+            profiles=list(metadata.get("profiles", [])),
             body=body.rstrip(),
             section=metadata.get("section", relpath.parent.as_posix() if relpath.parent != Path(".") else ""),
             source_path=spec_path,
@@ -154,6 +156,7 @@ def build_spec_catalog(spec_pages: dict[str, SpecPage], examples: dict[str, Exam
             title=spec.title,
             kind=spec.kind,
             order=spec.order,
+            profiles=list(spec.profiles),
             body=spec.body,
             section=spec.section,
             source_path=spec.source_path,
@@ -178,5 +181,33 @@ def build_spec_catalog(spec_pages: dict[str, SpecPage], examples: dict[str, Exam
         for spec_id in example.spec_ids:
             if spec_id in catalog:
                 catalog[spec_id].example_ids.append(example_id)
+
+    return catalog
+
+
+def build_profile_catalog(
+    spec_pages: dict[str, SpecPage],
+    examples: dict[str, ExamplePage],
+) -> dict[str, Profile]:
+    catalog = {
+        profile_id: Profile(
+            id=profile_id,
+            title=definition["title"],
+            kind=definition["kind"],
+            based_on=list(definition.get("based_on", [])),
+            description=definition["description"],
+        )
+        for profile_id, definition in PROFILE_DEFINITIONS.items()
+    }
+
+    for spec_id, spec_page in spec_pages.items():
+        for profile_id in spec_page.profiles:
+            if profile_id in catalog:
+                catalog[profile_id].spec_ids.append(spec_id)
+
+    for example_id, example in examples.items():
+        for profile_id in example.profiles:
+            if profile_id in catalog:
+                catalog[profile_id].example_ids.append(example_id)
 
     return catalog

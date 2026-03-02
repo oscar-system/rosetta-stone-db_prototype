@@ -2,6 +2,7 @@
 title: Univariate polynomial
 category: rings
 order: 8
+profiles: [oscar-v1.7, oscar-v1.8]
 ---
 
 The univariate polynomial

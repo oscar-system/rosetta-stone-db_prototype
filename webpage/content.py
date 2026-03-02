@@ -4,9 +4,9 @@ from pathlib import Path
 import re
 
 
-def parse_description(path: Path) -> tuple[dict[str, str], str]:
+def parse_description(path: Path) -> tuple[dict[str, object], str]:
     text = path.read_text(encoding="utf-8")
-    metadata: dict[str, str] = {}
+    metadata: dict[str, object] = {}
     body = text
 
     if text.startswith("---\n"):
@@ -18,7 +18,17 @@ def parse_description(path: Path) -> tuple[dict[str, str], str]:
                 if ":" not in line:
                     continue
                 key, value = line.split(":", 1)
-                metadata[key.strip()] = value.strip()
+                key = key.strip()
+                value = value.strip()
+                if value.startswith("[") and value.endswith("]"):
+                    items = [
+                        item.strip().strip("'\"")
+                        for item in value[1:-1].split(",")
+                        if item.strip()
+                    ]
+                    metadata[key] = items
+                else:
+                    metadata[key] = value
 
     return metadata, body.lstrip()
 

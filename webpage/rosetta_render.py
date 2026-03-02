@@ -11,7 +11,7 @@ from settings import (
     SPEC_INDEX_MD,
     SUBCATEGORY_TITLES,
 )
-from utils import fenced_block, github_edit_url, language_for_file, rel_link, render_data_for_markdown, slugify
+from utils import fenced_block, github_edit_url, language_for_file, profile_href, rel_link, render_data_for_markdown, slugify
 
 
 def spec_link_lines(page_path, spec_ids, spec_catalog):
@@ -29,6 +29,18 @@ def spec_link_lines(page_path, spec_ids, spec_catalog):
             "SPEC_LINKS": "\n".join(lines),
         },
     ).splitlines() + [""]
+
+
+def profile_lines(page_path, profile_ids, profile_catalog):
+    if not profile_ids:
+        return []
+
+    profile_page = profile_href(page_path)
+    links = []
+    for profile_id in profile_ids:
+        profile = profile_catalog[profile_id]
+        links.append(f"[{profile.title}]({profile_page}#{profile_id})")
+    return [f"**Profiles:** {', '.join(links)}", ""]
 
 
 def build_front_page_markdown():
@@ -135,7 +147,7 @@ def build_rosetta_index_markdown(examples, systems):
     )
 
 
-def build_example_markdown(example, systems, spec_catalog):
+def build_example_markdown(example, systems, spec_catalog, profile_catalog):
     body = example.body.rstrip()
     available_systems = [
         system_name
@@ -155,6 +167,7 @@ def build_example_markdown(example, systems, spec_catalog):
         ),
         f"# {example.title}",
         "",
+        *profile_lines(page_path, example.profiles, profile_catalog),
         body,
         "",
     ]

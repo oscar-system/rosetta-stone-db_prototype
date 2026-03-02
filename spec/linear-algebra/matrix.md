@@ -2,6 +2,7 @@
 title: Matrix
 kind: type
 order: 9
+profiles: [basic-v1]
 ---
 
 Matrices are two-dimensional homogeneous containers. The current corpus records

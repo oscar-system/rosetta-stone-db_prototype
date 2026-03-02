@@ -24,6 +24,7 @@ class ExamplePage:
     category: str
     subcategory: str | None
     order: int | None
+    profiles: list[str]
     body: str
     systems: dict[str, ExampleSystem]
     spec_ids: list[str] = field(default_factory=list)
@@ -35,8 +36,20 @@ class SpecPage:
     title: str
     kind: str
     order: int | None
+    profiles: list[str]
     body: str
     section: str
     source_path: Path
     path_md: Path
+    example_ids: list[str] = field(default_factory=list)
+
+
+@dataclass
+class Profile:
+    id: str
+    title: str
+    kind: str
+    based_on: list[str]
+    description: str
+    spec_ids: list[str] = field(default_factory=list)
     example_ids: list[str] = field(default_factory=list)

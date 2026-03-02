@@ -2,6 +2,7 @@
 title: Set
 kind: type
 order: 6
+profiles: [basic-v1]
 ---
 
 Sets are unordered homogeneous containers. The payload is stored as an array,

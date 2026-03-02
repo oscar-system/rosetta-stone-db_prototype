@@ -2,6 +2,7 @@
 title: Overall Data Model
 kind: core
 order: 1
+profiles: [basic-v1]
 ---
 
 The MaRDI file format stores mathematical objects as annotated JSON trees. A

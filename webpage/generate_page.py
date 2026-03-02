@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from discovery import build_spec_catalog, build_system_index, discover_examples, discover_spec_pages
+from discovery import build_profile_catalog, build_spec_catalog, build_system_index, discover_examples, discover_spec_pages
 from html_renderer import render_html_page
 from rosetta_render import build_example_markdown, build_front_page_markdown, build_rosetta_index_markdown
 from settings import ROOT_INDEX_MD, ROSETTA_INDEX_MD, SITE_DIR, SPEC_INDEX_MD
@@ -11,6 +11,7 @@ def main():
     systems = build_system_index(examples)
     spec_pages = discover_spec_pages()
     spec_catalog = build_spec_catalog(spec_pages, examples)
+    profile_catalog = build_profile_catalog(spec_pages, examples)
 
     SITE_DIR.mkdir(parents=True, exist_ok=True)
     for old_file in SITE_DIR.rglob("*"):
@@ -27,7 +28,7 @@ def main():
         spec_page = spec_catalog[spec_id]
         spec_page.path_md.parent.mkdir(parents=True, exist_ok=True)
         spec_page.path_md.write_text(
-            build_spec_page_markdown(spec_page, examples),
+            build_spec_page_markdown(spec_page, examples, profile_catalog, spec_catalog),
             encoding="utf-8",
         )
         print(f"Wrote {spec_page.path_md}")
@@ -37,7 +38,7 @@ def main():
         example_page_path = ROOT_INDEX_MD.parent / example.output_relpath_md
         example_page_path.parent.mkdir(parents=True, exist_ok=True)
         example_page_path.write_text(
-            build_example_markdown(example, systems, spec_catalog),
+            build_example_markdown(example, systems, spec_catalog, profile_catalog),
             encoding="utf-8",
         )
         print(f"Wrote {example_page_path}")

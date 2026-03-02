@@ -2,6 +2,7 @@
 title: Dictionary
 kind: type
 order: 5
+profiles: [basic-v1]
 ---
 
 Dictionaries map keys to values. In the current corpus, the key and value types

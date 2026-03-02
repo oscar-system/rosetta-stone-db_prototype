@@ -2,6 +2,7 @@
 title: Univariate Polynomial
 kind: type
 order: 10
+profiles: [oscar-v1.7, oscar-v1.8]
 ---
 
 A univariate polynomial payload is interpreted relative to a polynomial ring

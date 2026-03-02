@@ -1,6 +1,7 @@
 ---
 title: Dodecahedron dictionary
 category: polyhedral
+profiles: [oscar-v1.7, oscar-v1.8]
 subcategory: polyhedra
 ---
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from content import render_content_template, render_page_nav, replace_placeholders
 from settings import CATEGORY_TITLES, PARTIALS_DIR, ROOT_INDEX_MD, ROSETTA_INDEX_MD, SCHEMA_PATH, SPEC_INDEX_MD, SPEC_INDEX_SOURCE
-from utils import fenced_block, github_edit_url, rel_link, render_data_for_markdown
+from utils import fenced_block, github_edit_url, profile_href, rel_link, render_data_for_markdown
 
 
 def render_profiles_table(example_ids, examples, page_path):
@@ -45,6 +45,57 @@ def sample_payload_for_spec(spec_id, example_ids, examples):
                 if TYPE_SPEC_BY_ROOT_TYPE.get(root_type) == spec_id:
                     return render_data_for_markdown(system.data_file)
     return None
+
+
+def render_page_profiles(profile_ids, profile_catalog, page_path):
+    if not profile_ids:
+        return ""
+    if page_path.name == "profiles.md" and page_path.parent.name == "core":
+        return ""
+
+    profiles_path = profile_href(page_path)
+    links = []
+    for profile_id in profile_ids:
+        profile = profile_catalog[profile_id]
+        links.append(f"[{profile.title}]({profiles_path}#{profile_id})")
+    return f"**Profiles:** {', '.join(links)}"
+
+
+def render_profile_definitions(profile_catalog, spec_catalog, examples, page_path):
+    lines = []
+    for profile_id, profile in profile_catalog.items():
+        lines.append(f"<a id=\"{profile_id}\"></a>")
+        lines.append(f"## {profile.title}")
+        lines.append("")
+        lines.append(profile.description)
+        lines.append("")
+        lines.append(f"- Identifier: `{profile.id}`")
+        lines.append(f"- Kind: {profile.kind}")
+        if profile.based_on:
+            based_on_links = []
+            for base_id in profile.based_on:
+                base = profile_catalog[base_id]
+                based_on_links.append(f"[{base.title}](#{base_id})")
+            lines.append(f"- Based on: {', '.join(based_on_links)}")
+        else:
+            lines.append("- Based on: none")
+        lines.append("")
+        if profile.spec_ids:
+            lines.append("### Directly Documented Pages")
+            lines.append("")
+            for spec_id in profile.spec_ids:
+                spec_page = spec_catalog[spec_id]
+                lines.append(f"- [{spec_page.title}]({rel_link(page_path, spec_page.path_md)})")
+            lines.append("")
+        if profile.example_ids:
+            lines.append("### Direct Example Pages")
+            lines.append("")
+            for example_id in profile.example_ids:
+                example = examples[example_id]
+                example_path = ROOT_INDEX_MD.parent / example.output_relpath_md
+                lines.append(f"- [{example.title}]({rel_link(page_path, example_path)})")
+            lines.append("")
+    return "\n".join(lines).rstrip()
 
 
 def build_spec_index_markdown(spec_catalog):
@@ -137,18 +188,24 @@ def render_spec_sample(spec_page, examples):
     )
 
 
-def render_spec_placeholders(body, spec_page, examples, page_path):
+def render_spec_placeholders(body, spec_page, examples, page_path, profile_catalog, spec_catalog):
     return replace_placeholders(
         body,
         {
             "CANONICAL_EXAMPLE_PAYLOAD": render_spec_sample(spec_page, examples),
             "DOCUMENTED_PROFILES": render_spec_profiles(spec_page, examples, page_path),
             "ROSETTA_EXAMPLES": render_spec_examples(spec_page, examples, page_path),
+            "PROFILE_DEFINITIONS": render_profile_definitions(
+                profile_catalog,
+                spec_catalog,
+                examples,
+                page_path,
+            ),
         },
     )
 
 
-def build_spec_page_markdown(spec_page, examples):
+def build_spec_page_markdown(spec_page, examples, profile_catalog, spec_catalog):
     page_path = spec_page.path_md
     lines = [
         render_page_nav(
@@ -161,6 +218,15 @@ def build_spec_page_markdown(spec_page, examples):
         ),
         f"# {spec_page.title}",
         "",
-        render_spec_placeholders(spec_page.body, spec_page, examples, page_path),
+        render_page_profiles(spec_page.profiles, profile_catalog, page_path),
+        "",
+        render_spec_placeholders(
+            spec_page.body,
+            spec_page,
+            examples,
+            page_path,
+            profile_catalog,
+            spec_catalog,
+        ),
     ]
     return "\n".join(lines).rstrip() + "\n"

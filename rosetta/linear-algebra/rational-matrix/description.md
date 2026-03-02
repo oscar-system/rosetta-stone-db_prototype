@@ -1,6 +1,7 @@
 ---
 title: Rational matrix
 category: linear-algebra
+profiles: [oscar-v1.7, oscar-v1.8]
 ---
 
 The matrix is given as

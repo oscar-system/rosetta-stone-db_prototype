@@ -2,6 +2,7 @@
 title: Integers
 kind: type
 order: 2
+profiles: [basic-v1]
 ---
 
 Integer-valued data appears in several closely related data types, including

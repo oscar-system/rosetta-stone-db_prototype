@@ -2,6 +2,7 @@
 title: References and Parameters
 kind: core
 order: 3
+profiles: [basic-v1]
 ---
 
 Complex mathematical objects often depend on ambient rings, fields, spaces, or

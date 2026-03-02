@@ -2,6 +2,7 @@
 title: Vector
 kind: type
 order: 4
+profiles: [basic-v1]
 ---
 
 Vectors are homogeneous ordered containers. Their element type is recorded in
