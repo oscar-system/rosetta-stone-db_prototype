@@ -1,0 +1,1 @@
+{"_ns":{"Oscar":["https://github.com/oscar-system/Oscar.jl","1.1.2"]},"_type":{"name":"Cone","params":{"_type":"QQField"}},"data":{"_type":"polytope::Cone<Rational>","INPUT_LINEALITY":[{"cols":2}],"INPUT_RAYS":[["1","0"],["0","1"]],"_ns":{"polymake":["https://polymake.org","4.12"]},"CONE_AMBIENT_DIM":2}}

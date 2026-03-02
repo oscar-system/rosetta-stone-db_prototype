@@ -96,15 +96,23 @@
       "basic-v2": "basics/bool-basic-v2"
     },
     "ZZRingElem": {
-      "oscar-v1.4": "rings/zz-ring-element-oscar-v1.5",
-      "oscar-v1.5": "rings/zz-ring-element-oscar-v1.5",
+      "oscar-v1.0": "rings/zz-ring-element-oscar-v1.0-v1.5",
+      "oscar-v1.1": "rings/zz-ring-element-oscar-v1.0-v1.5",
+      "oscar-v1.2": "rings/zz-ring-element-oscar-v1.0-v1.5",
+      "oscar-v1.3": "rings/zz-ring-element-oscar-v1.0-v1.5",
+      "oscar-v1.4": "rings/zz-ring-element-oscar-v1.0-v1.5",
+      "oscar-v1.5": "rings/zz-ring-element-oscar-v1.0-v1.5",
       "oscar-v1.6": "rings/zz-ring-element",
       "oscar-v1.7": "rings/zz-ring-element",
       "oscar-v1.8": "rings/zz-ring-element"
     },
     "QQFieldElem": {
-      "oscar-v1.4": "rings/rational-number-oscar-v1.5",
-      "oscar-v1.5": "rings/rational-number-oscar-v1.5",
+      "oscar-v1.0": "rings/rational-number-oscar-v1.0-v1.5",
+      "oscar-v1.1": "rings/rational-number-oscar-v1.0-v1.5",
+      "oscar-v1.2": "rings/rational-number-oscar-v1.0-v1.5",
+      "oscar-v1.3": "rings/rational-number-oscar-v1.0-v1.5",
+      "oscar-v1.4": "rings/rational-number-oscar-v1.0-v1.5",
+      "oscar-v1.5": "rings/rational-number-oscar-v1.0-v1.5",
       "oscar-v1.6": "rings/rational-number",
       "oscar-v1.7": "rings/rational-number",
       "oscar-v1.8": "rings/rational-number"
@@ -118,8 +126,12 @@
       "oscar-v1.8": "groups/matrix-group"
     },
     "PhylogeneticTree": {
-      "oscar-v1.4": "polyhedral/phylogenetic-tree-oscar-v1.5",
-      "oscar-v1.5": "polyhedral/phylogenetic-tree-oscar-v1.5",
+      "oscar-v1.0": "polyhedral/phylogenetic-tree-oscar-v1.0-v1.5",
+      "oscar-v1.1": "polyhedral/phylogenetic-tree-oscar-v1.0-v1.5",
+      "oscar-v1.2": "polyhedral/phylogenetic-tree-oscar-v1.0-v1.5",
+      "oscar-v1.3": "polyhedral/phylogenetic-tree-oscar-v1.0-v1.5",
+      "oscar-v1.4": "polyhedral/phylogenetic-tree-oscar-v1.0-v1.5",
+      "oscar-v1.5": "polyhedral/phylogenetic-tree-oscar-v1.0-v1.5",
       "oscar-v1.6": "polyhedral/phylogenetic-tree",
       "oscar-v1.7": "polyhedral/phylogenetic-tree",
       "oscar-v1.8": "polyhedral/phylogenetic-tree"

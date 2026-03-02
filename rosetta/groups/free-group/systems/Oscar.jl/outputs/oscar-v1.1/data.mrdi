@@ -1,0 +1,1 @@
+{"_ns":{"Oscar":["https://github.com/oscar-system/Oscar.jl","1.1.2"]},"_type":"FPGroup","data":{"X":"1afdcad1-3e54-4254-ac88-dce020f32b98"},"id":"543d866c-bbfd-4e97-b407-9f72ecd63aa8","_refs":{"1afdcad1-3e54-4254-ac88-dce020f32b98":{"_type":"GapObj","data":{"GapType":"IsFreeGroup","wfilt":"IsLetterWordsFamily","names":["f1","f2"]}}}}

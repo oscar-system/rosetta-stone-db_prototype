@@ -1,0 +1,1 @@
+{"_ns":{"Oscar":["https://github.com/oscar-system/Oscar.jl","1.1.2"]},"_type":{"name":"PolyRingElem","params":"71ab541e-c41e-4e35-b4b0-c18cb81424ca"},"data":[["0","10"],["1","-1"],["2","7"]],"_refs":{"71ab541e-c41e-4e35-b4b0-c18cb81424ca":{"_type":"PolyRing","data":{"base_ring":{"_type":"QQField"},"symbols":["x"]}}}}
