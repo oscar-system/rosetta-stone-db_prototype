@@ -10,6 +10,7 @@ from marko.html_renderer import HTMLRenderer
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
 SITE_DIR = ROOT / "_site"
+TEMPLATE_PATH = ROOT / "templates" / "default.html"
 ROOT_INDEX_MD = SITE_DIR / "index.md"
 ROSETTA_DIR = SITE_DIR / "rosetta"
 ROSETTA_INDEX_MD = ROSETTA_DIR / "index.md"
@@ -384,227 +385,6 @@ LANGUAGE_BY_SUFFIX = {
     ".md": "markdown",
     ".mrdi": "json",
 }
-
-HTML_TEMPLATE = """<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{title}</title>
-  <script>
-    MathJax = {{
-      tex: {{
-        inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
-        displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']]
-      }}
-    }};
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" />
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/julia.min.js"></script>
-  <script>
-    window.addEventListener("DOMContentLoaded", function () {{
-      document.querySelectorAll("pre > code").forEach(function (codeBlock) {{
-        var pre = codeBlock.parentElement;
-        if (!pre || pre.querySelector(".copy-code-btn")) {{
-          return;
-        }}
-        var button = document.createElement("button");
-        button.type = "button";
-        button.className = "copy-code-btn";
-        button.textContent = "Copy";
-        button.addEventListener("click", function () {{
-          navigator.clipboard.writeText(codeBlock.textContent || "").then(function () {{
-            button.textContent = "Copied";
-            setTimeout(function () {{ button.textContent = "Copy"; }}, 1200);
-          }});
-        }});
-        pre.appendChild(button);
-      }});
-
-      if (window.hljs) {{
-        window.hljs.highlightAll();
-      }}
-    }});
-  </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <style>
-    :root {{
-      --page-bg: linear-gradient(180deg, #f3eee2 0%, #fbfaf6 26%, #f6f7f2 100%);
-      --panel-bg: rgba(255, 255, 255, 0.94);
-      --border: #ddd3c2;
-      --text: #1d1b18;
-      --muted: #5c554a;
-      --accent: #0d5c63;
-      --accent-soft: #e5f0ef;
-      --code-bg: #f3f4f6;
-      --shadow: 0 24px 80px rgba(68, 55, 32, 0.08);
-    }}
-    * {{
-      box-sizing: border-box;
-    }}
-    body {{
-      margin: 0;
-      padding: 0;
-      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-      background: var(--page-bg);
-      color: var(--text);
-      line-height: 1.6;
-    }}
-    main {{
-      max-width: 1080px;
-      margin: 2rem auto;
-      background: var(--panel-bg);
-      padding: 2.25rem;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(6px);
-    }}
-    h1, h2, h3 {{
-      font-family: Georgia, "Times New Roman", serif;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-    }}
-    h1 {{
-      font-size: clamp(2rem, 4vw, 3.4rem);
-      margin-top: 0;
-    }}
-    h2 {{
-      margin-top: 2.2rem;
-      padding-top: 0.2rem;
-      border-top: 1px solid #eee4d6;
-    }}
-    p, li, table, code {{
-      font-size: 1rem;
-    }}
-    .page-nav {{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }}
-    .page-nav a {{
-      padding: 0.25rem 0.7rem;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.75);
-      text-decoration: none;
-    }}
-    .hero {{
-      padding: 1.4rem 1.5rem;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background:
-        radial-gradient(circle at top right, rgba(13, 92, 99, 0.12), transparent 32%),
-        linear-gradient(135deg, rgba(229, 240, 239, 0.9), rgba(255, 249, 240, 0.95));
-      margin-bottom: 1.8rem;
-    }}
-    .card-grid {{
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1rem;
-      margin: 1.4rem 0 1.8rem;
-    }}
-    .card {{
-      display: block;
-      padding: 1rem 1.1rem;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: #fffdf9;
-      text-decoration: none;
-      color: inherit;
-    }}
-    .card:hover {{
-      border-color: #bba778;
-      transform: translateY(-1px);
-    }}
-    .card strong {{
-      display: block;
-      font-size: 1.05rem;
-      margin-bottom: 0.35rem;
-    }}
-    .note-box {{
-      padding: 1rem 1.1rem;
-      border-left: 4px solid var(--accent);
-      background: var(--accent-soft);
-      border-radius: 10px;
-      margin: 1.25rem 0;
-    }}
-    .footer-note {{
-      margin-top: 2rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.95rem;
-    }}
-    pre {{
-      overflow-x: auto;
-      padding: 1rem;
-      border-radius: 10px;
-      position: relative;
-      background: var(--code-bg);
-      border: 1px solid #e1e3e8;
-    }}
-    .copy-code-btn {{
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      border: 1px solid #c9c9c9;
-      background: #fff;
-      color: #222;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      padding: 0.2rem 0.5rem;
-      cursor: pointer;
-    }}
-    .copy-code-btn:hover {{
-      background: #f2f2f2;
-    }}
-    code {{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }}
-    table {{
-      border-collapse: collapse;
-      width: auto;
-      max-width: 100%;
-      display: block;
-      overflow-x: auto;
-    }}
-    th, td {{
-      border: 1px solid #ddd;
-      padding: 0.45rem 0.65rem;
-      text-align: left;
-      vertical-align: top;
-      background: rgba(255, 255, 255, 0.8);
-    }}
-    a {{
-      color: var(--accent);
-    }}
-    @media (max-width: 700px) {{
-      main {{
-        margin: 1rem;
-        padding: 1.2rem;
-      }}
-      .page-nav {{
-        gap: 0.5rem;
-      }}
-      .page-nav a {{
-        font-size: 0.9rem;
-      }}
-    }}
-  </style>
-</head>
-<body>
-  <main>
-{content}
-  </main>
-</body>
-</html>
-"""
-
 
 def slugify(value):
     slug = re.sub(r"[^a-z0-9]+", "-", value.lower())
@@ -1277,6 +1057,10 @@ def markdown_to_html(md_text):
     return renderer.convert(text)
 
 
+def load_html_template():
+    return TEMPLATE_PATH.read_text(encoding="utf-8")
+
+
 def extract_title(md_text, fallback):
     for line in md_text.splitlines():
         if line.startswith("# "):
@@ -1291,7 +1075,9 @@ def render_html_page(md_path):
     md_text = md_path.read_text(encoding="utf-8")
     content_html = markdown_to_html(md_text)
     title = extract_title(md_text, md_path.stem)
-    full_html = HTML_TEMPLATE.format(title=title, content=content_html)
+    full_html = load_html_template()
+    full_html = full_html.replace("{{ title }}", title)
+    full_html = full_html.replace("{{ content }}", content_html)
     html_path = md_path.with_suffix(".html")
     html_path.write_text(full_html, encoding="utf-8")
     print(f"Wrote {html_path}")
