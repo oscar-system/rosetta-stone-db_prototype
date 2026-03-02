@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from html import escape
+
 from content import render_content_template, render_page_nav, replace_placeholders
 from settings import CATEGORY_TITLES, PARTIALS_DIR, PROFILE_ORDER, ROOT_INDEX_MD, ROSETTA_INDEX_MD, SCHEMA_PATH, SPEC_INDEX_MD, SPEC_INDEX_SOURCE, resolve_type_spec
 from utils import fenced_block, github_edit_url, profile_href, rel_link, render_data_for_markdown
@@ -104,35 +106,123 @@ def render_other_versions(spec_page, spec_catalog, page_path):
 
 
 def render_profile_definitions(profile_catalog, spec_catalog, examples, page_path):
-    lines = []
-    for profile_id, profile in profile_catalog.items():
-        lines.append(f"<a id=\"{profile_id}\"></a>")
-        lines.append(f"## {profile.title}")
+    shared_profiles = [
+        profile_catalog[profile_id]
+        for profile_id in profile_catalog
+        if profile_catalog[profile_id].kind != "application"
+    ]
+    application_profiles = [
+        profile_catalog[profile_id]
+        for profile_id in profile_catalog
+        if profile_catalog[profile_id].kind == "application"
+    ]
+
+    sections = []
+    for profile in shared_profiles:
+        sections.append(render_profile_section_markdown(profile, profile_catalog, spec_catalog, page_path))
+
+    if application_profiles:
+        if sections:
+            sections.append("")
+        sections.append("## OSCAR Profiles")
+        sections.append("")
+        sections.append(render_application_profile_tabs(application_profiles, profile_catalog, spec_catalog, page_path))
+
+    return "\n".join(sections).rstrip()
+
+
+def render_profile_section_markdown(profile, profile_catalog, spec_catalog, page_path):
+    lines = [f"<a id=\"{profile.id}\"></a>", f"## {profile.title}", "", profile.description, ""]
+    lines.extend(render_profile_metadata_lines(profile, profile_catalog))
+    lines.append("")
+    if profile.spec_ids:
+        lines.append("### Directly Documented Pages")
         lines.append("")
-        lines.append(profile.description)
+        for spec_id in profile.spec_ids:
+            spec_page = spec_catalog[spec_id]
+            lines.append(f"- [{spec_page.title}]({rel_link(page_path, spec_page.path_md)})")
         lines.append("")
-        lines.append(f"- Identifier: `{profile.id}`")
-        lines.append(f"- Kind: {profile.kind}")
-        lines.append(f"- Status: {profile.status}")
-        if profile.released_on:
-            lines.append(f"- Released on: {profile.released_on}")
-        if profile.based_on:
-            based_on_links = []
-            for base_id in profile.based_on:
-                base = profile_catalog[base_id]
-                based_on_links.append(f"[{base.title}](#{base_id})")
-            lines.append(f"- Based on: {', '.join(based_on_links)}")
-        else:
-            lines.append("- Based on: none")
-        lines.append("")
+    return "\n".join(lines).rstrip()
+
+
+def render_profile_metadata_lines(profile, profile_catalog):
+    lines = [
+        f"- Identifier: `{profile.id}`",
+        f"- Kind: {profile.kind}",
+        f"- Status: {profile.status}",
+    ]
+    if profile.released_on:
+        lines.append(f"- Released on: {profile.released_on}")
+    if profile.based_on:
+        based_on_links = []
+        for base_id in profile.based_on:
+            base = profile_catalog[base_id]
+            based_on_links.append(f"[{base.title}](#{base_id})")
+        lines.append(f"- Based on: {', '.join(based_on_links)}")
+    else:
+        lines.append("- Based on: none")
+    return lines
+
+
+def render_profile_metadata_html_items(profile, profile_catalog):
+    items = [
+        f"Identifier: <code>{escape(profile.id)}</code>",
+        f"Kind: {escape(profile.kind)}",
+        f"Status: {escape(profile.status)}",
+    ]
+    if profile.released_on:
+        items.append(f"Released on: {escape(profile.released_on)}")
+    if profile.based_on:
+        based_on_links = []
+        for base_id in profile.based_on:
+            base = profile_catalog[base_id]
+            based_on_links.append(f'<a href="#{escape(base_id)}">{escape(base.title)}</a>')
+        items.append(f"Based on: {', '.join(based_on_links)}")
+    else:
+        items.append("Based on: none")
+    return items
+
+
+def render_application_profile_tabs(application_profiles, profile_catalog, spec_catalog, page_path):
+    container_id = "tabs_spec_profiles_applications"
+    lines = [
+        f'<div class="output-tabs" data-tabs id="{container_id}">',
+        '<div class="output-tab-list" role="tablist" aria-label="Application profiles">',
+    ]
+
+    default_profile = application_profiles[-1]
+    for profile in application_profiles:
+        button_id = f"{container_id}_tab_{profile.id.replace('-', '_')}"
+        default_attr = ' data-tab-default="true"' if profile.id == default_profile.id else ""
+        lines.append(
+            f'<button type="button" class="output-tab-btn" role="tab" '
+            f'id="{button_id}" aria-controls="{profile.id}" '
+            f'data-tab-target="{profile.id}" data-tab-hashes="{profile.id}"{default_attr}>'
+            f"{escape(profile.title)}</button>"
+        )
+
+    lines.append("</div>")
+
+    for profile in application_profiles:
+        lines.append(f'<div class="output-tab-panel" role="tabpanel" id="{profile.id}">')
+        lines.append(f"<h3>{escape(profile.title)}</h3>")
+        lines.append(f"<p>{escape(profile.description)}</p>")
+        lines.append("<ul>")
+        for item in render_profile_metadata_html_items(profile, profile_catalog):
+            lines.append(f"<li>{item}</li>")
+        lines.append("</ul>")
         if profile.spec_ids:
-            lines.append("### Directly Documented Pages")
-            lines.append("")
+            lines.append("<h4>Directly Documented Pages</h4>")
+            lines.append("<ul>")
             for spec_id in profile.spec_ids:
                 spec_page = spec_catalog[spec_id]
-                lines.append(f"- [{spec_page.title}]({rel_link(page_path, spec_page.path_md)})")
-            lines.append("")
-    return "\n".join(lines).rstrip()
+                href = rel_link(page_path, spec_page.path_md)
+                lines.append(f'<li><a href="{escape(href)}">{escape(spec_page.title)}</a></li>')
+            lines.append("</ul>")
+        lines.append("</div>")
+
+    lines.append("</div>")
+    return "\n".join(lines)
 
 
 def build_spec_index_markdown(spec_catalog):
