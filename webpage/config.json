@@ -1,0 +1,66 @@
+{
+  "category_titles": {
+    "basics": "Basics",
+    "containers": "Containers",
+    "rings": "Rings",
+    "linear-algebra": "Linear Algebra",
+    "groups": "Groups",
+    "lie-theory": "Lie Theory",
+    "polyhedral": "Polyhedral Geometry"
+  },
+  "subcategory_titles": {
+    "groups": {
+      "abelian": "Abelian Groups",
+      "permutation": "Permutation Groups",
+      "matrix": "Matrix Groups",
+      "free": "Free Groups",
+      "fp": "Finitely Presented Groups",
+      "pc": "Pc Groups",
+      "__other__": "Other"
+    },
+    "polyhedral": {
+      "polyhedra": "Polyhedra",
+      "fans": "Fans",
+      "cones": "Cones",
+      "matroids": "Matroids",
+      "optimization": "Optimization",
+      "complexes-subdivisions": "Complexes and Subdivisions",
+      "phylogenetic": "Phylogenetic",
+      "combinatorics": "Combinatorics",
+      "__other__": "Other"
+    },
+    "lie-theory": {
+      "root-data": "Root Data",
+      "weight-lattice": "Weight Lattice",
+      "weyl-group": "Weyl Group",
+      "__other__": "Other"
+    }
+  },
+  "type_spec_by_root_type": {
+    "Bool": "basics/bool",
+    "Base.Int": "basics/integers",
+    "BigInt": "basics/integers",
+    "Int16": "basics/integers",
+    "UInt64": "basics/integers",
+    "ZZRingElem": "basics/integers",
+    "String": "basics/string",
+    "Vector": "containers/vector",
+    "Dict": "containers/dict",
+    "Set": "containers/set",
+    "Tuple": "containers/tuple",
+    "QQFieldElem": "rings/rational-number",
+    "Matrix": "linear-algebra/matrix",
+    "PolyRingElem": "rings/univariate-polynomial",
+    "MPolyRingElem": "rings/multivariate-polynomial"
+  },
+  "language_by_suffix": {
+    ".jl": "julia",
+    ".pl": "perl",
+    ".sh": "bash",
+    ".json": "json",
+    ".lp": "text",
+    ".ine": "text",
+    ".md": "markdown",
+    ".mrdi": "json"
+  }
+}

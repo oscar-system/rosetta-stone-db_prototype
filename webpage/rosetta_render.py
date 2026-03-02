@@ -1,0 +1,195 @@
+from __future__ import annotations
+
+from content import load_markdown_source, render_content_template, render_page_nav
+from settings import (
+    CATEGORY_TITLES,
+    FRONT_PAGE_SOURCE,
+    PARTIALS_DIR,
+    ROOT_INDEX_MD,
+    ROSETTA_INDEX_MD,
+    ROSETTA_INDEX_SOURCE,
+    SPEC_INDEX_MD,
+    SUBCATEGORY_TITLES,
+)
+from utils import fenced_block, language_for_file, rel_link, render_data_for_markdown, slugify
+
+
+def spec_link_lines(page_path, spec_ids, spec_catalog):
+    if not spec_ids:
+        return []
+
+    lines = []
+    for spec_id in spec_ids:
+        spec_page = spec_catalog[spec_id]
+        href = rel_link(page_path, spec_page.path_md)
+        lines.append(f"- [{spec_page.title}]({href})")
+    return render_content_template(
+        PARTIALS_DIR / "example-related-spec.md",
+        {
+            "SPEC_LINKS": "\n".join(lines),
+        },
+    ).splitlines() + [""]
+
+
+def build_front_page_markdown():
+    return render_content_template(
+        FRONT_PAGE_SOURCE,
+        {
+            "PAGE_NAV": "",
+        },
+    )
+
+
+def build_rosetta_index_markdown(examples, systems):
+    system_names = sorted(systems.keys())
+    category_rank = {name: idx for idx, name in enumerate(CATEGORY_TITLES.keys())}
+    subcategory_rank = {
+        category: {name: idx for idx, name in enumerate(titles.keys())}
+        for category, titles in SUBCATEGORY_TITLES.items()
+    }
+
+    grouped_examples = {}
+    for example_id, example in examples.items():
+        grouped_examples.setdefault(example.category, []).append(example_id)
+
+    sorted_groups = sorted(
+        grouped_examples.keys(),
+        key=lambda name: (category_rank.get(name, 999), name.lower()),
+    )
+
+    toc_lines = []
+    for group_id in sorted_groups:
+        display_name = CATEGORY_TITLES.get(group_id, group_id.replace("-", " ").title())
+        toc_lines.append(f"- [{display_name}](#{slugify(display_name)})")
+
+    lines = []
+    for group_id in sorted_groups:
+        display_name = CATEGORY_TITLES.get(group_id, group_id.replace("-", " ").title())
+        lines.append(f"## {display_name}")
+        lines.append("")
+        group_examples = grouped_examples[group_id]
+
+        subgrouped = {}
+        for example_id in group_examples:
+            sub = examples[example_id].subcategory or "__other__"
+            subgrouped.setdefault(sub, []).append(example_id)
+
+        ordered_subgroups = sorted(
+            subgrouped.keys(),
+            key=lambda sub: (subcategory_rank.get(group_id, {}).get(sub, 999), sub.lower()),
+        )
+
+        for sub in ordered_subgroups:
+            if len(ordered_subgroups) > 1:
+                display_sub = (
+                    SUBCATEGORY_TITLES.get(group_id, {}).get(sub)
+                    or sub.replace("-", " ").title()
+                )
+                lines.append(f"### {display_sub}")
+                lines.append("")
+
+            sub_examples = sorted(
+                subgrouped[sub],
+                key=lambda exid: (
+                    examples[exid].order if examples[exid].order is not None else 10_000,
+                    examples[exid].title.lower(),
+                ),
+            )
+            visible_systems = [
+                system_name
+                for system_name in system_names
+                if any(example_id in systems[system_name] for example_id in sub_examples)
+            ]
+
+            lines.append("| Example | " + " | ".join(visible_systems) + " |")
+            lines.append("| --- | " + " | ".join("---" for _ in visible_systems) + " |")
+            for example_id in sub_examples:
+                example = examples[example_id]
+                relpath = f"./{example.category}/{example.slug}.md"
+                row = [f"[{example.title}]({relpath})"]
+                for system_name in visible_systems:
+                    if example_id in systems[system_name]:
+                        anchor = slugify(system_name)
+                        row.append(f"[X]({relpath}#{anchor})")
+                    else:
+                        row.append("")
+                lines.append("| " + " | ".join(row) + " |")
+            lines.append("")
+
+    return render_content_template(
+        ROSETTA_INDEX_SOURCE,
+        {
+            "PAGE_NAV": render_page_nav(
+                [
+                    ("Front Page", "../index.md"),
+                    ("Specification", "../spec/index.md"),
+                ]
+            ),
+            "TABLE_OF_CONTENTS": "\n".join(toc_lines),
+            "EXAMPLE_TABLES": "\n".join(lines).rstrip(),
+        },
+    )
+
+
+def build_example_markdown(example, systems, spec_catalog):
+    body = example.body.rstrip()
+    available_systems = [
+        system_name
+        for system_name in sorted(systems.keys())
+        if example.id in systems[system_name]
+    ]
+
+    page_path = ROOT_INDEX_MD.parent / example.output_relpath_md
+    lines = [
+        render_page_nav(
+            [
+                ("Front Page", rel_link(page_path, ROOT_INDEX_MD)),
+                ("Rosetta Stone", rel_link(page_path, ROSETTA_INDEX_MD)),
+                ("Specification", rel_link(page_path, SPEC_INDEX_MD)),
+            ]
+        ),
+        f"# {example.title}",
+        "",
+        body,
+        "",
+    ]
+
+    lines.extend(spec_link_lines(page_path, example.spec_ids, spec_catalog))
+
+    system_lines = []
+    for system_name in available_systems:
+        system_lines.append(f"### {system_name}")
+        system_lines.append("")
+
+        system_example = systems[system_name].get(example.id)
+        generate_file = system_example.generate_file
+        data_file = system_example.data_file
+
+        if generate_file is not None:
+            system_lines.append(f"#### Generate code (`{generate_file.name}`)")
+            system_lines.append("")
+            code = generate_file.read_text(encoding="utf-8")
+            system_lines.append(fenced_block(code, language_for_file(generate_file)))
+            system_lines.append("")
+
+        if data_file is not None:
+            system_lines.append(f"#### Data file (`{data_file.name}`)")
+            system_lines.append("")
+            data = render_data_for_markdown(data_file)
+            system_lines.append(fenced_block(data, language_for_file(data_file)))
+            system_lines.append("")
+
+        if generate_file is None and data_file is None:
+            system_lines.append(load_markdown_source(PARTIALS_DIR / "example-no-system.md").strip())
+            system_lines.append("")
+
+    lines.extend(
+        render_content_template(
+            PARTIALS_DIR / "example-systems.md",
+            {
+                "SYSTEM_SECTIONS": "\n".join(system_lines).rstrip(),
+            },
+        ).splitlines() + [""]
+    )
+
+    return "\n".join(lines).rstrip() + "\n"

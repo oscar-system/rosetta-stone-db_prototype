@@ -65,7 +65,7 @@ Optional:
 - `subcategory` (used for sub-grouping and sorting in the index)
 
 `category` and `subcategory` are internal keys (slug-like). Display names and
-ordering are configured in `webpage/generate_page.py`.
+ordering are configured in `webpage/config.json`.
 
 ## Local development
 
