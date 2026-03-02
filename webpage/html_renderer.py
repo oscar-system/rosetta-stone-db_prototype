@@ -183,7 +183,17 @@ def render_html_page(md_path):
     title = extract_title(md_text, md_path.stem)
     full_html = load_text(TEMPLATE_PATH)
     full_html = full_html.replace("{{ title }}", title)
+    full_html = full_html.replace("{{ page_class }}", page_class_for(md_path))
     full_html = full_html.replace("{{ content }}", content_html)
     html_path = md_path.with_suffix(".html")
     html_path.write_text(full_html, encoding="utf-8")
     print(f"Wrote {html_path}")
+
+
+def page_class_for(md_path):
+    parts = md_path.parts
+    if "spec" in parts:
+        return "section-spec"
+    if "rosetta" in parts:
+        return "section-rosetta"
+    return "section-neutral"

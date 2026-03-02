@@ -53,6 +53,22 @@
       --code-bg: #f3f4f6;
       --shadow: 0 24px 80px rgba(68, 55, 32, 0.08);
     }
+    body.section-spec {
+      --page-bg: linear-gradient(180deg, #eef4f6 0%, #f9fcfc 26%, #f4f7f8 100%);
+      --panel-bg: rgba(252, 255, 255, 0.95);
+      --border: #c9dbe0;
+      --accent: #0b6275;
+      --accent-soft: #dff0f5;
+      --shadow: 0 24px 80px rgba(29, 69, 84, 0.08);
+    }
+    body.section-rosetta {
+      --page-bg: linear-gradient(180deg, #f6efe4 0%, #fcfaf5 26%, #f8f3ea 100%);
+      --panel-bg: rgba(255, 252, 247, 0.95);
+      --border: #dfcfbd;
+      --accent: #8d4c1f;
+      --accent-soft: #f4e5d6;
+      --shadow: 0 24px 80px rgba(88, 54, 24, 0.08);
+    }
     * {
       box-sizing: border-box;
     }
@@ -106,6 +122,12 @@
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.75);
       text-decoration: none;
+    }
+    .page-nav a.page-nav-active {
+      background: var(--accent-soft);
+      border-color: rgba(13, 92, 99, 0.25);
+      color: var(--accent);
+      font-weight: 600;
     }
     .page-nav .page-nav-edit {
       margin-left: auto;
@@ -222,7 +244,7 @@
     }
   </style>
 </head>
-<body>
+<body class="{{ page_class }}">
   <main>
 {{ content }}
   </main>

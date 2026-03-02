@@ -146,6 +146,7 @@ def build_spec_index_markdown(spec_catalog):
                     ("Rosetta Stone", "../rosetta/index.md"),
                 ],
                 edit_link=("Edit this page", github_edit_url(SPEC_INDEX_SOURCE)),
+                active_label="Specification",
             ),
             "CORE_PAGES": "\n".join(core_lines),
             "TYPE_PAGES": "\n".join(type_lines),
@@ -216,12 +217,13 @@ def build_spec_page_markdown(spec_page, examples, profile_catalog, spec_catalog)
         render_page_nav(
             [
                 ("Front Page", rel_link(page_path, ROOT_INDEX_MD)),
-                ("Specification Index", rel_link(page_path, SPEC_INDEX_MD)),
+                ("Specification", rel_link(page_path, SPEC_INDEX_MD)),
                 ("Rosetta Stone", rel_link(page_path, ROSETTA_INDEX_MD)),
             ],
             edit_link=("Edit this page", github_edit_url(spec_page.source_path)),
+            active_label="Specification",
         ),
-        f"# {spec_page.title}",
+        f"# Specification: {spec_page.title}",
         "",
         render_page_profiles(spec_page.profiles, profile_catalog, page_path),
         "",

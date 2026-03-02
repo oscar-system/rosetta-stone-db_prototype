@@ -143,8 +143,15 @@ def load_text(path: Path) -> str:
 def render_page_nav(
     links: list[tuple[str, str]],
     edit_link: tuple[str, str] | None = None,
+    active_label: str | None = None,
 ) -> str:
-    items = [f'<a href="{href}">{label}</a>' for label, href in links]
+    items = []
+    for label, href in links:
+        classes = []
+        if label == active_label:
+            classes.append("page-nav-active")
+        class_attr = f' class="{" ".join(classes)}"' if classes else ""
+        items.append(f'<a{class_attr} href="{href}">{label}</a>')
     if edit_link is not None:
         label, href = edit_link
         items.append(f'<a class="page-nav-edit" href="{href}">{label}</a>')
