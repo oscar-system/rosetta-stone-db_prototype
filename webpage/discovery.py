@@ -88,24 +88,21 @@ def discover_examples() -> dict[str, ExamplePage]:
                         namespaces=extract_namespaces(parsed_data),
                     )
 
-            raw_order = metadata.get("order")
-            parsed_order = None
-            if raw_order is not None:
-                try:
-                    parsed_order = int(raw_order)
-                except ValueError:
-                    parsed_order = None
+            parsed_order = metadata.optional_int("order")
 
             examples[example_id] = ExamplePage(
                 id=example_id,
                 slug=example_slug,
                 output_relpath_md=f"rosetta/{group_id}/{example_slug}.md",
                 path=description_path,
-                title=metadata.get("title", example_slug),
-                category=metadata.get("category", metadata.get("group", group_id)),
-                subcategory=metadata.get("subcategory"),
+                title=metadata.require_str("title", example_slug),
+                category=metadata.require_str(
+                    "category",
+                    metadata.require_str("group", group_id),
+                ),
+                subcategory=metadata.optional_str("subcategory"),
                 order=parsed_order,
-                profiles=list(metadata.get("profiles", [])),
+                profiles=metadata.str_list("profiles"),
                 body=body,
                 systems=systems,
             )
@@ -125,24 +122,21 @@ def discover_spec_pages() -> dict[str, SpecPage]:
     spec_pages: dict[str, SpecPage] = {}
     for spec_path in sorted(SPEC_SOURCE_DIR.rglob("*.md")):
         metadata, body = parse_description(spec_path)
-        raw_order = metadata.get("order")
-        parsed_order = None
-        if raw_order is not None:
-            try:
-                parsed_order = int(raw_order)
-            except ValueError:
-                parsed_order = None
+        parsed_order = metadata.optional_int("order")
 
         relpath = spec_path.relative_to(SPEC_SOURCE_DIR)
         spec_id = relpath.with_suffix("").as_posix()
         spec_pages[spec_id] = SpecPage(
             id=spec_id,
-            title=metadata.get("title", spec_id.replace("-", " ").title()),
-            kind=metadata.get("kind", "type"),
+            title=metadata.require_str("title", spec_id.replace("-", " ").title()),
+            kind=metadata.require_str("kind", "type"),
             order=parsed_order,
-            profiles=list(metadata.get("profiles", [])),
+            profiles=metadata.str_list("profiles"),
             body=body.rstrip(),
-            section=metadata.get("section", relpath.parent.as_posix() if relpath.parent != Path(".") else ""),
+            section=metadata.require_str(
+                "section",
+                relpath.parent.as_posix() if relpath.parent != Path(".") else "",
+            ),
             source_path=spec_path,
             path_md=SPEC_SITE_DIR / relpath,
         )

@@ -1,12 +1,100 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 import re
 
 
-def parse_description(path: Path) -> tuple[dict[str, object], str]:
+FrontmatterValue = str | list[str]
+
+
+@dataclass(frozen=True)
+class FrontmatterEntry:
+    value: FrontmatterValue
+    line: int
+
+
+@dataclass(frozen=True)
+class Frontmatter:
+    path: Path
+    entries: dict[str, FrontmatterEntry]
+
+    def get(self, key: str) -> FrontmatterValue | None:
+        entry = self.entries.get(key)
+        if entry is None:
+            return None
+        return entry.value
+
+    @staticmethod
+    def _value_description(value: object) -> str:
+        if isinstance(value, list):
+            return "a list"
+        if isinstance(value, str):
+            return "a string"
+        return f"a {type(value).__name__}"
+
+    def require_str(self, key: str, default: str | None = None) -> str:
+        value = self.get(key)
+        if value is None:
+            if default is not None:
+                return default
+            raise ValueError(f"Error, missing '{key}' value in {self.path}")
+        if isinstance(value, str):
+            return value
+        raise ValueError(
+            f"Error, unsupported '{key}' value in {self.path}:{self.line_for(key)}: "
+            f"expected a string, got {self._value_description(value)}"
+        )
+
+    def optional_str(self, key: str) -> str | None:
+        value = self.get(key)
+        if value is None:
+            return None
+        if isinstance(value, str):
+            return value
+        raise ValueError(
+            f"Error, unsupported '{key}' value in {self.path}:{self.line_for(key)}: "
+            f"expected a string, got {self._value_description(value)}"
+        )
+
+    def str_list(self, key: str) -> list[str]:
+        value = self.get(key)
+        if value is None:
+            return []
+        if isinstance(value, list):
+            return list(value)
+        raise ValueError(
+            f"Error, unsupported '{key}' value in {self.path}:{self.line_for(key)}: "
+            f"expected a list, got {self._value_description(value)}"
+        )
+
+    def optional_int(self, key: str) -> int | None:
+        value = self.get(key)
+        if value is None:
+            return None
+        if not isinstance(value, str):
+            raise ValueError(
+                f"Error, unsupported '{key}' value in {self.path}:{self.line_for(key)}: "
+                f"expected an integer, got {self._value_description(value)}"
+            )
+        try:
+            return int(value)
+        except ValueError as exc:
+            raise ValueError(
+                f"Error, unsupported '{key}' value in {self.path}:{self.line_for(key)}: "
+                f"expected an integer, got {value!r}"
+            ) from exc
+
+    def line_for(self, key: str) -> int:
+        entry = self.entries.get(key)
+        if entry is None:
+            raise KeyError(key)
+        return entry.line
+
+
+def parse_description(path: Path) -> tuple[Frontmatter, str]:
     text = path.read_text(encoding="utf-8")
-    metadata: dict[str, object] = {}
+    entries: dict[str, FrontmatterEntry] = {}
     body = text
 
     if text.startswith("---\n"):
@@ -14,7 +102,7 @@ def parse_description(path: Path) -> tuple[dict[str, object], str]:
         if len(parts) == 2:
             header_block = parts[0][4:]
             body = parts[1]
-            for line in header_block.splitlines():
+            for line_number, line in enumerate(header_block.splitlines(), start=2):
                 if ":" not in line:
                     continue
                 key, value = line.split(":", 1)
@@ -26,11 +114,11 @@ def parse_description(path: Path) -> tuple[dict[str, object], str]:
                         for item in value[1:-1].split(",")
                         if item.strip()
                     ]
-                    metadata[key] = items
+                    entries[key] = FrontmatterEntry(value=items, line=line_number)
                 else:
-                    metadata[key] = value
+                    entries[key] = FrontmatterEntry(value=value, line=line_number)
 
-    return metadata, body.lstrip()
+    return Frontmatter(path=path, entries=entries), body.lstrip()
 
 
 def load_markdown_source(path: Path) -> str:

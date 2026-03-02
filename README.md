@@ -75,10 +75,22 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+Install development tooling:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
 Generate the site:
 
 ```bash
 python3 webpage/generate_page.py
+```
+
+Run type checking:
+
+```bash
+mypy webpage
 ```
 
 Notes:
@@ -86,6 +98,7 @@ Notes:
 - Math rendering uses MathJax in generated HTML.
 - Code blocks use highlight.js and include a copy button.
 - JSON `data.*` is rendered with compact pretty-printing on pages.
+- `mypy` is configured in `pyproject.toml`.
 
 ## GitHub Pages
 

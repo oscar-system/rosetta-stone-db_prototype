@@ -1,0 +1,7 @@
+[tool.mypy]
+python_version = "3.11"
+files = ["webpage"]
+check_untyped_defs = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true

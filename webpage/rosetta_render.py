@@ -63,7 +63,7 @@ def build_rosetta_index_markdown(examples, systems):
         for category, titles in SUBCATEGORY_TITLES.items()
     }
 
-    grouped_examples = {}
+    grouped_examples: dict[str, list[str]] = {}
     for example_id, example in examples.items():
         grouped_examples.setdefault(example.category, []).append(example_id)
 
@@ -84,7 +84,7 @@ def build_rosetta_index_markdown(examples, systems):
         lines.append("")
         group_examples = grouped_examples[group_id]
 
-        subgrouped = {}
+        subgrouped: dict[str, list[str]] = {}
         for example_id in group_examples:
             sub = examples[example_id].subcategory or "__other__"
             subgrouped.setdefault(sub, []).append(example_id)
