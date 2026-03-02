@@ -12,7 +12,16 @@
       }
     };
   </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css"
+    media="(prefers-color-scheme: light)"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css"
+    media="(prefers-color-scheme: dark)"
+  />
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/julia.min.js"></script>
   <script>
@@ -120,6 +129,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
   <style>
     :root {
+      color-scheme: light dark;
       --page-bg: linear-gradient(180deg, #f3eee2 0%, #fbfaf6 26%, #f6f7f2 100%);
       --panel-bg: rgba(255, 255, 255, 0.94);
       --border: #ddd3c2;
@@ -128,6 +138,14 @@
       --accent: #0d5c63;
       --accent-soft: #e5f0ef;
       --code-bg: #f3f4f6;
+      --code-text: #1d1b18;
+      --link: #0b6275;
+      --nav-pill-bg: rgba(255, 255, 255, 0.75);
+      --card-bg: #fffdf9;
+      --table-cell-bg: rgba(255, 255, 255, 0.8);
+      --tabs-bg: rgba(255, 255, 255, 0.62);
+      --tabs-bar-bg: rgba(255, 255, 255, 0.45);
+      --tab-btn-bg: rgba(255, 255, 255, 0.82);
       --shadow: 0 24px 80px rgba(68, 55, 32, 0.08);
     }
     body.section-spec {
@@ -146,6 +164,43 @@
       --accent-soft: #f4e5d6;
       --shadow: 0 24px 80px rgba(88, 54, 24, 0.08);
     }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --page-bg: linear-gradient(180deg, #181714 0%, #111316 28%, #171a1d 100%);
+        --panel-bg: rgba(25, 28, 32, 0.94);
+        --border: #3a3f46;
+        --text: #ece6dc;
+        --muted: #b8b0a3;
+        --accent: #8ed0d8;
+        --accent-soft: rgba(62, 114, 124, 0.28);
+        --code-bg: #11161c;
+        --code-text: #e6edf3;
+        --link: #9ad9e0;
+        --nav-pill-bg: rgba(28, 31, 35, 0.9);
+        --card-bg: #1c2024;
+        --table-cell-bg: rgba(31, 35, 40, 0.9);
+        --tabs-bg: rgba(24, 28, 33, 0.88);
+        --tabs-bar-bg: rgba(18, 22, 27, 0.92);
+        --tab-btn-bg: rgba(35, 40, 46, 0.92);
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+      }
+      body.section-spec {
+        --page-bg: linear-gradient(180deg, #13191d 0%, #101517 28%, #171d21 100%);
+        --panel-bg: rgba(20, 28, 31, 0.94);
+        --border: #35505a;
+        --accent: #8ed0d8;
+        --accent-soft: rgba(38, 89, 98, 0.3);
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+      }
+      body.section-rosetta {
+        --page-bg: linear-gradient(180deg, #1c1712 0%, #171311 28%, #201a16 100%);
+        --panel-bg: rgba(33, 27, 22, 0.94);
+        --border: #5a4636;
+        --accent: #efb482;
+        --accent-soft: rgba(113, 70, 36, 0.28);
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+      }
+    }
     * {
       box-sizing: border-box;
     }
@@ -156,6 +211,9 @@
       background: var(--page-bg);
       color: var(--text);
       line-height: 1.6;
+    }
+    a {
+      color: var(--link);
     }
     main {
       max-width: 1080px;
@@ -179,7 +237,7 @@
     h2 {
       margin-top: 2.2rem;
       padding-top: 0.2rem;
-      border-top: 1px solid #eee4d6;
+      border-top: 1px solid var(--border);
     }
     p, li, table, code {
       font-size: 1rem;
@@ -197,7 +255,7 @@
       padding: 0.25rem 0.7rem;
       border: 1px solid var(--border);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.75);
+      background: var(--nav-pill-bg);
       text-decoration: none;
     }
     .page-nav a.page-nav-active {
@@ -223,6 +281,13 @@
         linear-gradient(135deg, rgba(229, 240, 239, 0.9), rgba(255, 249, 240, 0.95));
       margin-bottom: 1.8rem;
     }
+    @media (prefers-color-scheme: dark) {
+      .hero {
+        background:
+          radial-gradient(circle at top right, rgba(142, 208, 216, 0.16), transparent 32%),
+          linear-gradient(135deg, rgba(38, 45, 51, 0.94), rgba(27, 31, 36, 0.96));
+      }
+    }
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -234,7 +299,7 @@
       padding: 1rem 1.1rem;
       border: 1px solid var(--border);
       border-radius: 14px;
-      background: #fffdf9;
+      background: var(--card-bg);
       text-decoration: none;
       color: inherit;
     }
@@ -253,6 +318,10 @@
       background: var(--accent-soft);
       border-radius: 10px;
       margin: 1.25rem 0;
+    }
+    pre, code, .hljs {
+      background: var(--code-bg);
+      color: var(--code-text);
     }
     .footer-note {
       margin-top: 2rem;
@@ -299,7 +368,7 @@
       padding: 0.45rem 0.65rem;
       text-align: left;
       vertical-align: top;
-      background: rgba(255, 255, 255, 0.8);
+      background: var(--table-cell-bg);
     }
     a {
       color: var(--accent);
@@ -307,7 +376,7 @@
     .output-tabs {
       border: 1px solid var(--border);
       border-radius: 14px;
-      background: rgba(255, 255, 255, 0.62);
+      background: var(--tabs-bg);
       overflow: hidden;
     }
     .output-tab-list {
@@ -316,11 +385,11 @@
       gap: 0.45rem;
       padding: 0.85rem 0.9rem 0;
       border-bottom: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.45);
+      background: var(--tabs-bar-bg);
     }
     .output-tab-btn {
       border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.82);
+      background: var(--tab-btn-bg);
       color: var(--muted);
       border-radius: 10px 10px 0 0;
       padding: 0.45rem 0.8rem;
