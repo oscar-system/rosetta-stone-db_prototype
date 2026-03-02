@@ -1,0 +1,1 @@
+{"_ns":{"Oscar":["https://github.com/oscar-system/Oscar.jl","1.8.0-DEV-1-8dea7e5a4d0cdef038b2fa2cd018d08201b4ac07"]},"_type":{"name":"Tuple","params":["Base.Int","String","Bool"]},"data":["1","string",true]}

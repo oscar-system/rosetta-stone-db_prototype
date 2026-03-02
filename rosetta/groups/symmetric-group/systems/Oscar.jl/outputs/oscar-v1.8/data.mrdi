@@ -1,0 +1,1 @@
+{"_ns":{"Oscar":["https://github.com/oscar-system/Oscar.jl","1.8.0-DEV-1-8dea7e5a4d0cdef038b2fa2cd018d08201b4ac07"]},"_type":"PermGroup","data":{"degree":"5","gens":[["2","3","4","5","1"],["2","1"]]},"attrs":{"order":{"_type":{"name":"ZZRingElem","params":{"_type":"ZZRing"}},"data":"120"},"is_perfect":{"_type":"Bool","data":false}},"id":"017e693a-9a2e-49fb-a649-403a75577f85"}
