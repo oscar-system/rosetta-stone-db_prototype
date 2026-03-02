@@ -1,7 +1,7 @@
 # Rosetta Stone DB (prototype)
 
-This repository is a prototype "Rosetta stone" for serialization of mathematical
-objects across computer algebra systems.
+This repository is a prototype website and corpus for the MaRDI file format for
+mathematical software.
 
 It stores:
 - a human-readable description per example
@@ -9,7 +9,9 @@ It stores:
 - the serialized data emitted by that system
 
 It also generates a browsable static site with:
-- an index table grouped by category (and optional subcategory)
+- a front page linking to the specification and the rosetta stone
+- a specification section covering the overall format and selected data types
+- a rosetta-stone index grouped by category (and optional subcategory)
 - per-example pages with code and serialized data for each available system
 - Markdown and HTML output
 
@@ -38,8 +40,10 @@ Example:
 Generated output includes:
 - `_site/index.md`
 - `_site/index.html`
-- one `.md` and one `.html` page per example in category subdirectories, e.g.
-  `_site/groups/free-group.md` and `_site/groups/free-group.html`
+- `_site/spec/index.md` and `_site/spec/index.html`
+- `_site/rosetta/index.md` and `_site/rosetta/index.html`
+- one `.md` and one `.html` page per example under `_site/rosetta/`, e.g.
+  `_site/rosetta/groups/free-group.md` and `_site/rosetta/groups/free-group.html`
 
 ## Metadata in `description.md`
 
