@@ -3,10 +3,12 @@ from __future__ import annotations
 from pathlib import Path
 
 from content import load_markdown_source, render_content_template, render_page_nav
+from mrdi_compare import equivalent_json
 from settings import (
     CATEGORY_TITLES,
     FRONT_PAGE_SOURCE,
     PARTIALS_DIR,
+    PROFILE_ORDER,
     ROOT_INDEX_MD,
     ROSETTA_INDEX_MD,
     ROSETTA_INDEX_SOURCE,
@@ -190,17 +192,39 @@ def build_example_markdown(example, systems, spec_catalog, profile_catalog):
         if shared_generate_files:
             system_lines.extend(render_generate_sections(shared_generate_files))
 
-        for output in outputs:
+        for output_group in equivalent_output_groups(outputs):
+            representative = choose_representative_output(output_group)
+
             if len(outputs) > 1:
-                system_lines.append(f"#### {output_heading(page_path, output.id, profile_catalog)}")
+                if len(output_group) > 1:
+                    system_lines.append(
+                        f"#### Equivalent outputs for "
+                        f"{output_label_list(page_path, output_group, profile_catalog)}"
+                    )
+                else:
+                    system_lines.append(
+                        f"#### {output_heading(page_path, representative.id, profile_catalog)}"
+                    )
                 system_lines.append("")
 
-            if output.generate_files and output.generate_files != shared_generate_files:
-                system_lines.extend(render_generate_sections(output.generate_files))
+            if len(output_group) > 1:
+                system_lines.append(
+                    "These serialized outputs are equivalent up to UUID renaming "
+                    "and recorded namespace version strings."
+                )
+                system_lines.append("")
 
-            data_file = output.data_file
+            if representative.generate_files and representative.generate_files != shared_generate_files:
+                system_lines.extend(render_generate_sections(representative.generate_files))
+
+            data_file = representative.data_file
             if data_file is not None:
-                system_lines.append(f"#### Data file (`{data_file.name}`)")
+                if len(output_group) > 1:
+                    system_lines.append(
+                        f"#### Representative data file (`{data_file.name}`)"
+                    )
+                else:
+                    system_lines.append(f"#### Data file (`{data_file.name}`)")
                 system_lines.append("")
                 data = render_data_for_markdown(data_file)
                 system_lines.append(fenced_block(data, language_for_file(data_file)))
@@ -241,3 +265,56 @@ def output_heading(page_path, output_id, profile_catalog):
         href = profile_href(page_path)
         return f"Output for [{profile.title}]({href}#{output_id})"
     return f"Output `{output_id}`"
+
+
+def output_sort_key(output):
+    if output.profile_id is None:
+        return (10_000, output.id)
+    return (PROFILE_ORDER.get(output.profile_id, 10_000), output.id)
+
+
+def choose_representative_output(outputs):
+    return max(outputs, key=output_sort_key)
+
+
+def outputs_are_equivalent(left, right):
+    if left.generate_files != right.generate_files:
+        return False
+    if left.parsed_data is None or right.parsed_data is None:
+        return left.data_file == right.data_file
+    return equivalent_json(
+        left.parsed_data,
+        right.parsed_data,
+        ignore_namespace_versions=True,
+    )
+
+
+def equivalent_output_groups(outputs):
+    groups: list[list[object]] = []
+    for output in sorted(outputs, key=output_sort_key):
+        matched_group = None
+        for group in groups:
+            if outputs_are_equivalent(group[0], output):
+                matched_group = group
+                break
+        if matched_group is None:
+            groups.append([output])
+        else:
+            matched_group.append(output)
+    return groups
+
+
+def output_label(page_path, output_id, profile_catalog):
+    if output_id in profile_catalog:
+        profile = profile_catalog[output_id]
+        href = profile_href(page_path)
+        return f"[{profile.title}]({href}#{output_id})"
+    return f"`{output_id}`"
+
+
+def output_label_list(page_path, outputs, profile_catalog):
+    labels = [
+        output_label(page_path, output.id, profile_catalog)
+        for output in sorted(outputs, key=output_sort_key)
+    ]
+    return ", ".join(labels)
