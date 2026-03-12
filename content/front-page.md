@@ -47,12 +47,14 @@ The specification pages fix terminology explicitly. In particular, this site use
 - [Browse this repository](https://github.com/oscar-system/rosetta-stone-db_prototype)
 
 <div class="footer-note">
-<p><strong>Contributors.</strong> The following people have contributed to the OSCAR serialization effort:
+<p><strong>Contributors.</strong> The following people have contributed to the serialization effort:
+John Abbott,
 Thomas Breuer,
 Alheydis Geiger,
 Lars Göttgens,
+Jereon Hanselman,
 Max Horn,
 Stevell Muller,
 Matthias Zach.</p>
-<p><strong>Disclaimer.</strong> This is part of ongoing work on a FAIR file format for mathematical software. Supported by <a href="https://www.mardi4nfdi.de">MaRDI</a> and by <a href="https://www.computeralgebra.de/sfb/">DFG SFB/TRR-195</a>.</p>
+<p><strong>Disclaimer.</strong> This is part of ongoing work on a FAIR file format for mathematical software. Supported by <a href="https://www.mardi4nfdi.de">MaRDI</a> and by <a href="https://www.computeralgebra.de/sfb/">DFG SFB/TRR-195</a>. The idea of the rosetta stone was due to Lars Kastner, with contributions to this website from Antony Della Vecchia and Max Horn</p>
 </div>
